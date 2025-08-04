@@ -1,0 +1,6 @@
+<% @title ="新人登録 registration of newcomers"%>
+<h1><%= @title %></h1>
+
+<div id='generic-form'>
+	<%= from_with model: @staff_member, url: [ :admin, @staff_member ] do |f| %>
+</div>

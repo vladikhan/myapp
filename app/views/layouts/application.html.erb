@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+<title><% document_title %></title> 
+
+
+<%= stylesheet_link_tag "application", "data-turbo-track": "reload", media: "all", "data-turbo-track": "reload" %>
+<%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+  </head>
+
+
+  <body>
+    <div id="wrapper">
+      <%=
+        render "staff/shared/header" %>
+      <div id ="container">
+        <%= yield %>
+    </div>
+    <%= render "staff/shared/footer" %>
+  </div>
+
+  </body>
+</html>

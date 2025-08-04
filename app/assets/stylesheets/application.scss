@@ -1,0 +1,74 @@
+/*
+ *= require_self
+ *= require_tree .
+ */
+
+@use 'colors';
+@use 'staff/container';
+@use 'staff/dimensions';
+@use 'staff/layout';
+@use 'staff/staff';
+@use 'staff/flash';
+@use 'staff/sessions';
+@use 'admin';
+@use 'customer';
+
+h1,
+h2,
+h3 {
+	color: #7b82e2;
+}
+.container {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 20px;
+}
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+div#wrapper {
+	position: relative;
+	box-sizing: border-box;
+	min-height: 100%;
+	margin: 0 auto;
+	padding-bottom: 48px;
+}
+header {
+	padding: 6px;
+	background-color: #08a;
+	color: #fafafa;
+}
+header span.logo-mark {
+	font-weight: bold;
+}
+header a {
+	float: right;
+	color: #fafafa;
+}
+footer {
+	bottom: 0;
+	position: absolute;
+	width: 100%;
+	background-color: #666;
+	color: #fafafa;
+}
+footer p {
+	text-align: center;
+	padding: 6px;
+	margin: 0;
+}
+div#error {
+	width: 600px;
+	margin: 20px auto;
+	padding: 20px;
+	border-radius: 10px;
+	border: solid 4px #666;
+	background-color: #fafafa;
+	text-align: center;
+}
+div#error p.url {
+	font-family: monospace;
+}

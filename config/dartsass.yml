@@ -1,0 +1,3 @@
+builds:
+  application.scss: application.css
+  staff.css: staff.css

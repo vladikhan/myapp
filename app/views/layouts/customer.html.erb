@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Customer Area</title>
+<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+</head>
+  <body>
+    <div id="wrapper">
+      <%= render "customer/shared/header" %>
+      <div id ="container">
+        <%= yield %>
+    </div>
+    <%= render "shared/footer" %>
+  </div>
+
+  </body>
+</html>
