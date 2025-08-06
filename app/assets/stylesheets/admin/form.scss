@@ -1,5 +1,5 @@
 @use '../dimensions' as *;
-@use '../colors';
+@use '../colors' as colors;
 
 div#wrapper {
 	div#container {
@@ -8,8 +8,8 @@ div#wrapper {
 			margin: ($wide * 2) auto;
 			padding: $wide * 2;
 			border-radius: $wide;
-			border: solid 4px $dark_magenta;
-			background-color: $very_light_gray;
+			border: solid 4px colors.$dark_magenta;
+			background-color: colors.$very_light_gray;
 
 			form {
 				div {
@@ -21,14 +21,14 @@ div#wrapper {
 					label.required:after {
 						content: '*';
 						padding-left: $narrow;
-						color: $red;
+						color: colors.$red;
 					}
 				}
 				div.notes {
 					text-align: right;
 					font-size: $small;
 					span.mark {
-						color: $red;
+						color: colors.$red;
 					}
 				}
 				div.check-boxes,

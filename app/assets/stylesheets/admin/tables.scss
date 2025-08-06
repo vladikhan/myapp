@@ -1,5 +1,5 @@
-@import 'colors';
-@import 'dimensions';
+@use 'colors' as *;
+@use 'dimensions';
 
 div.table-wrapper {
 	width: 90%;

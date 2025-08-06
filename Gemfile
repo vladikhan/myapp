@@ -64,9 +64,11 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "dartsass-rails", "~> 0.5.1"
-# gem 'sass-rails'
+# gem 'sass-rails', '~> 6.0.0'
+# gem 'sassc-rails'
 
 gem 'sprockets-rails'
+
 
 
 

@@ -3,7 +3,8 @@
  *= require_tree .
  */
 @use 'dimensions' as *;
-@use 'colors';
+@use 'colors' as *;
+@use 'admin/form';
 
 @use './staff/container';
 @use './staff/layout';
