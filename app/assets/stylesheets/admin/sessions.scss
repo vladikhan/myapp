@@ -1,5 +1,5 @@
 @use '../colors' as *;
-@use '../dimensions' as *;
+@use './dimensions';
 
 div#wrapper {
 	div#container {

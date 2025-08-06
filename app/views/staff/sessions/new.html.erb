@@ -3,7 +3,7 @@
 <div id="login-form">
   <h1><%= @title %></h1>
 
-<%= form_with model: @form, url: staff_sessions_path, method: :post do |f| %>    <div>
+<%= form_with model: @form, url: staff_login_path, method: :post do |f| %>    <div>
       <%= f.label :email, "メールアドレス" %>
       <%= f.text_field :email %>
     </div>

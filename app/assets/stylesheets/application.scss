@@ -2,13 +2,13 @@
  *= require_self
  *= require_tree .
  */
-
+@use 'dimensions' as *;
 @use 'colors';
-@use 'staff/container';
-@use 'staff/dimensions';
-@use 'staff/layout';
-@use 'staff/staff';
-@use 'staff/flash';
+
+@use './staff/container';
+@use './staff/layout';
+@use './staff/staff';
+@use './staff/flash';
 @use 'staff/sessions';
 @use 'admin';
 @use 'customer';

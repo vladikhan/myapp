@@ -6,28 +6,29 @@ module Admin
 
     def show
       @staff_member = StaffMember.find(params[:id])
-      redirect_to[ :edit, :admin, staff_member ]
+      redirect_to [:edit, :admin, @staff_member]
     end
 
     def new
       @staff_member = StaffMember.new
     end
 
+    def edit
+      @staff_member = StaffMember.find(params[:id])
+    end
+
     def create
-      @staff_member = AdminMember.new(staff_member_params)
+      @staff_member = StaffMember.new(staff_member_params)
       if @staff_member.save
-        redirect_to admin_staff_members_path, notice: "職員を作成しました"
+        flash.notice = "職員アカウントを作成しました"
+        redirect_to admin_staff_members_path
       else
         render :new
       end
     end
 
-    def edit
-      @staff_member = AdminMember.find(params[:id])
-    end
-
     def update
-      @staff_member = AdminMember.find(params[:id])
+      @staff_member = StaffMember.find(params[:id])
       if @staff_member.update(staff_member_params)
         redirect_to admin_staff_members_path, notice: "職員情報を更新しました"
       else
@@ -36,7 +37,7 @@ module Admin
     end
 
     def destroy
-      @staff_member = AdminMember.find(params[:id])
+      @staff_member = StaffMember.find(params[:id])
       @staff_member.destroy
       redirect_to admin_staff_members_path, notice: "職員を削除しました"
     end
@@ -44,7 +45,11 @@ module Admin
     private
 
     def staff_member_params
-      params.require(:admin_member).permit(:email, :family_name, :given_name, :family_name_kana, :given_name_kana, :start_date, :end_date, :suspended, :password)
+      params.require(:staff_member).permit(
+        :email, :family_name, :given_name,
+        :family_name_kana, :given_name_kana,
+        :start_date, :end_date, :suspended, :password
+      )
     end
   end
 end

@@ -16,5 +16,8 @@
 	"scripts": {
 		"build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css",
 		"watch:css": "sass --watch app/assets/stylesheets:app/assets/builds --no-source-map --load-path=app/assets/stylesheets"
+	},
+	"devDependencies": {
+		"webpack-dev-server": "^3"
 	}
 }
