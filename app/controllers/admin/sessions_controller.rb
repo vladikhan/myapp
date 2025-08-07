@@ -8,14 +8,12 @@ class Admin::SessionsController < Admin::Base
       render action: "new"
     end
   end
-
   def create 
-    @form = Admin::LoginForm.new(params[:admin_login_form])
+    @form = Admin::LoginForm.new(login_form_params)
     if @form.email.present?
       admin_member = 
       AdminMember.find_by("LOWER(email) = ?", @form.email.downcase)
     end
-
     if Admin::Authenticator.new(admin_member).authenticate(@form.password)
       if admin_member.suspended?
         flash.now.alert = "アカウントが止されています．"
@@ -31,6 +29,11 @@ class Admin::SessionsController < Admin::Base
     end
   end
 
+  private def login_form_params
+    params.require(:admin_login_form).permit(:email, :password)
+  end
+
+  
   def destroy
     session.delete(:admin_member_id)
     flash.notice = "ログアウトしました．"

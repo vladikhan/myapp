@@ -1,7 +1,13 @@
 <% @title = "職員一覧" %>
 <h1><%= @title %></h1>
 
-<table class='listing'>
+<table class='table-wrapper'>
+	<div class="links">
+		<%= link_to "新人登録 とうろく registration of newcomers
+", new_admin_staff_member_path %>
+	</div>
+
+	<table class='listing'>
 	<tr>
     <th>氏名</th>
     <th>フリガナ</th>
@@ -21,16 +27,16 @@
 		<td class="boolean">
 			<%= m.suspended? ? raw("&#x2611;") : raw("&#x2610;") %></td>
 		<td class='actions'>
-			<%= link_to "Kanji p.195", [ :edit, :admin, m ]%> |
-			<%=link_to "Kanji p.195", [ :admin, m ], method: :delete,
-			data: { confirm: "本当に．．．しますか?" } %>
+			<%= link_to "編集へんしゅう", [ :edit, :admin, m ] %> |
+			<%= link_to "削除 さくじょ delete", [ :admin, m ], method: :delete,
+			data: { confirm: "本当に削除しますか?" } %>
 		</td>
 	</tr>
 	<% end %>
 	</table>
-</div>
 
 
-<div class="links">
-<%= link_to "新しい職員を追加", new_admin_staff_member_path %>
+	<div class="links">
+	<%= link_to "新人登録 とうろく", new_admin_staff_member_path %>
+	</div>
 </div>

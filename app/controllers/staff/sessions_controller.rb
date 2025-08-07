@@ -1,6 +1,5 @@
 class Staff::SessionsController < Staff::Base
   layout "staff"
-
   def new 
     if current_staff_member
       redirect_to :staff_root
@@ -9,12 +8,10 @@ class Staff::SessionsController < Staff::Base
       render action: "new"
     end
   end
-
   def create 
-    @form = Staff::LoginForm.new(params[:staff_login_form])
+    @form = Staff::LoginForm.new(login_form_params)
     if @form.email.present?
-      staff_member =
-      StaffMember.find_by("LOWER(email) = ?", @form.email.downcase)
+      staff_member = StaffMember.find_by(email_for_index: @form.email.downcase)
     end
 
     if Staff::Authenticator.new(staff_member).authenticate(@form.password)
@@ -30,6 +27,9 @@ class Staff::SessionsController < Staff::Base
       flash.now.alert = "メールアドレスまたパスワードが正しくありません．"
       render action: "new"
     end
+end
+  private def login_form_params
+    params.require(:staff_login_form).permit(:email, :password)
   end
 
   def destroy 
@@ -38,3 +38,4 @@ class Staff::SessionsController < Staff::Base
     redirect_to :staff_root
   end
 end
+
