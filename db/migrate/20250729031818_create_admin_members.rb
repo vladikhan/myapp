@@ -6,7 +6,7 @@ class CreateAdminMembers < ActiveRecord::Migration[6.1]
       t.string :given_name, null: false
       t.string :family_name_kana, null: false 
       t.string :given_name_kana, null: false
-      t.string :hashed_password
+      t.string :password_digest
       t.date :start_date, null: false
       t.date :end_date
       t.boolean :suspended, null: false, default: false

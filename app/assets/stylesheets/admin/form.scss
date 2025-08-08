@@ -5,7 +5,7 @@ div#wrapper {
 	div#container {
 		div#login-form {
 			width: 480px;
-			margin: ($wide * 2) auto;
+			margin: $wide * 2 auto;
 			padding: $wide * 2;
 			border-radius: $wide;
 			border: solid 4px colors.$dark_magenta;
@@ -40,7 +40,7 @@ div#wrapper {
 				div.buttons {
 					text-align: center;
 					input[type='submit'] {
-						padding: $wide ($wide * 2);
+						padding: $wide $wide * 2;
 					}
 				}
 			}
