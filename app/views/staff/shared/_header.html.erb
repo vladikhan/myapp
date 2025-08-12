@@ -6,11 +6,11 @@
 
 	<%=
 	if current_staff_member 
-	 link_to "ログアウト", staff_session_path, method: :delete 
+	 link_to "ログアウト", staff_logout_path, method: :delete 
 	 else 
 	 link_to "ログイン", staff_login_path 
 	end
 	%>
-	<%= link_to "アカウント", staff_account if current_staff_member %>
+	<%= link_to "アカウント", staff_account_path if current_staff_member %>
 
 </header>

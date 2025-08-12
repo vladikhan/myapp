@@ -41,21 +41,36 @@ member = StaffMember.new(
 )
 
 member.password = "password"   
-member.save!           
+member.save!         
+
+
+member = StaffMember.new(
+  email: "polina@example.com",
+  family_name: "Tsoy",
+  given_name: "Polina",
+  family_name_kana: "ツォイ",
+  given_name_kana: "ポリナ",
+  start_date: Date.today,
+  end_date: Date.today.next_year,
+  suspended: false
+)
+
+member.password = "password"   
+member.save!     
 
 
 
-# member = StaffMember.new(
-#   email: "helena@example.com",
-#   family_name: "Hele",
-#   given_name: "Na",
-#   family_name_kana: "ヘレ",
-#   given_name_kana: "ナ",
-#   password: "foobar",  
-#   start_date: Date.today,
-#   end_date: Date.today.next_year,
-#   suspended: false
-# )
+ member = StaffMember.new(
+   email: "helena@example.com",
+   family_name: "Hele",
+   given_name: "Na",
+   family_name_kana: "ヘレ",
+   given_name_kana: "ナ",
+   password: "foobar",  
+   start_date: Date.today,
+   end_date: Date.today.next_year,
+   suspended: false
+ )
 
-# member.password = "foobar"   
-# member.save!  
+ member.password = "password"   
+ member.save!   
