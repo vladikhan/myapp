@@ -14,7 +14,7 @@ class Admin::SessionsController < Admin::Base
       admin_member = 
       AdminMember.find_by("LOWER(email) = ?", @form.email.downcase)
     end
-    if admin_member && Admin::Authenticator.new(admin_member).authenticate(@form.password)
+    if Admin::Authenticator.new(admin_member).authenticate(@form.password)
       if admin_member.suspended?
         flash.now.alert = "アカウントが止されています．"
         render action :"new"

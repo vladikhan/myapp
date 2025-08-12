@@ -14,6 +14,21 @@ member.save!
 
 
 
+member = StaffMember.new(
+  email: "okamoto@example.com",
+  family_name: "Okamoto",
+  given_name: "Meiko",
+  family_name_kana: "オカモト",
+  given_name_kana: "メイコ",
+  start_date: Date.today,
+  end_date: Date.today.next_year,
+  suspended: false
+)
+
+member.password = "password"   
+member.save!           
+
+
 
 # member = StaffMember.new(
 #   email: "helena@example.com",

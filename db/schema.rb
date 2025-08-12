@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_08_08_031238) do
+ActiveRecord::Schema.define(version: 2025_07_29_031818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,14 +37,15 @@ ActiveRecord::Schema.define(version: 2025_08_08_031238) do
     t.string "given_name", null: false
     t.string "family_name_kana", null: false
     t.string "given_name_kana", null: false
-    t.string "hashed_password"
+    t.string "password_digest"
     t.date "start_date", null: false
     t.date "end_date"
     t.boolean "suspended", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "password_digest"
+    t.string "email_for_index", null: false
     t.index "lower((email)::text)", name: "index_staff_members_on_LOWER_email", unique: true
+    t.index ["email_for_index"], name: "index_staff_members_on_email_for_index", unique: true
     t.index ["family_name_kana", "given_name_kana"], name: "index_staff_members_on_family_name_kana_and_given_name_kana"
   end
 
