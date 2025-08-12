@@ -1,5 +1,5 @@
-@use '../colors';
-@use '../dimensions';
+@use '../colors' as *;
+@use '../dimensions' as *;
 
 header {
 	span.notice,

@@ -9,10 +9,10 @@
 @use './staff/container';
 @use './staff/layout';
 @use './staff/staff';
-@use './staff/flash';
+@use 'staff/flash';
 @use 'staff/sessions';
 @use 'admin';
-@use 'customer';
+// @use 'customer';
 @use 'tables';
 
 h1,
