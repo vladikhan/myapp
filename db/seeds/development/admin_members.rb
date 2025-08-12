@@ -74,3 +74,20 @@ member.save!
 
  member.password = "password"   
  member.save!   
+
+
+
+  member = StaffMember.new(
+   email: "roza@example.com",
+   family_name: "Roza",
+   given_name: "Lee",
+   family_name_kana: "ロザ",
+   given_name_kana: "リー",
+   password: "password",  
+   start_date: Date.today,
+   end_date: Date.today.next_year,
+   suspended: false
+ )
+
+ member.password = "password"   
+ member.save!   
