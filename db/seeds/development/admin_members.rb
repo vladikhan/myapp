@@ -14,6 +14,21 @@ member.save!
 
 
 
+member = AdminMember.new(
+  email: "sasha@example.com",
+  family_name: "Sasha",
+  given_name: "Ko",
+  family_name_kana: "サシャ",
+  given_name_kana: "コ",
+  start_date: Date.today,
+  end_date: Date.today.next_year,
+  suspended: false
+)
+
+member.password = "password"   
+member.save!   
+
+
 member = StaffMember.new(
   email: "okamoto@example.com",
   family_name: "Okamoto",
