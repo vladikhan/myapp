@@ -1,18 +1,21 @@
-<% @title = "ログイン" %>
+<div id="wrapper">
+  <div id="container">
+    <div id="login-form">
+      <h1><%= @title %></h1>
 
-<div id="login-form">
-  <h1><%= @title %></h1>
-
-<%= form_with model: @form, url: staff_login_path, method: :post do |f| %>    <div>
-      <%= f.label :email, "メールアドレス" %>
-      <%= f.text_field :email %>
+      <%= form_with model: @form, url: staff_login_path, method: :post do |f| %>
+        <div>
+          <%= f.label :email, "メールアドレス" %>
+          <%= f.text_field :email %>
+        </div>
+        <div>
+          <%= f.label :password, "パスワード" %>
+          <%= f.password_field :password %>
+        </div>
+        <div>
+          <%= f.submit "ログイン" %>
+        </div>
+      <% end %>
     </div>
-    <div>
-      <%= f.label :password, "パスワード" %>
-      <%= f.password_field :password %>
-    </div>
-    <div>
-      <%= f.submit "ログイン" %>
-    </div>
-  <% end %>
+  </div>
 </div>

@@ -15,9 +15,10 @@ div#wrapper {
 				div {
 					padding: $wide;
 					label {
+						/* Все label стандартные */
 						display: block;
 						padding: $moderate 0;
-					}
+					} /* Звёздочка для required */
 					label.required:after {
 						content: '*';
 						padding-left: $narrow;

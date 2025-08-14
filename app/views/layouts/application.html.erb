@@ -12,15 +12,19 @@
     <%= csp_meta_tag %>1
   </head>
 
-  <body>
-    <div id="wrapper">
-      <%=
-        render "staff/shared/header" %>
-      <div id ="container">
-        <%= yield %>
+ <body>
+  <div id="wrapper">
+    <%= render "staff/shared/header" %>
+
+    <% flash.each do |key, message| %>
+      <div class="flash <%= key %>"><%= message %></div>
+    <% end %>
+
+    <div id="container">
+      <%= yield %>
     </div>
+
     <%= render "staff/shared/footer" %>
   </div>
-
-  </body>
+</body>
 </html>
