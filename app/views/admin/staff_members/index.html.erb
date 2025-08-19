@@ -4,7 +4,6 @@
 <div class="table-wrapper">
   <div class="links">
     <%= link_to "新人登録 とうろく registration of newcomers", new_admin_staff_member_path %>
-		
   </div>
 
   <table class="listing">
@@ -32,7 +31,8 @@
           </td>
           <td class="actions">
             <%= link_to "編集へんしゅう", [:edit, :admin, m] %> |
-            <%= link_to "削除 さくじょ delete", [:admin, m], method: :delete, data: { confirm: "本当に削除しますか?" } %>
+            <%= link_to "Events", [ :admin, m, :staff_events ] %> |
+            <%= link_to "削除 さくじょ", [:admin, m], method: :delete, data: { confirm: "本当に削除しますか?" } %>
           </td>
         </tr>
       <% end %>

@@ -1,0 +1,27 @@
+<h1>職員のログイン・ログアウト記録</h1>
+<div class="links">
+    <%= link_to "職員一覧", admin_staff_members_path %>
+  </div>
+
+<table class="listing">
+  <tr>
+    <th>氏名</th>
+    <th>種別</th>
+    <th>日時</th>
+  </tr>
+  <% @events.each do |event| %>
+    <tr>
+      <td><%= event.member.family_name + event.member.given_name %></td>
+      <td><%= event.description %></td>
+      <td><%= event.occured_at.strftime("%Y/%m/%d %H:%M:%S") %></td>
+    </tr>
+  <% end %>
+  <% if @events.empty? %>
+    <tr>
+      <td colspan="3" style="text-align:center;">記録がありません</td>
+    </tr>
+  <% end %>
+</table>
+<div class="links">
+	<%= link_to "職員一覧", admin_staff_members_path %>	
+</div>
