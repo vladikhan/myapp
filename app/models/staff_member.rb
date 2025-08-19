@@ -1,6 +1,8 @@
  class StaffMember < ApplicationRecord
    has_secure_password
 
+   has_many :events, class_name: "StaffEvent", dependent: :destroy
+
    before_validation :set_email_for_index
 
    private

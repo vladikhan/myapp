@@ -1,12 +1,38 @@
-<% @title "アカウント情報編集へんしゅう" %>
+<% @title = "アカウント情報編集へんしゅう" %>
 <h1><%= @title %></h1>
 
-<div id='login-form'>
-	<%=form_with model: @staff_number, url: staff_account_path do |f| %>
-	 <%= render "form",f: f %>
-	 <div class='buttons'>
-		<%= f.submit "更新 こうしん Update" %>
-		<%= link_to "キャンセル", staff_account_path%>
-	 </div>  
-	 <% end %>
+<div id="login-form">
+  <%= form_with model: @staff_member, url: staff_account_path, local: true do |f| %>
+    
+    <div class="field">
+      <%= f.label :email, "メールアドレス" %>
+      <%= f.email_field :email, required: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :family_name, "姓" %>
+      <%= f.text_field :family_name, required: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :given_name, "名" %>
+      <%= f.text_field :given_name, required: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :family_name_kana, "姓（カナ）" %>
+      <%= f.text_field :family_name_kana, required: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :given_name_kana, "名（カナ）" %>
+      <%= f.text_field :given_name_kana, required: true %>
+    </div>
+
+    <div class="buttons">
+      <%= f.submit "更新 こうしん Update" %>
+      <%= link_to "キャンセル", staff_account_path %>
+    </div>
+
+  <% end %>
 </div>

@@ -13,7 +13,7 @@ class Admin::Base < ApplicationController
 
   private def authorize
     unless current_admin_member
-      flash.notice = "管理者(かんりしゃ)としてログインしてください"
+      flash.notice = "管理者としてログインしてください"
       redirect_to admin_login_path
     end
   end
