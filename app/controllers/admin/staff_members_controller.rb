@@ -23,14 +23,18 @@ class Admin::StaffMembersController < Admin::Base
     end
 
     def create
-      @staff_member = StaffMember.new(staff_member_params)
-      if @staff_member.save
-        flash.notice = "職員アカウントを作成しました"
-        redirect_to admin_staff_members_path
-      else
-        render :new
-      end
-    end
+  @staff_member = StaffMember.new(staff_member_params)
+
+  if @staff_member.save
+    flash[:notice] = "職員アカウントを作成しました"
+    redirect_to admin_staff_members_path
+  else
+    # Показываем ошибки на форме
+    flash.now[:alert] = @staff_member.errors.full_messages.join(", ")
+    Rails.logger.debug(@staff_member.errors.full_messages)  # Логи для дебага
+    render :new
+  end
+end
 
     def update
       @staff_member = StaffMember.find(params[:id])
