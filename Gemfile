@@ -23,7 +23,7 @@ gem 'jbuilder', '~> 2.7'
 
  gem 'validates_timeliness', '~> 6.0'
 
-
+gem 'valid_email2'
  
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
