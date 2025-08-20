@@ -1,0 +1,16 @@
+ja:
+  activerecord:
+    models:
+      staff_member: スタッフ
+    attributes:
+      staff_member:
+        family_name_kana: 姓（フリガナ）
+        given_name: 名（Given name）
+    errors:
+      models:
+        staff_member:
+          attributes:
+            family_name_kana:
+              invalid: 'はカタカナで入力してください'
+            given_name:
+              blank: 'は必須です'

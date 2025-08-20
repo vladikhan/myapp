@@ -242,12 +242,16 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     thor (1.4.0)
+    timeliness (0.5.3)
     timeout (0.4.3)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    validates_timeliness (6.0.1)
+      activemodel (>= 6.0.0, < 7)
+      timeliness (>= 0.3.10, < 1)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -289,6 +293,7 @@ DEPENDENCIES
   sprockets-rails
   turbolinks (~> 5)
   tzinfo-data
+  validates_timeliness (~> 6.0)
   web-console (>= 4.1.0)
   webdrivers
 
