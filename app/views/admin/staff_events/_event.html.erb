@@ -1,10 +1,15 @@
 <tr>
-	<% unless @staff_member %>
-	<td>
-		<%= link_to(event.member.family_name + event.member.given_name, [ :admin, event.member, :staff_events ]) %>
-	</td>
-	<% end %>
-	<td><%= event.description %></td>
-	<td class="date"><%= event.occured_at.strftime("%Y/%m/%d %H:%M:%S") %>
-	</td>
+  <% unless @staff_member %>
+    <td>
+      <%= event.member ? 
+          (event.member.family_name.to_s + event.member.given_name.to_s) 
+          : "不明な職員" %> <!-- ← добавлена проверка event.member и fallback -->
+    </td>
+  <% end %>
+  <td>
+    <%= event.description || "不明な種別" %> <!-- ← добавлен fallback для description -->
+  </td>
+  <td>
+    <%= event.occurred_at ? event.occurred_at.strftime("%Y/%m/%d %H:%M:%S") : "日時不明" %> <!-- ← fallback для occured_at -->
+  </td>
 </tr>

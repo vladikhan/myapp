@@ -67,5 +67,5 @@ Rails.application.configure do
   
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.web_console.allowed_ips = %w( 127.0.0.1 ::1 )
+  config.web_console.allowed_ips = '172.19.0.1'
 end

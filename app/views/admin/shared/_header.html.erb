@@ -1,12 +1,16 @@
 <header>
-<%= link_to "BAUKIS2", :admin_root, class: "logo-mark" %>
-  <%= content_tag(:span, flash.notice, class: "notice") if flash.notice %>
-  <%= content_tag(:span, flash.alert, class: "alert") if flash.alert %>  
+  <%= link_to "BAUKIS2", admin_root_path, class: "logo-mark" %>
+
+  <% if flash.notice %>
+    <span class="notice"><%= flash.notice %></span>
+  <% end %>
+  <% if flash.alert %>
+    <span class="alert"><%= flash.alert %></span>
+  <% end %>
 
   <% if current_admin_member %>
-  <%= link_to "ログアウト", admin_logout_path, method: :delete %>
-<% else %>
-  <%= link_to "ログイン", admin_login_path %>
-<% end %>
-
+    <%= link_to "ログアウト", admin_logout_path, method: :delete %>
+  <% else %>
+    <%= link_to "ログイン", admin_login_path %>
+  <% end %>
 </header>

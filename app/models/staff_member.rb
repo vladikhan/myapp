@@ -1,7 +1,7 @@
  class StaffMember < ApplicationRecord
    has_secure_password
 
-   has_many :events, class_name: "StaffEvent", dependent: :destroy
+  has_many :events, class_name: "StaffEvent", foreign_key: "staff_member_id"
 
    before_validation :set_email_for_index
 
