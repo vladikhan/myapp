@@ -22,8 +22,9 @@
     <th>日時</th>
   </tr>
 
-  <%= render partial: "event", collection: @events, as: :event %>
-
+  <% @events.each do |event| %>
+    <%= StaffEventPresenter.new(event, self).table_row %>
+  <% end %>
   <% if @events.empty? %>
     <tr>
       <td colspan="<%= @staff_member ? 2 : 3 %>" style="text-align:center;">記録がありません</td>
