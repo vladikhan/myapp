@@ -1,7 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe "Staff::Accounts", type: :request do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+describe "Staff::Accounts", type: :request do
+  before do
+    host! 'staff.baukis2.example.com'
+  end
+
+  it "returns 200" do
+    get staff_account_url
+    expect(response).to have_http_status(:ok)
   end
 end

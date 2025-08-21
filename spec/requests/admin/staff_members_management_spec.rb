@@ -1,6 +1,8 @@
 require "rails_helper"
 
 describe "管理者による職員管理", "ログイン前" do
+  before { host! 'baukis2.example.com' } # <- добавляем сюда
+
   include_examples "a protected admin controller", "admin/staff_members"
 end
 
@@ -8,12 +10,12 @@ describe "管理者による職員管理" do
   let(:administrator) { create(:administrator) }
 
   before do
+    host! 'baukis2.example.com'   # <- host для admin
+
     post admin_session_url, params: {
-      admin_login_form: {
-        email: administrator.email,
-        password: "pw"
-      }
+      admin_login_form: { email: administrator.email, password: "password" }
     }
+    follow_redirect!
   end
 
   describe "新人登録" do
@@ -25,9 +27,7 @@ describe "管理者による職員管理" do
     end
 
     example "例外 ActionController::ParameterMissing が発生" do
-      expect {
-        post admin_staff_members_url
-      }.to raise_error(ActionController::ParameterMissing)
+      expect { post admin_staff_members_url, params: {} }.to raise_error(ActionController::ParameterMissing)
     end
   end
 
@@ -42,12 +42,18 @@ describe "管理者による職員管理" do
       expect(staff_member).to be_suspended
     end
 
-    example "hashed_password の値は変更されない" do
+    example "password_digest の値は変更されない" do
       params_hash.delete(:password)
-      params_hash.merge!(hashed_password: "x")
       expect {
         patch admin_staff_member_url(staff_member), params: { staff_member: params_hash }
-      }.not_to change { staff_member.hashed_password.to_s }
+      }.not_to change { staff_member.reload.password_digest }
+    end
+  end
+
+  describe "ログアウト" do
+    example "管理者は正しくログアウトできる" do
+      delete admin_logout_url
+      expect(response).to redirect_to(admin_login_url)
     end
   end
 end

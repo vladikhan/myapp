@@ -24,6 +24,11 @@ class Admin::StaffMembersController < Admin::Base
 
     def create
   @staff_member = StaffMember.new(staff_member_params)
+      if @staff_member.save 
+        redirect_to admin_staff_members_url, notice: "職員を登録しました"
+      else 
+        render :new
+      end
 
   if @staff_member.save
     flash[:notice] = "職員アカウントを作成しました"
@@ -34,7 +39,7 @@ class Admin::StaffMembersController < Admin::Base
     Rails.logger.debug(@staff_member.errors.full_messages)  # Логи для дебага
     render :new
   end
-end
+    end
 
     def update
       @staff_member = StaffMember.find(params[:id])
