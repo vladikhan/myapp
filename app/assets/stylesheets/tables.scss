@@ -40,6 +40,8 @@ table {
 
 table.listing {
 	width: 100%;
+	border-radius: $wide;
+
 	tr:nth-child(even) {
 		background-color: $very_light_gray;
 	}

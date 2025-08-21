@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
   config = Rails.application.config.baukis2
 
-  # -------------------------
   # Staff routes
-  # -------------------------
   constraints host: config[:staff][:host] do
     namespace :staff, path: config[:staff][:path] do
       root "top#index", as: :root
@@ -15,12 +13,11 @@ Rails.application.routes.draw do
 
       # Аккаунт сотрудника
       resource :account, except: [:new, :create, :destroy]
+      resource :password, only: [ :show, :edit, :update ]
     end
   end
 
-  # -------------------------
   # Admin routes
-  # -------------------------
   constraints host: config[:admin][:host] do
     namespace :admin, path: config[:admin][:path] do
       root "top#index", as: :root
