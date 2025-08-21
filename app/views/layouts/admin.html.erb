@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Admin Area</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbolinks-track": "reload" %>
-  </head>
-  
-  <body>
-    <div id="wrapper">
-      <%= render "admin/shared/header" %>
-      
-      <div id="container">
-        <%= yield %>
-      </div>
-      
-      <%= render "shared/footer" %>
+<head>
+  <title>Admin Area</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbolinks-track": "reload" %>
+</head>
+<body>
+  <div id="wrapper">
+    <%= render "admin/shared/header" %>
+
+    <div id="container">
+      <%= yield %>
     </div>
-  </body>
+
+    <%= render "shared/footer" if lookup_context.exists?("shared/_footer") %>
+  </div>
+</body>
 </html>
