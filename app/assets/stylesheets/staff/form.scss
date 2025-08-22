@@ -47,11 +47,16 @@ div#wrapper {
 					display: inline;
 					padding: 0;
 					label: {
-						color: $red;
+						color: colors.$red;
 					}
 					input: {
 						background-color: $pink;
 					}
+				}
+				div.error-message {
+					color: colors.$red;
+					font-size: $small;
+					padding: 0 $very_wide;
 				}
 			}
 		}

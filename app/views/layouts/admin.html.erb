@@ -12,7 +12,7 @@
     <%= render "admin/shared/header" %>
 
     <div id="container">
-      <%= yield %>
+      <%= yield %>   <!-- <- только один yield -->
     </div>
 
     <%= render "shared/footer" if lookup_context.exists?("shared/_footer") %>
