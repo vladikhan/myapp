@@ -16,7 +16,8 @@ module Myapp
  config.assets.css_compressor = nil
     config.assets.enabled = true
 
-    config.autoload_paths << Rails.root.join('app/forms')
+    config.autoload_paths << Rails.root.join('app/lib')
+    config.eager_load_paths << Rails.root.join('app/lib')
 
 
     config.time_zone ="Tokyo"

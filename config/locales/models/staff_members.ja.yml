@@ -1,0 +1,24 @@
+ja:
+  activerecord:
+    attributes:
+      staff_member:
+        email: メールアドレス
+        family_name: 氏名（姓）
+        given_name: 氏名（名）
+        family_name_kana: フリガナ（姓）
+        given_name_kana: フリガナ（名）
+        start_date:
+        end_date:
+    errors:
+      models:
+        staff_member:
+          attributes:
+            email:
+              taken: が他の職員とじ
+            start_date:
+              after_or_equal_to: には2000ねん１月１日以降の日付を指定してください．"
+              before: には １年後１年後の日付よりを指定してください．
+            end_date:
+              after_or_equal_to: には２０００ねん１月１日以降の日付を指定してください．
+              before: には １年後の日付より前の日付を指定してください．
+              after: には開始日より後の付けを指定してください．

@@ -53,6 +53,16 @@ div#wrapper {
 					input {
 						background-color: colors.$pink;
 					}
+					div.error-message {
+						color: colors.$red;
+						font-size: $small;
+						padding: 0 $very_wide;
+					}
+					div.input-block {
+						input {
+							margin-right: $narrow * 2;
+						}
+					}
 				}
 			}
 		}
