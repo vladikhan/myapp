@@ -3,19 +3,22 @@ class Staff::ChangePasswordForm
 
   attr_accessor :object, :current_password, :new_password, :new_password_confirmation
 
- validate do
-  if object.nil?
-    errors.add(:base, "Staff member not found")
-  elsif !Staff::Authenticator.new(object).authenticate(current_password)
-    errors.add(:current_password, :wrong)
+  validates :new_password, presence: { message: "は必須です" }, confirmation: { message: "と確認が一致しません" }
+  validates :new_password_confirmation, presence: { message: "は必須です" }
+
+  validate :correct_current_password
+
+  def save
+    return false unless valid?
+
+    object.password = new_password
+    object.save!
   end
-end
 
- def save
-  return false if object.nil?
-  return false unless valid?
+  private
 
-  object.password = new_password
-  object.save!
+  def correct_current_password
+    return if object && Staff::Authenticator.new(object).authenticate(current_password)
+    errors.add(:current_password, :wrong)
   end
 end

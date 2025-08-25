@@ -18,11 +18,38 @@ ja:
           attributes:
             email:
               taken: は他の職員と重複しています
+              invalid: の形式が正しくありません
             start_date:
               after_or_equal_to: には2000年1月1日以降の日付を指定してください
             end_date:
               after: には開始日より後の日付を指定してください
-            family_name_kana:
-              invalid: はカタカナで入力してください
+            family_name:
+              blank: は必須です
+              invalid: には有効な文字を入力してください
             given_name:
+              blank: は必須です
+              invalid: には有効な文字を入力してください
+            family_name_kana:
+              blank: は必須です
+              invalid: はカタカナで入力してください
+            given_name_kana:
+              blank: は必須です
+              invalid: はカタカナで入力してください
+
+  activemodel:
+    attributes:
+      staff/change_password_form:
+        current_password: 現在パスワード
+        new_password: 新しいパスワード
+        new_password_confirmation: 新しいパスワード（確認）
+    errors:
+      models:
+        staff/change_password_form:
+          attributes:
+            current_password:
+              wrong: を正しく入力してください
+            new_password:
+              blank: は必須です
+              confirmation: と確認が一致しません
+            new_password_confirmation:
               blank: は必須です

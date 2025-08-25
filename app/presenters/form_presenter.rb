@@ -43,15 +43,13 @@ def date_field_block(name, label_text = nil, options = {})
 end
 
   def password_field_block(name, label_text, options = {})
-    return "".html_safe unless object&.new_record?
-
-    merged_options = options.merge(@current_options || {})
-    markup(:div, class: "input-block") do |m|
-      m << decorated_label(name, label_text, merged_options)
-      m << password_field(name, merged_options)
-      m << error_messages_for(name)
-    end
+  merged_options = options.merge(@current_options || {})
+  markup(:div, class: "input-block") do |m|
+    m << decorated_label(name, label_text, merged_options)
+    m << password_field(name, merged_options)
+    m << error_messages_for(name)
   end
+end
 
   def date_field_block(name, label_text, options = {})
     merged_options = options.merge(@current_options || {})
