@@ -4,7 +4,7 @@ class StaffMember < ApplicationRecord
 
   has_many :events, class_name: "StaffEvent", foreign_key: "staff_member_id"
 
-  # Нормализация имени и фуриганы
+  # 正規化 (Normalization)
   before_validation do
     self.family_name = normalize_as_name(family_name) if family_name
     self.given_name = normalize_as_name(given_name) if given_name
@@ -13,64 +13,79 @@ class StaffMember < ApplicationRecord
   end
 
   before_validation :normalize_email
+  before_validation :set_email_for_index
 
+  # メールアドレスの正規化
   def normalize_email
     return if email.blank?
+
     self.email = email.strip.gsub(/\A[\u3000]+|[\u3000]+\z/, '')
     self.email = email.tr('Ａ-Ｚａ-ｚ０-９＠．', 'A-Za-z0-9@.')
     self.email = email.downcase
     self.email = email.gsub(/\s+/, '')
   end
 
+  # バリデーション用の正規表現
   KATAKANA_REGEXP = /\A[\p{katakana}\u{30fc}]+\z/
+  NAME_REGEXP = /\A[ぁ-んァ-ン一-龥々]+\z/
 
-  validates :email, presence: true, uniqueness: { case_sensitive: false }
-  validates :family_name, :given_name, presence: true
+  # バリデーション
+  validates :family_name, :given_name,
+            presence: { message: "は必須です" },
+            format: { with: NAME_REGEXP, message: "には有効な文字を入力してください" }
+
   validates :family_name_kana, :given_name_kana,
-            presence: true,
-            format: { with: KATAKANA_REGEXP, allow_blank: true }
+            presence: { message: "は必須です" },
+            format: { with: KATAKANA_REGEXP, message: "はカタカナで入力してください" }
 
-  # Кастомные проверки дат
+  validates :email,
+            presence: { message: "は必須です" },
+            uniqueness: { case_sensitive: false, message: "は既に使用されています" },
+            format: { with: URI::MailTo::EMAIL_REGEXP, message: "の形式が正しくありません" }
+
+  # カスタム日付チェック
   validate :start_date_after_2000
   validate :end_date_after_start_date
 
-  before_validation :set_email_for_index
-
   private
 
+  # email_for_indexの設定
   def set_email_for_index
     self.email_for_index = email.downcase if email.present?
   end
 
+  # 入社日が2000年以降であること
   def start_date_after_2000
-  return if start_date.blank?
+    return if start_date.blank?
 
-  date = start_date.is_a?(Date) ? start_date : Date.parse(start_date.to_s) rescue nil
-  return unless date
+    date = start_date.is_a?(Date) ? start_date : Date.parse(start_date.to_s) rescue nil
+    return unless date
 
-  if date < Date.new(2000, 1, 1)
-    errors.add(
-      :start_date,
-      I18n.t("activerecord.errors.models.staff_member.attributes.start_date.after_or_equal_to")
-    )
+    if date < Date.new(2000, 1, 1)
+      errors.add(
+        :start_date,
+        I18n.t("activerecord.errors.models.staff_member.attributes.start_date.after_or_equal_to")
+      )
+    end
   end
-end
 
-def end_date_after_start_date
-  return if end_date.blank? || start_date.blank?
+  # 退職日が入社日より後であること
+  def end_date_after_start_date
+    return if end_date.blank? || start_date.blank?
 
-  start_d = start_date.is_a?(Date) ? start_date : Date.parse(start_date.to_s) rescue nil
-  end_d   = end_date.is_a?(Date) ? end_date : Date.parse(end_date.to_s) rescue nil
-  return unless start_d && end_d
+    start_d = start_date.is_a?(Date) ? start_date : Date.parse(start_date.to_s) rescue nil
+    end_d   = end_date.is_a?(Date) ? end_date : Date.parse(end_date.to_s) rescue nil
+    return unless start_d && end_d
 
-  if end_d <= start_d
-    errors.add(
-      :end_date,
-      I18n.t("activerecord.errors.models.staff_member.attributes.end_date.after")
-    )
+    if end_d <= start_d
+      errors.add(
+        :end_date,
+        I18n.t("activerecord.errors.models.staff_member.attributes.end_date.after")
+      )
+    end
   end
-end
 
+  # 有効な状態かどうか
   def active?
     return false unless start_date
     !suspended && start_date <= Date.today && (end_date.nil? || end_date >= Date.today)
