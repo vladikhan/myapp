@@ -27,12 +27,13 @@ class StaffMember < ApplicationRecord
 
   # バリデーション用の正規表現
   KATAKANA_REGEXP = /\A[\p{katakana}\u{30fc}]+\z/
-  NAME_REGEXP = /\A[ぁ-んァ-ン一-龥々]+\z/
+  NAME_REGEX     = /\A[\p{Han}\p{Hiragana}\p{Katakana}\p{Latin}ー－]+\z/
+  EMAIL_REGEX    = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   # バリデーション
   validates :family_name, :given_name,
             presence: { message: "は必須です" },
-            format: { with: NAME_REGEXP, message: "には有効な文字を入力してください" }
+            format: { with: NAME_REGEX, message: "には漢字・ひらがな・カタカナ・英字で入力してください" }
 
   validates :family_name_kana, :given_name_kana,
             presence: { message: "は必須です" },
@@ -41,7 +42,7 @@ class StaffMember < ApplicationRecord
   validates :email,
             presence: { message: "は必須です" },
             uniqueness: { case_sensitive: false, message: "は既に使用されています" },
-            format: { with: URI::MailTo::EMAIL_REGEXP, message: "の形式が正しくありません" }
+            format: { with: EMAIL_REGEX, message: "の形式が正しくありません" }
 
   # カスタム日付チェック
   validate :start_date_after_2000
