@@ -1,10 +1,9 @@
-<%# partial для StaffMember формы %>
 <%= form_with model: @staff_member, url: admin_staff_members_path, local: true do |f| %>
   <% p = StaffMemberFormPresenter.new(f, self) %>
 
   <%# Обязательные поля %>
   <% p.with_options(required: true) do |q| %>
-    <%= q.text_field_block(:email, "メールアドレス", size: 32) %>
+    <%= q.text_field_block(:email, StaffMember.human_attribute_name(:email), size: 32) %>
     <%= q.password_field_block(:password, "パスワード", size: 32) %>
   <% end %>
 
@@ -13,8 +12,8 @@
 
   <%# Даты %>
   <% p.with_options(required: true) do |q| %>
-    <%= q.date_field_block(:start_date, "入社日") %>
-    <%= q.date_field_block(:end_date, "退職日") %>
+    <%= q.date_field_block(:start_date, StaffMember.human_attribute_name(:start_date)) %>
+    <%= q.date_field_block(:end_date, StaffMember.human_attribute_name(:end_date)) %>
   <% end %>
 
   <%= p.suspended_check_box %>

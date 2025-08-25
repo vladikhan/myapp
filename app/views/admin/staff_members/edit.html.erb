@@ -1,13 +1,10 @@
-<% @title ="職員(しょくいん staff member)アカウントの編集(へんしゅうedit)"%>
+<% @title ="職員(しょくいん)アカウントの編集(へんしゅう)"%>
 <h1><%= @title %></h1>
 
 <div id="login-form">
 	<%= form_with model: @staff_member, url: [ :admin, @staff_member ] do |f| %>
 
 	<%= render "form", f: f %>
-	<div class='buttons'>
-		<%= f.submit "更新" %>
-		<%= link_to "キャンセル", admin_staff_members_path%>
-	</div>
+
 	<% end %>
 </div>
