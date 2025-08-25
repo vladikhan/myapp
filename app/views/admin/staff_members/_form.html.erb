@@ -1,25 +1,18 @@
-<%= form_with model: @staff_member, url: admin_staff_members_path, local: true do |f| %>
-  <% p = StaffMemberFormPresenter.new(f, self) %>
+<%= markup do |m| 
+  p = StaffMemberFormPresenter.new(f, self)
+  m << p.notes
+  p.with_options(required: true) do |q|
+    m << q.text_field_block(:email, size: 32)
+    m << q.password_field_block(:password) # label подтянется автоматически
+    m << q.full_name_block(:family_name, :given_name)
+    m << q.full_name_kana_block(:family_name_kana, :given_name_kana) 
+    m << q.date_field_block(:start_date)
+    m << q.date_field_block(:end_date, required: false)
+  end
+  m << p.suspended_check_box
+end %>
 
-  <%# Обязательные поля %>
-  <% p.with_options(required: true) do |q| %>
-    <%= q.text_field_block(:email, StaffMember.human_attribute_name(:email), size: 32) %>
-    <%= q.password_field_block(:password, "パスワード", size: 32) %>
-  <% end %>
-
-  <%= p.full_name_block(:family_name, :given_name, "氏名") %>
-  <%= p.full_name_kana_block(:family_name_kana, :given_name_kana, "フリガナ") %>
-
-  <%# Даты %>
-  <% p.with_options(required: true) do |q| %>
-    <%= q.date_field_block(:start_date, StaffMember.human_attribute_name(:start_date)) %>
-    <%= q.date_field_block(:end_date, StaffMember.human_attribute_name(:end_date)) %>
-  <% end %>
-
-  <%= p.suspended_check_box %>
-
-  <div class="buttons">
-    <%= f.submit "登録" %>
-    <%= link_to "キャンセル", admin_staff_members_path%>
-  </div>
-<% end %>
+<div class="buttons">
+  <%= f.submit(@staff_member.new_record? ? "登録" : "更新") %>
+  <%= link_to "キャンセル", admin_staff_members_path, class: "cancel-button" %>
+</div>

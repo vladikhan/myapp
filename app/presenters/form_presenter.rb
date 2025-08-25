@@ -22,16 +22,29 @@ class FormPresenter
     ""
   end
 
-  def text_field_block(name, label_text, options = {})
-    merged_options = options.merge(@current_options || {})
-    markup(:div, class: "input-block") do |m|
-      m << decorated_label(name, label_text, merged_options)
-      m << text_field(name, merged_options)
-      m << error_messages_for(name)
-    end
+  def text_field_block(name, label_text = nil, options = {})
+  label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
+  merged_options = options.merge(@current_options || {})
+  markup(:div, class: "input-block") do |m|
+    m << decorated_label(name, label_text, merged_options)
+    m << text_field(name, merged_options)
+    m << error_messages_for(name)
+  end
   end
 
+def date_field_block(name, label_text = nil, options = {})
+  label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
+  merged_options = options.merge(@current_options || {})
+  markup(:div, class: "input-block") do |m|
+    m << decorated_label(name, label_text, merged_options)
+    m << date_field(name, merged_options)
+    m << error_messages_for(name)
+  end
+end
+
   def password_field_block(name, label_text, options = {})
+    return "".html_safe unless object&.new_record?
+
     merged_options = options.merge(@current_options || {})
     markup(:div, class: "input-block") do |m|
       m << decorated_label(name, label_text, merged_options)
@@ -52,7 +65,9 @@ class FormPresenter
   def error_messages_for(name)
     markup do |m|
       object.errors.full_messages_for(name).each do |message|
-        m.div(class: "error-message") { |m2| m2.text message }
+        m.div(class: "error-message") do |m|
+          m.text message
+        end
       end
     end
   end

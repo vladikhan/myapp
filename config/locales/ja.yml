@@ -4,13 +4,25 @@ ja:
       staff_member: スタッフ
     attributes:
       staff_member:
-        family_name_kana: 姓（フリガナ）
-        given_name: 名（Given name）
+        email: メールアドレス
+        password: パスワード
+        family_name: 氏名（姓）
+        given_name: 氏名（名）
+        family_name_kana: フリガナ（姓）
+        given_name_kana: フリガナ（名）
+        start_date: 入社日
+        end_date: 退職日
     errors:
       models:
         staff_member:
           attributes:
+            email:
+              taken: は他の職員と重複しています
+            start_date:
+              after_or_equal_to: には2000年1月1日以降の日付を指定してください
+            end_date:
+              after: には開始日より後の日付を指定してください
             family_name_kana:
-              invalid: 'はカタカナで入力してください'
+              invalid: はカタカナで入力してください
             given_name:
-              blank: 'は必須です'
+              blank: は必須です
