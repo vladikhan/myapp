@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_08_25_082306) do
+ActiveRecord::Schema.define(version: 2025_08_26_022830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,12 +37,12 @@ ActiveRecord::Schema.define(version: 2025_08_25_082306) do
     t.string "given_name", null: false
     t.string "family_name_kana", null: false
     t.string "given_name_kana", null: false
+    t.string "password_digest"
     t.date "start_date", null: false
     t.date "end_date"
     t.boolean "suspended", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "password_digest"
     t.index "lower((email)::text)", name: "index_admin_members_on_LOWER_email", unique: true
     t.index ["family_name_kana", "given_name_kana"], name: "index_admin_members_on_family_name_kana_and_given_name_kana"
   end
@@ -62,6 +62,23 @@ ActiveRecord::Schema.define(version: 2025_08_25_082306) do
     t.index ["family_name_kana", "given_name_kana"], name: "index_customers_on_family_name_kana_and_given_name_kana"
   end
 
+  create_table "home_addresses", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "postal_code"
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_home_addresses_on_customer_id"
+  end
+
+  create_table "personal_phones", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_personal_phones_on_customer_id"
+  end
+
   create_table "staff_events", force: :cascade do |t|
     t.bigint "staff_member_id", null: false
     t.string "type", null: false
@@ -76,18 +93,30 @@ ActiveRecord::Schema.define(version: 2025_08_25_082306) do
     t.string "given_name", null: false
     t.string "family_name_kana", null: false
     t.string "given_name_kana", null: false
+    t.string "password_digest"
     t.date "start_date", null: false
     t.date "end_date"
     t.boolean "suspended", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "email_for_index", null: false
-    t.string "password_digest"
     t.index "lower((email)::text)", name: "index_staff_members_on_LOWER_email", unique: true
     t.index ["email_for_index"], name: "index_staff_members_on_email_for_index", unique: true
     t.index ["family_name_kana", "given_name_kana"], name: "index_staff_members_on_family_name_kana_and_given_name_kana"
   end
 
+  create_table "work_addresses", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "postal_code"
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["customer_id"], name: "index_work_addresses_on_customer_id"
+  end
+
   add_foreign_key "addresses", "customers"
+  add_foreign_key "home_addresses", "customers"
+  add_foreign_key "personal_phones", "customers"
   add_foreign_key "staff_events", "staff_members"
+  add_foreign_key "work_addresses", "customers"
 end
