@@ -1,10 +1,61 @@
 class Staff::CustomersController < Staff::Base
+  before_action :set_customer_form, only: [:edit, :update, :show]
+
   def index
-    @customers = Customer.order(:family_name_kana, :given_name_kana)
-    .page(params[:page])
+@customers = Customer.order(:id).page(params[:page])  end
+
+  def show
+     @customer = Customer.find(params[:id])
   end
 
-  def show 
-    @customer = Customer.find(params[:id])
+  def new
+    @customer_form = Staff::CustomerForm.new
+  end
+
+  def create
+    @customer_form = Staff::CustomerForm.new
+    @customer_form.customer.assign_attributes(customer_params)
+
+    if @customer_form.customer.save
+      redirect_to staff_customers_path, notice: "顧客を登録しました。"
+    else
+      render :new
+    end
+  end
+
+  def edit
+    # @customer_form уже установлен через before_action
+  end
+
+  def update
+    @customer_form.customer.assign_attributes(customer_params)
+    if @customer_form.customer.save
+      redirect_to staff_customers_path, notice: "顧客情報を更新しました。"
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    customer = Customer.find(params[:id])
+    customer.destroy
+    redirect_to staff_customers_path, notice: "顧客を削除しました。"
+  end
+
+  private
+
+  def set_customer_form
+    customer = Customer.find(params[:id])
+    @customer_form = Staff::CustomerForm.new(customer)
+  end
+
+  def customer_params
+    params.require(:form).permit(
+      customer: [:email, :password, :family_name, :given_name, :family_name_kana, :given_name_kana, :birthday, :gender],
+      home_address: [:postal_code, :prefecture, :city, :address1, :address2],
+      work_address: [:company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
+      personal_phones: [],
+      work_phones: []
+    )
   end
 end

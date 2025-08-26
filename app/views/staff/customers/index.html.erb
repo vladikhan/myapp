@@ -3,10 +3,10 @@
 
 <div class="table-wrapper">
   <div class="links">
-    <%= link_to "新人登録", :new_staff_customer %>
+    <%= link_to "新人登録", new_staff_customer_path %>
   </div>
 
-  <%= paginate @customers %>
+  <%= paginate @customers if @customers.respond_to?(:current_page) %>
 
   <table class="listing">
     <tr>
@@ -18,24 +18,21 @@
       <th>アクション</th>
     </tr>
     <% @customers.each do |c| %>
-      <% p = CustomerPresenter.new(c, self) %>
+      <% p = CustomerPresenter.new(c, self) rescue nil %>
       <tr>
-        <td><%= p.full_name %></td>
-        <td><%= p.full_name_kana %></td>
-        <td class="email"><%= p.email %></td>
-        <td class="date"><%= p.birthday %></td>
-        <td><%= p.gender %></td>
+        <td><%= p&.full_name || "#{c.family_name} #{c.given_name}" %></td>
+        <td><%= p&.full_name_kana || "#{c.family_name_kana} #{c.given_name_kana}" %></td>
+        <td><%= c.email %></td>
+        <td><%= c.birthday %></td>
+        <td><%= c.gender %></td>
         <td class="actions">
-          <%= link_to "詳細しょうさい", [:staff, c] %> |
-          <%= link_to "編集", [:edit, :staff, c] %> |
-          <%= link_to "削除", [:staff, c], method: :delete, data: { confirm: "本当に削除しますか？" } %>
+          <%= link_to "詳細", staff_customer_path(c) %> |
+          <%= link_to "編集", edit_staff_customer_path(c) %> |
+          <%= link_to "削除", staff_customer_path(c), method: :delete, data: { confirm: "本当に削除しますか？" } %>
         </td>
       </tr>
     <% end %>
   </table>
 
-  <%= paginate @customers %>
-  <div class="links">
-    <%= link_to "新人登録", :new_staff_customer %>
-  </div>
+  <%= paginate @customers if @customers.respond_to?(:current_page) %>
 </div>

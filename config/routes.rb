@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   config = Rails.application.config.baukis2
 
-  # Staff routes
+  # -------------------------
+  # Staff routes (с host constraint)
+  # -------------------------
   constraints host: config[:staff][:host] do
     namespace :staff, path: config[:staff][:path] do
       root "top#index", as: :root
@@ -13,12 +15,35 @@ Rails.application.routes.draw do
 
       # Аккаунт сотрудника
       resource :account, except: [:new, :create, :destroy]
-      resource :password, only: [ :show, :edit, :update ]
+      resource :password, only: [:show, :edit, :update]
+
+      # Customers
       resources :customers
     end
   end
 
+  # -------------------------
+  # Staff routes (без host constraint, для разработки)
+  # -------------------------
+  namespace :staff do
+    root "top#index", as: :root_dev
+
+    # Сессии
+    get    "login"  => "sessions#new"
+    post   "login"  => "sessions#create"
+    delete "logout" => "sessions#destroy"
+
+    # Аккаунт сотрудника
+    resource :account, except: [:new, :create, :destroy]
+    resource :password, only: [:show, :edit, :update]
+
+    # Customers
+    resources :customers
+  end
+
+  # -------------------------
   # Admin routes
+  # -------------------------
   constraints host: config[:admin][:host] do
     namespace :admin, path: config[:admin][:path] do
       root "top#index", as: :root
