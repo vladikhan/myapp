@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_08_26_091621) do
+ActiveRecord::Schema.define(version: 2025_08_27_022304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "address_phones", force: :cascade do |t|
+    t.bigint "address_id", null: false
+    t.string "number"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_address_phones_on_address_id"
+  end
 
   create_table "addresses", force: :cascade do |t|
     t.bigint "customer_id", null: false
@@ -62,6 +70,19 @@ ActiveRecord::Schema.define(version: 2025_08_26_091621) do
     t.index ["family_name_kana", "given_name_kana"], name: "index_customers_on_family_name_kana_and_given_name_kana"
   end
 
+  create_table "home_addresses", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "postal_code"
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "prefecture"
+    t.string "city"
+    t.string "address1"
+    t.string "address2"
+    t.index ["customer_id"], name: "index_home_addresses_on_customer_id"
+  end
+
   create_table "personal_phones", force: :cascade do |t|
     t.bigint "customer_id", null: false
     t.string "number"
@@ -96,7 +117,23 @@ ActiveRecord::Schema.define(version: 2025_08_26_091621) do
     t.index ["family_name_kana", "given_name_kana"], name: "index_staff_members_on_family_name_kana_and_given_name_kana"
   end
 
+  create_table "work_addresses", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.string "postal_code"
+    t.string "address"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "city"
+    t.string "address1"
+    t.string "address2"
+    t.string "company_name"
+    t.index ["customer_id"], name: "index_work_addresses_on_customer_id"
+  end
+
+  add_foreign_key "address_phones", "addresses"
   add_foreign_key "addresses", "customers"
+  add_foreign_key "home_addresses", "customers"
   add_foreign_key "personal_phones", "customers"
   add_foreign_key "staff_events", "staff_members"
+  add_foreign_key "work_addresses", "customers"
 end

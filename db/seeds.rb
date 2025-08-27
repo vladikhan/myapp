@@ -1,7 +1,7 @@
 puts "Seeding customers..."
 
 # Удаляем старые записи
-Customer.destroy_all if Customer.any?
+Customer.destroy_all
 
 city_names = %w(青巻市 赤巻市 黄巻市)
 
@@ -49,11 +49,12 @@ company_names = %w(OIAX ABC XYZ)
       gender: m < 5 ? "male" : "female"
     )
 
-    if m.even?
-      c.personal_phones.create!(number: sprintf("090-0000-%04d", n * 10 + m))
-    end
+    # Личные телефоны
+    c.personal_phones.create!(number: sprintf("090-0000-%04d", n * 10 + m)) if m.even?
+    c.personal_phones.create!(number: sprintf("03-0000-%04d", n)) if m % 10 == 0
 
-    home = c.create_home_address!(
+    # Домашний адрес
+    c.create_home_address!(
       postal_code: sprintf("%07d", rand(10000000)),
       prefecture: Address::PREFECTURE_NAMES.sample,
       city: city_names.sample,
@@ -61,21 +62,70 @@ company_names = %w(OIAX ABC XYZ)
       address2: "レイルズハイツ301号室"
     )
 
-    if m % 10 == 0
-      home.phones.create!(number: sprintf("03-0000-%04d", n))
-    end
-
+    # Рабочий адрес
     if m % 3 == 0
       c.create_work_address!(
-        postal_code: sprintf("%07d", rand(10000000)),
-        prefecture: Address::PREFECTURE_NAMES.sample,
-        city: city_names.sample,
-        address1: "試験4-5-6",
-        address2: "ルビービル2F",
-        company_name: company_names.sample
-      )
+  postal_code: sprintf("%07d", rand(10000000)),
+  city: city_names.sample,
+  address1: "試験4-5-6",
+  address2: "ルビービル2F",
+  company_name: company_names.sample
+)
     end
   end
 end
 
 puts "Created #{Customer.count} customers"
+
+
+puts "Creating staff_members..."
+
+def debug_create_staff(attrs)
+  StaffMember.create!(attrs)
+rescue ActiveRecord::RecordInvalid => e
+  puts "Failed to create: #{attrs[:email]}"
+  puts "   Errors: #{e.record.errors.full_messages.join(', ')}"
+end
+
+debug_create_staff(
+  email: "taro@example.com",
+  family_name: "山田",
+  given_name: "太郎",
+  family_name_kana: "ヤマダ",
+  given_name_kana: "タロウ",
+  password: "password",
+  start_date: Date.today,
+  end_date: Date.today + 365,
+)
+
+family_names = %w{
+  佐藤:サトウ:sato
+  鈴木:スズキ:suzuki
+  高橋:タカハシ:takahashi
+  田中:タナカ:tanaka
+}
+
+given_names = %w{
+  二郎:ジロウ:jiro
+  三郎:サブロウ:saburo
+  マツコ:マツコ:matsuko
+  武子:タケコ:takeko
+  梅子:ウメコ:umeko
+}
+
+20.times do |n|
+  fn = family_names[n % 4].split(":")
+  gn = given_names[n % 5].split(":")
+
+  debug_create_staff(
+    email: "#{fn[2]}.#{gn[2]}@example.com",
+    family_name: fn[0],
+    given_name: gn[0],
+    family_name_kana: fn[1],
+    given_name_kana: gn[1],
+    password: "password",
+    start_date: (100 - n).days.ago.to_date,
+    end_date: n == 0 ? Date.today : nil,
+    suspended: n == 1
+  )
+end

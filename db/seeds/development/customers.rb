@@ -1,8 +1,10 @@
-"Seeding customers..."
+puts "Seeding customers..."
 
 # Удаляем старые записи, чтобы избежать конфликтов
+PersonalPhone.destroy_all
+WorkAddress.destroy_all
+HomeAddress.destroy_all
 Customer.destroy_all
-# db/seeds.rb
 
 city_names = %w(青巻市 赤巻市 黄巻市)
 
@@ -52,30 +54,37 @@ company_names = %w(OIAX ABC XYZ)
       gender: m < 5 ? "male" : "female"
     )
 
-    # Личные телефоны
+    # Личные телефоны клиента
     if m.even?
       c.personal_phones.create!(number: sprintf("090-0000-%04d", n * 10 + m))
     end
 
-    # Адрес дома
-    home = c.create_home_address!(
-      postal_code: sprintf("%07d", rand(10000000)),
-      prefecture: Address::PREFECTURE_NAMES.sample,
-      city: city_names.sample,
-      address1: "開発1-2-3",
-      address2: "レイルズハイツ301号室"
-    )
-
-    # Телефон дома
+    # Дополнительный телефон для некоторых клиентов
     if m % 10 == 0
-      home.phones.create!(number: sprintf("03-0000-%04d", n))
+      # Используем home_address, создадим его раньше, если нужно
+      home = c.create_home_address!(
+        postal_code: sprintf("%07d", rand(10000000)),
+        prefecture: Address::PREFECTURE_NAMES.sample,
+        city: city_names.sample,
+        address1: "開発1-2-3",
+        address2: "レイルズハイツ301号室"
+      )
+      home.phones.create!(number: "03-0000-0001")
+    else
+      # Если home_address ещё не создан, создаем без телефона
+      c.create_home_address!(
+        postal_code: sprintf("%07d", rand(10000000)),
+        prefecture: Address::PREFECTURE_NAMES.sample,
+        city: city_names.sample,
+        address1: "開発1-2-3",
+        address2: "レイルズハイツ301号室"
+      )
     end
 
     # Адрес работы
     if m % 3 == 0
       c.create_work_address!(
         postal_code: sprintf("%07d", rand(10000000)),
-        prefecture: Address::PREFECTURE_NAMES.sample,
         city: city_names.sample,
         address1: "試験4-5-6",
         address2: "ルビービル2F",
@@ -84,3 +93,5 @@ company_names = %w(OIAX ABC XYZ)
     end
   end
 end
+
+puts "Created #{Customer.count} customers"
