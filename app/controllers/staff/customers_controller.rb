@@ -6,7 +6,6 @@ class Staff::CustomersController < Staff::Base
   end
 
   def show
-    # @customer_form уже установлен через before_action
     @customer = @customer_form.customer
   end
 
