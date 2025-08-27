@@ -4,6 +4,8 @@ puts "Seeding customers..."
 Customer.destroy_all
 
 city_names = %w(青巻市 赤巻市 黄巻市)
+prefectures = Address::PREFECTURE_NAMES # предполагаем, что у тебя есть константа с префектурами
+company_names = %w(OIAX ABC XYZ)
 
 family_names = %w{
   佐藤:サトウ:sato
@@ -31,12 +33,10 @@ given_names = %w{
   亀子:カメコ:kameko
 }
 
-company_names = %w(OIAX ABC XYZ)
-
 10.times do |n|
   10.times do |m|
-    fn = family_names[n].split(":")
-    gn = given_names[m].split(":")
+    fn = family_names[n % family_names.size].split(":")
+    gn = given_names[m % given_names.size].split(":")
 
     c = Customer.create!(
       email: "#{fn[2]}.#{gn[2]}@example.jp",
@@ -56,22 +56,22 @@ company_names = %w(OIAX ABC XYZ)
     # Домашний адрес
     c.create_home_address!(
       postal_code: sprintf("%07d", rand(10000000)),
-      prefecture: Address::PREFECTURE_NAMES.sample,
+      prefecture: prefectures.sample,
       city: city_names.sample,
       address1: "開発1-2-3",
       address2: "レイルズハイツ301号室"
     )
 
     # Рабочий адрес
-    if m % 3 == 0
-      c.create_work_address!(
-  postal_code: sprintf("%07d", rand(10000000)),
-  city: city_names.sample,
-  address1: "試験4-5-6",
-  address2: "ルビービル2F",
-  company_name: company_names.sample
-)
-    end
+    c.create_work_address!(
+      postal_code: sprintf("%07d", rand(10000000)),
+      prefecture: prefectures.sample,
+      city: city_names.sample,
+      address1: "試験4-5-6",
+      address2: "ルビービル2F",
+      company_name: company_names.sample,
+      division_name: "営業部"
+    )
   end
 end
 
