@@ -1,11 +1,13 @@
 class Staff::CustomersController < Staff::Base
-  before_action :set_customer_form, only: [:edit, :update, :show]
+  before_action :set_customer_form, only: [:show, :edit, :update]
 
   def index
-@customers = Customer.order(:id).page(params[:page])  end
+    @customers = Customer.order(:id).page(params[:page])
+  end
 
   def show
-     @customer = Customer.find(params[:id])
+    # @customer_form уже установлен через before_action
+    @customer = @customer_form.customer
   end
 
   def new
@@ -24,7 +26,7 @@ class Staff::CustomersController < Staff::Base
   end
 
   def edit
-    # @customer_form уже установлен через before_action
+    @customer = @customer_form.customer
   end
 
   def update
@@ -53,7 +55,7 @@ class Staff::CustomersController < Staff::Base
     params.require(:form).permit(
       customer: [:email, :password, :family_name, :given_name, :family_name_kana, :given_name_kana, :birthday, :gender],
       home_address: [:postal_code, :prefecture, :city, :address1, :address2],
-      work_address: [:company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
+      work_address: [:company_name, :division_name, :postal_code, :address1, :address2],
       personal_phones: [],
       work_phones: []
     )
