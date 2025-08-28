@@ -20,17 +20,20 @@ h2,
 h3 {
 	color: #7b82e2;
 }
+
 .container {
-	max-width: 960px;
+	max-width: 700px;
 	margin: 0 auto;
 	padding: 20px;
 }
+
 html,
 body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
 }
+
 div#wrapper {
 	position: relative;
 	box-sizing: border-box;
@@ -38,18 +41,22 @@ div#wrapper {
 	margin: 0 auto;
 	padding-bottom: 48px;
 }
+
 header {
 	padding: 6px;
 	background-color: #08a;
 	color: #fafafa;
 }
+
 header span.logo-mark {
 	font-weight: bold;
 }
+
 header a {
 	float: right;
 	color: #fafafa;
 }
+
 footer {
 	bottom: 0;
 	position: absolute;
@@ -57,11 +64,13 @@ footer {
 	background-color: #666;
 	color: #fafafa;
 }
+
 footer p {
 	text-align: center;
 	padding: 6px;
 	margin: 0;
 }
+
 div#error {
 	width: 600px;
 	margin: 20px auto;
@@ -71,6 +80,55 @@ div#error {
 	background-color: #fafafa;
 	text-align: center;
 }
+
 div#error p.url {
 	font-family: monospace;
+}
+
+/* ========================================== */
+/* Компактные fieldset и поля формы */
+#login-form fieldset {
+	border: 1px solid #ccc;
+	padding: 10px 15px;
+	margin-bottom: 15px;
+	border-radius: 6px;
+}
+
+#login-form fieldset h3 {
+	margin-top: 0;
+	font-size: 1.1em;
+}
+
+#login-form .field {
+	margin-bottom: 8px;
+}
+
+#login-form label {
+	display: block;
+	margin-bottom: 3px;
+	font-weight: 500;
+	font-size: 0.95em;
+}
+
+#login-form input[type='text'],
+#login-form input[type='email'],
+#login-form input[type='password'],
+#login-form input[type='date'],
+#login-form select {
+	width: 100%;
+	max-width: 300px;
+	padding: 5px 8px;
+	font-size: 0.95em;
+	box-sizing: border-box;
+}
+
+#login-form .buttons {
+	margin-top: 10px;
+}
+
+#login-form .buttons input,
+#login-form .buttons a {
+	padding: 5px 12px;
+	font-size: 0.95em;
+	border-radius: 4px;
 }

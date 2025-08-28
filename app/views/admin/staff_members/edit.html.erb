@@ -1,10 +1,26 @@
-<% @title ="職員(しょくいん)アカウントの編集(へんしゅう)"%>
+<% @title = "職員アカウントの編集" %>
 <h1><%= @title %></h1>
 
 <div id="login-form">
-	<%= form_with model: @staff_member, url: [ :admin, @staff_member ] do |f| %>
+  <% if @staff_member.errors.any? %>
+    <div class="errors">
+      <h2><%= pluralize(@staff_member.errors.count, "エラー") %> が発生しました:</h2>
+      <ul>
+        <% @staff_member.errors.each do |attribute, message| %>
+          <li>
+            <%= @staff_member.class.human_attribute_name(attribute) %> <%= message %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-	<%= render "form", f: f %>
+  <%= form_with model: @staff_member, url: [:admin, @staff_member] do |f| %>
+    
+    <fieldset id="staff-edit-fields">
+      <h3>基本情報</h3>
+      <%= render "form", f: f %>
+    </fieldset>
 
-	<% end %>
+  <% end %>
 </div>

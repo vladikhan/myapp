@@ -11,6 +11,7 @@ gem 'pg'
 gem 'puma', '~> 5.0'
 # Use SCSS for stylesheet
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
+gem 'webpacker', '~> 5.4'
 
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

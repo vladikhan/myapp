@@ -4,95 +4,113 @@
 <div id="login-form">
   <%= form_with model: @customer_form.customer, url: staff_customer_path(@customer_form.customer), local: true do |f| %>
 
-    <%# Основная информация о клиенте %>
-    <div class="field">
-      <%= f.label :email, "メールアドレス" %>
-      <%= f.email_field :email, required: true %>
-    </div>
+    <!-- 基本情報 -->
+    <fieldset>
+      <h3>基本情報</h3>
 
-    <div class="field">
-      <%= f.label :password, "パスワード" %>
-      <%= f.password_field :password %>
-    </div>
+      <div class="field">
+        <%= f.label :email, "メールアドレス" %>
+        <%= f.email_field :email, required: true %>
+      </div>
 
-    <div class="field">
-      <%= f.label :family_name, "姓" %>
-      <%= f.text_field :family_name, required: true %>
-    </div>
+      <div class="field">
+        <%= f.label :password, "パスワード" %>
+        <%= f.password_field :password %>
+      </div>
 
-    <div class="field">
-      <%= f.label :given_name, "名" %>
-      <%= f.text_field :given_name, required: true %>
-    </div>
+      <div class="field">
+        <%= f.label :family_name, "姓" %>
+        <%= f.text_field :family_name, required: true %>
+      </div>
 
-    <div class="field">
-      <%= f.label :family_name_kana, "姓（カナ）" %>
-      <%= f.text_field :family_name_kana, required: true %>
-    </div>
+      <div class="field">
+        <%= f.label :given_name, "名" %>
+        <%= f.text_field :given_name, required: true %>
+      </div>
 
-    <div class="field">
-      <%= f.label :given_name_kana, "名（カナ）" %>
-      <%= f.text_field :given_name_kana, required: true %>
-    </div>
+      <div class="field">
+        <%= f.label :family_name_kana, "姓（カナ）" %>
+        <%= f.text_field :family_name_kana, required: true %>
+      </div>
 
-    <div class="field">
-      <%= f.label :birthday, "生年月日" %>
-      <%= f.date_field :birthday %>
-    </div>
+      <div class="field">
+        <%= f.label :given_name_kana, "名（カナ）" %>
+        <%= f.text_field :given_name_kana, required: true %>
+      </div>
 
-    <div class="field">
-      <%= f.label :gender, "性別" %><br>
-      <%= f.radio_button :gender, "male" %> 男性
-      <%= f.radio_button :gender, "female" %> 女性
-    </div>
+      <div class="field">
+        <%= f.label :birthday, "生年月日" %>
+        <%= f.date_field :birthday %>
+      </div>
 
-    <%# Домашний адрес %>
-    <h3>自宅住所</h3>
-    <div class="field">
+      <div class="field">
+        <%= f.label :gender, "性別" %><br>
+        <%= f.radio_button :gender, "male" %> 男性
+        <%= f.radio_button :gender, "female" %> 女性
+      </div>
+    </fieldset>
+
+    <!-- 自宅住所 -->
+    <fieldset>
+      <h3>自宅住所</h3>
       <%= f.fields_for :home_address do |home| %>
-        <%= home.label :postal_code, "郵便番号" %>
-        <%= home.text_field :postal_code %>
-
-        <%= home.label :prefecture, "都道府県" %>
-        <%= home.select :prefecture, Address::PREFECTURE_NAMES %>
-
-        <%= home.label :city, "市区町村" %>
-        <%= home.text_field :city %>
-
-        <%= home.label :address1, "町域、番地等" %>
-        <%= home.text_field :address1 %>
-
-        <%= home.label :address2, "建物名、部屋番号等" %>
-        <%= home.text_field :address2 %>
+        <div class="field">
+          <%= home.label :postal_code, "郵便番号" %>
+          <%= home.text_field :postal_code %>
+        </div>
+        <div class="field">
+          <%= home.label :prefecture, "都道府県" %>
+          <%= home.select :prefecture, Address::PREFECTURE_NAMES %>
+        </div>
+        <div class="field">
+          <%= home.label :city, "市区町村" %>
+          <%= home.text_field :city %>
+        </div>
+        <div class="field">
+          <%= home.label :address1, "町域、番地等" %>
+          <%= home.text_field :address1 %>
+        </div>
+        <div class="field">
+          <%= home.label :address2, "建物名、部屋番号等" %>
+          <%= home.text_field :address2 %>
+        </div>
       <% end %>
-    </div>
+    </fieldset>
 
-    <%# Рабочий адрес %>
-    <h3>勤務先住所</h3>
-    <div class="field">
+    <!-- 勤務先住所 -->
+    <fieldset>
+      <h3>勤務先住所</h3>
       <%= f.fields_for :work_address do |work| %>
-        <%= work.label :company_name, "会社名" %>
-        <%= work.text_field :company_name %>
-
-        <%= work.label :division_name, "部署名" %>
-        <%= work.text_field :division_name %>
-
-        <%= work.label :postal_code, "郵便番号" %>
-        <%= work.text_field :postal_code %>
-
-        <%= work.label :prefecture, "都道府県" %>
-        <%= work.select :prefecture, Address::PREFECTURE_NAMES %>
-
-        <%= work.label :city, "市区町村" %>
-        <%= work.text_field :city %>
-
-        <%= work.label :address1, "町域、番地等" %>
-        <%= work.text_field :address1 %>
-
-        <%= work.label :address2, "建物名、部屋番号等" %>
-        <%= work.text_field :address2 %>
+        <div class="field">
+          <%= work.label :company_name, "会社名" %>
+          <%= work.text_field :company_name %>
+        </div>
+        <div class="field">
+          <%= work.label :division_name, "部署名" %>
+          <%= work.text_field :division_name %>
+        </div>
+        <div class="field">
+          <%= work.label :postal_code, "郵便番号" %>
+          <%= work.text_field :postal_code %>
+        </div>
+        <div class="field">
+          <%= work.label :prefecture, "都道府県" %>
+          <%= work.select :prefecture, Address::PREFECTURE_NAMES %>
+        </div>
+        <div class="field">
+          <%= work.label :city, "市区町村" %>
+          <%= work.text_field :city %>
+        </div>
+        <div class="field">
+          <%= work.label :address1, "町域、番地等" %>
+          <%= work.text_field :address1 %>
+        </div>
+        <div class="field">
+          <%= work.label :address2, "建物名、部屋番号等" %>
+          <%= work.text_field :address2 %>
+        </div>
       <% end %>
-    </div>
+    </fieldset>
 
     <div class="buttons">
       <%= f.submit "更新" %>

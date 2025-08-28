@@ -2,6 +2,7 @@ class StaffMember < ApplicationRecord
   has_secure_password
   include EmailHolder
   include PersonalNameHolder
+  include PasswordHolder
 
   has_many :events, class_name: "StaffEvent", foreign_key: "staff_member_id"
 
