@@ -1,4 +1,4 @@
-<% @title = "顧客こきゃく管理" %>
+<% @title = "顧客管理" %>
 <h1><%= @title %></h1>
 
 <div class="table-wrapper">
@@ -17,14 +17,18 @@
       <th>性別</th>
       <th>アクション</th>
     </tr>
+
     <% @customers.each do |c| %>
-      <% p = CustomerPresenter.new(c, self) rescue nil %>
+      <% p = CustomerPresenter.new(c, self) rescue OpenStruct.new(
+           full_name: "#{c.family_name} #{c.given_name}",
+           full_name_kana: "#{c.family_name_kana} #{c.given_name_kana}"
+         ) %>
       <tr>
-        <td><%= p&.full_name || "#{c.family_name} #{c.given_name}" %></td>
-        <td><%= p&.full_name_kana || "#{c.family_name_kana} #{c.given_name_kana}" %></td>
+        <td><%= p.full_name %></td>
+        <td><%= p.full_name_kana %></td>
         <td><%= c.email %></td>
         <td><%= c.birthday %></td>
-        <td><%= c.gender %></td>
+        <td><%= p.gender %></td>
         <td class="actions">
           <%= link_to "詳細", staff_customer_path(c) %> |
           <%= link_to "編集", edit_staff_customer_path(c) %> |

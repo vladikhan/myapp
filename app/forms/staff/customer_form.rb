@@ -19,12 +19,13 @@ class Staff::CustomerForm
   end
 
   def save 
-    ActiveRecord::Base.transaction do
-      customer.save!
-      customer.home_address.save!
-      customer.work_address.save!
+    if customer.valid?
+      ActiveRecord::Base.transaction do
+        customer.save!
+        customer.home_address.save!
+        customer.work_address.save!
+      end
     end
-  end
 
   private def customer_params
     @params.require(:customer).permit(
@@ -45,5 +46,6 @@ end
             :company_name, :division_name
 
      )
+  end
   end
 end
