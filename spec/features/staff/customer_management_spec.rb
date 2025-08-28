@@ -49,12 +49,6 @@ feature "職員による顧客管理" do
     expect(new_customer.work_address.company_name).to eq("テスト")
   end
 
-
-
-
-
-
-
   scenario "職員が顧客情報を編集する" do
   click_link "顧客管理"
   first("table.listing tbody tr:first-child").click_link "編集"
@@ -65,6 +59,24 @@ feature "職員による顧客管理" do
   fill_in "customer_home_address_postal_code", with: "9999999"
   fill_in "customer_work_address_company_name", with: "テスト"
   end
+
+  scenario "職員が生年月日と自宅の郵便番号に無効な値を入力する" do
+    click_link "顧客管理"
+    first("table.listing").click_link "編集"
+
+    fill_in "生年月日", with: "2100-01-01"
+    within("fieldset#home-address-fields") do
+    fill_in "郵便番号", with: "XYZ"
+    end
+    click_button "変更"
+
+    expect(page).to have_css("header span.alert")
+    expect(page).to have_css(
+      "div.field_with_errors input#form_customer_birthday")
+    expect(page).to have_css(
+        "div.field_with_errors input#form_home_address_postal_code")
+    end
+      
 
   within("table.listing body tr:first-child") do
     click_link "編集"
@@ -82,5 +94,5 @@ feature "職員による顧客管理" do
   expect(page).to have_content("顧客情報を変更しました")
   expect(page).to have_content("test@example.jp")
   expect(page).to have_content("テスト")
-  end
+end
 end

@@ -1,17 +1,13 @@
 class StaffMember < ApplicationRecord
   has_secure_password
-  include StringNormalizer
+  include EmailHolder
+  include PersonalNameHolder
 
   has_many :events, class_name: "StaffEvent", foreign_key: "staff_member_id"
 
   # 正規化 (Normalization)
-  before_validation do
-    self.family_name = normalize_as_name(family_name) if family_name
-    self.given_name = normalize_as_name(given_name) if given_name
-    self.family_name_kana = normalize_as_furigana(family_name_kana) if family_name_kana
-    self.given_name_kana = normalize_as_furigana(given_name_kana) if given_name_kana
-  end
 
+  
   before_validation :normalize_email
   before_validation :set_email_for_index
 
@@ -25,24 +21,7 @@ class StaffMember < ApplicationRecord
     self.email = email.gsub(/\s+/, '')
   end
 
-  # バリデーション用の正規表現
-  KATAKANA_REGEXP = /\A[\p{katakana}\u{30fc}]+\z/
-  NAME_REGEX     = /\A[\p{Han}\p{Hiragana}\p{Katakana}\p{Latin}ー－]+\z/
-  EMAIL_REGEX    = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-
-  # バリデーション
-  validates :family_name, :given_name,
-            presence: { message: "は必須です" },
-            format: { with: NAME_REGEX, message: "には漢字・ひらがな・カタカナ・英字で入力してください" }
-
-  validates :family_name_kana, :given_name_kana,
-            presence: { message: "は必須です" },
-            format: { with: KATAKANA_REGEXP, message: "はカタカナで入力してください" }
-
-  validates :email,
-            presence: { message: "は必須です" },
-            uniqueness: { case_sensitive: false, message: "は既に使用されています" },
-            format: { with: EMAIL_REGEX, message: "の形式が正しくありません" }
+  
 
   # カスタム日付チェック
   validate :start_date_after_2000
