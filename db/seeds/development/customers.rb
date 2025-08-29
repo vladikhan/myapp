@@ -38,11 +38,9 @@ company_names = %w(OIAX ABC XYZ)
 
 10.times do |n|
   10.times do |m|
-    # Получаем имя
     fn = family_names[n].split(":")
     gn = given_names[m].split(":")
 
-    # Создаем клиента
     c = Customer.create!(
       email: "#{fn[2]}.#{gn[2]}@example.jp",
       family_name: fn[0],
@@ -54,33 +52,24 @@ company_names = %w(OIAX ABC XYZ)
       gender: m < 5 ? "male" : "female"
     )
 
+    # Создаём home_address
+    home = c.create_home_address!(
+      postal_code: sprintf("%07d", rand(10000000)),
+      prefecture: Address::PREFECTURE_NAMES.sample,
+      city: city_names.sample,
+      address1: "開発1-2-3",
+      address2: "レイルズハイツ301号室"
+    )
+
+    # Добавляем телефоны к home_address
+    if m % 10 == 0
+      home.phones.create!(number: sprintf("03-0000-%04d", n))
+      home.phones.create!(number: "03-0000-0001")
+    end
+
     # Личные телефоны клиента
     if m % 2 == 0
       c.personal_phones.create!(number: sprintf("090-0000-%04d", n * 10 + m))
-    end
-
-    # Дополнительный телефон для некоторых клиентов
-    if m % 10 == 0
-      c.home_address.phone.create!(number: sprintf("03-0000-%04d", n))
-
-      # Используем home_address, создадим его раньше, если нужно
-      home = c.create_home_address!(
-        postal_code: sprintf("%07d", rand(10000000)),
-        prefecture: Address::PREFECTURE_NAMES.sample,
-        city: city_names.sample,
-        address1: "開発1-2-3",
-        address2: "レイルズハイツ301号室"
-      )
-      home.phones.create!(number: "03-0000-0001")
-    else
-      # Если home_address ещё не создан, создаем без телефона
-      c.create_home_address!(
-        postal_code: sprintf("%07d", rand(10000000)),
-        prefecture: Address::PREFECTURE_NAMES.sample,
-        city: city_names.sample,
-        address1: "開発1-2-3",
-        address2: "レイルズハイツ301号室"
-      )
     end
 
     # Адрес работы
