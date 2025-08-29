@@ -55,12 +55,14 @@ company_names = %w(OIAX ABC XYZ)
     )
 
     # Личные телефоны клиента
-    if m.even?
+    if m % 2 == 0
       c.personal_phones.create!(number: sprintf("090-0000-%04d", n * 10 + m))
     end
 
     # Дополнительный телефон для некоторых клиентов
     if m % 10 == 0
+      c.home_address.phone.create!(number: sprintf("03-0000-%04d", n))
+
       # Используем home_address, создадим его раньше, если нужно
       home = c.create_home_address!(
         postal_code: sprintf("%07d", rand(10000000)),
