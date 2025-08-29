@@ -6,6 +6,9 @@ class Staff::CustomerForm
 
   def initialize(customer = nil)
     @customer = customer || Customer.new(gender: "male")
+    (2 - @customer.personal_phones.size).times do
+      @customer.personal_phones.build
+    end
     self.inputs_home_address = @customer.home_address.present?
     self.inputs_work_address = @customer.work_address.present?
     @customer.build_home_address unless @customer.home_address

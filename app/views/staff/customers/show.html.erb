@@ -63,11 +63,11 @@
       <tr><th>町域、番地等</th><td><%= customer.work_address&.address1 || "-" %></td></tr>
       <tr><th>建物名、部屋番号等</th><td><%= customer.work_address&.address2 || "-" %></td></tr>
       <tr>
-        <th>勤務先電話番号(1)</th>
+        <th>個人電話番号(1)</th>
         <td><%= phones[0]&.number || "-" %></td>
       </tr>
       <tr>
-        <th>勤務先電話番号(2)</th>
+        <th>個人電話番号(2)</th>
         <td><%= phones[1]&.number || "-" %></td>
     <% else %>
       <tr><td colspan="2">登録されていません</td></tr>
