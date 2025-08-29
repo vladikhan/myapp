@@ -15,12 +15,16 @@
 // @use 'customer';
 @use 'tables';
 
+/* ========================================== */
+/* Typography */
 h1,
 h2,
 h3 {
 	color: #7b82e2;
+	font-weight: 600;
 }
 
+/* Layout */
 .container {
 	max-width: 700px;
 	margin: 0 auto;
@@ -32,6 +36,9 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+	font-family: 'Segoe UI', Roboto, sans-serif;
+	background-color: #f7f8fa;
+	color: #333;
 }
 
 div#wrapper {
@@ -42,21 +49,38 @@ div#wrapper {
 	padding-bottom: 48px;
 }
 
+div#wrapper div#container h1 {
+	padding: 9px 30px;
+}
+/* ========================================== */
+/* Header */
 header {
-	padding: 6px;
+	padding: 10px 20px;
 	background-color: #08a;
 	color: #fafafa;
+	justify-content: space-between;
+	align-items: center;
 }
 
 header span.logo-mark {
 	font-weight: bold;
+	font-size: 1.3em;
 }
 
-header a {
-	float: right;
+header nav a {
+	margin-left: 15px;
 	color: #fafafa;
+	text-decoration: none;
+	font-size: 0.95em;
+	transition: color 0.3s ease;
 }
 
+header nav a:hover {
+	color: #d4e8f9;
+}
+
+/* ========================================== */
+/* Footer */
 footer {
 	bottom: 0;
 	position: absolute;
@@ -67,10 +91,13 @@ footer {
 
 footer p {
 	text-align: center;
-	padding: 6px;
+	padding: 10px;
 	margin: 0;
+	font-size: 0.9em;
 }
 
+/* ========================================== */
+/* Error Box */
 div#error {
 	width: 600px;
 	margin: 20px auto;
@@ -86,12 +113,13 @@ div#error p.url {
 }
 
 /* ========================================== */
-/* Компактные fieldset и поля формы */
+/* Forms */
 #login-form fieldset {
-	border: 1px solid #ccc;
-	padding: 10px 15px;
+	border: 1px solid #c8cfe4;
+	padding: 12px 15px;
 	margin-bottom: 15px;
 	border-radius: 6px;
+	color: #3a42a8;
 }
 
 #login-form fieldset h3 {
@@ -100,14 +128,15 @@ div#error p.url {
 }
 
 #login-form .field {
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 }
 
 #login-form label {
 	display: block;
-	margin-bottom: 3px;
+	margin-bottom: 5px;
 	font-weight: 500;
 	font-size: 0.95em;
+	color: #444;
 }
 
 #login-form input[type='text'],
@@ -117,18 +146,163 @@ div#error p.url {
 #login-form select {
 	width: 100%;
 	max-width: 300px;
-	padding: 5px 8px;
-	font-size: 0.95em;
+	padding: 10px 14px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 16px;
 	box-sizing: border-box;
+	color: #333;
+	background-color: #fff;
+	transition: all 0.3s ease;
 }
 
+/* Specific tweaks */
+#login-form input[type='password'] {
+	width: 100%;
+}
+
+#login-form input[type='date'],
+#login-form select {
+	font-size: 0.95em;
+	color: #6d6875;
+}
+
+/* Focus effect */
+#login-form input:focus,
+#login-form select:focus {
+	border-color: #08a;
+	box-shadow: 0 0 8px rgba(0, 136, 170, 0.3);
+	outline: none;
+}
+table.listing {
+	width: 60%;
+}
+/* Buttons */
 #login-form .buttons {
-	margin-top: 10px;
+	margin-top: 15px;
+	display: flex;
+	gap: 10px;
 }
 
 #login-form .buttons input,
 #login-form .buttons a {
-	padding: 5px 12px;
+	padding: 8px 14px;
 	font-size: 0.95em;
-	border-radius: 4px;
+	border-radius: 6px;
+	background-color: #08a;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+}
+
+#login-form .buttons input:hover,
+#login-form .buttons a:hover {
+	background-color: #066d8e;
+}
+
+.check_boxes {
+	color: #08a;
+}
+
+/* ========================================== */
+/* Links */
+a {
+	color: #08a;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.3s ease;
+}
+
+a:hover {
+	color: #055d73;
+	text-decoration: underline;
+}
+
+/* ========================================== */
+/* Pagination - Clean Modern Look */
+.pagination {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+	margin: 25px 0;
+	flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination span {
+	display: inline-block;
+	padding: 0px 4px;
+	border-radius: 6px;
+	background-color: #f8f9fa;
+	color: #08a;
+	font-size: 0.95em;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+	background-color: #08a;
+	color: #fff;
+	border-color: #08a;
+}
+
+.pagination .current {
+	background-color: #08a;
+	color: #fff;
+	font-weight: bold;
+	border-color: #08a;
+}
+
+/* ========================================== */
+/* Page Navigation (Prev/Next links) */
+.page-nav {
+	display: flex;
+	justify-content: space-between;
+	margin: 30px 0;
+}
+
+.page-nav a {
+	display: inline-block;
+	padding: 10px 18px;
+	border-radius: 6px;
+	background-color: #f8f9fa;
+	border: 1px solid #d0d0d0;
+	color: #08a;
+	font-size: 1em;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.page-nav a:hover {
+	background-color: #08a;
+	color: #fff;
+	border-color: #08a;
+}
+#login-form .buttons {
+	display: flex;
+	justify-content: center; /* center horizontally */
+	gap: 12px; /* space between buttons */
+	margin-top: 20px;
+}
+
+#login-form .buttons input,
+#login-form .buttons a {
+	padding: 8px 16px;
+	font-size: 0.95em;
+	border-radius: 6px;
+	background-color: #08a;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+}
+
+#login-form .buttons input:hover,
+#login-form .buttons a:hover {
+	background-color: #066d8e;
 }

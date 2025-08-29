@@ -49,6 +49,11 @@
         <%= f.radio_button :gender, "female" %> 女性
       </div>
     </fieldset>
+    
+      <div class="check-boxes">
+        <%= f.check_box :inputs_home_address %>
+        <%= f.label :inputs_home_address, "自宅住所を入力する" %>
+      </div>
 
     <!-- 自宅住所 -->
     <fieldset>
@@ -77,6 +82,11 @@
       <% end %>
     </fieldset>
 
+      <div class="check-boxes">
+        <%= f.check_box :inputs_work_address %>
+        <%= f.label :inputs_work_address, "勤務先を入力する" %>
+      </div>
+
     <!-- 勤務先住所 -->
     <fieldset>
       <h3>勤務先住所</h3>
@@ -92,6 +102,7 @@
         <div class="field">
           <%= work.label :postal_code, "郵便番号" %>
           <%= work.text_field :postal_code %>
+          <span class="notes">(7の半角数字で入力してください)</span>
         </div>
         <div class="field">
           <%= work.label :prefecture, "都道府県" %>
@@ -112,6 +123,8 @@
       <% end %>
     </fieldset>
 
+
+    <!-- ボタン -->
     <div class="buttons">
       <%= f.submit "更新" %>
       <%= link_to "キャンセル", staff_customers_path %>
