@@ -7,4 +7,10 @@ class WorkAddress < ApplicationRecord
   end
 
   validates :company_name, presence: true
+
+private_methods
+
+def normalize_as_name(value)
+  value.to_s.strip.presence
+end
 end
