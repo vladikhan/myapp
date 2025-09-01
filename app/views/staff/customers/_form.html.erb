@@ -22,10 +22,22 @@
         <%= f.label :given_name, "名" %>
         <%= f.text_field :given_name, required: true %>
       </div>
+
       <div class="field">
-        <%= f.label :gender, "性別" %>
-        <%= f.select :gender, [["男性", "male"], ["女性", "female"]], include_blank: true %>
+        <%= f.label :gender, "性別" %><br>
+        <%= f.radio_button :gender, "male" %> 男性
+        <%= f.radio_button :gender, "female" %> 女性
       </div>
+<!-- Personal phones -->
+   
+      <h3>個人電話番号</h3>
+      <%= f.fields_for :personal_phones do |phone| %>
+        <div class="field">
+          <%= phone.label :number, "電話番号" %>
+          <%= phone.text_field :number %>
+        </div>
+      <% end %>
+
     </fieldset>
 
     <!-- チェックボックス для home address -->
@@ -101,17 +113,6 @@
     </div>
   <% end %>
 </fieldset>
-
-    <!-- Personal phones -->
-    <fieldset>
-      <h3>個人電話番号</h3>
-      <%= f.fields_for :personal_phones do |phone| %>
-        <div class="field">
-          <%= phone.label :number, "電話番号" %>
-          <%= phone.text_field :number %>
-        </div>
-      <% end %>
-    </fieldset>
 
   <% end %>
 </div>
