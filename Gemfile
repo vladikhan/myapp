@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.4'
+ruby '~> 3.1.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.6'
@@ -25,6 +25,7 @@ gem 'jbuilder', '~> 2.7'
  gem 'validates_timeliness', '~> 6.0'
 
 gem 'valid_email2'
+
  
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

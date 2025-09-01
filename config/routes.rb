@@ -44,16 +44,17 @@ Rails.application.routes.draw do
   # -------------------------
   # Admin routes
   # -------------------------
+    # -------------------------
+  # Admin routes (с host constraint)
+  # -------------------------
   constraints host: config[:admin][:host] do
-    namespace :admin, path: config[:admin][:path] do
+    namespace :admin do
       root "top#index", as: :root
 
-      # Сессии
       get    "login"  => "sessions#new",     as: :login
       post   "login"  => "sessions#create",  as: :session
       delete "logout" => "sessions#destroy", as: :logout
 
-      # Управление сотрудниками и событиями
       resources :staff_members do
         resources :staff_events, only: [:index]
       end
@@ -61,6 +62,21 @@ Rails.application.routes.draw do
     end
   end
 
+  # -------------------------
+  # Admin routes (без host constraint, для разработки)
+  # -------------------------
+  namespace :admin do
+    root "top#index", as: :root_dev
+
+    get    "login"  => "sessions#new"
+    post   "login"  => "sessions#create"
+    delete "logout" => "sessions#destroy"
+
+    resources :staff_members do
+      resources :staff_events, only: [:index]
+    end
+    resources :staff_events, only: [:index]
+  end
   # -------------------------
   # Customer routes (без host constraint)
   # -------------------------

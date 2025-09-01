@@ -12,12 +12,14 @@ services:
     command: bin/rails server -b 0.0.0.0
     volumes:
       - .:/myapp
+      - ~/.ssh:/root/.ssh:ro # <- добавили проброс SSH ключей
     ports:
       - '3000:3000'
     depends_on:
       - db
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/baukis2_development
+      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no' # чтобы не спрашивал подтверждение ключа
 
 volumes:
   db-data:
