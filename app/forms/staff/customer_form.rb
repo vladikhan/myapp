@@ -6,9 +6,7 @@ class Staff::CustomerForm
 
   def initialize(customer = nil)
     @customer = customer || Customer.new(gender: "male")
-    (2 - @customer.personal_phones.size).times do
-      @customer.personal_phones.build
-    end
+    (2 - @customer.personal_phones.size).times { @customer.personal_phones.build }
     self.inputs_home_address = @customer.home_address.present?
     self.inputs_work_address = @customer.work_address.present?
     @customer.build_home_address unless @customer.home_address
@@ -16,35 +14,44 @@ class Staff::CustomerForm
   end
 
   def assign_attributes(params = {})
-  @params = params
+    @params = params
 
-  customer.assign_attributes(customer_params)
-  customer.home_address.assign_attributes(home_address_params)
-  customer.work_address.assign_attributes(work_address_params)
+    customer.assign_attributes(customer_params)
+    customer.home_address.assign_attributes(home_address_params) if inputs_home_address
+    customer.work_address.assign_attributes(work_address_params) if inputs_work_address
 
-  def save 
-    
+    if params[:personal_phones_attributes]
+      customer.personal_phones.each_with_index do |phone, i|
+        phone.assign_attributes(number: params[:personal_phones_attributes][i][:number])
+      end
+    end
   end
 
-  private def customer_params
+  def save
+    ActiveRecord::Base.transaction do
+      customer.save!
+      customer.home_address.save! if inputs_home_address
+      customer.work_address.save! if inputs_work_address
+      customer.personal_phones.each(&:save!)
+    end
+  rescue ActiveRecord::RecordInvalid
+    false
+  end
+
+  private
+
+  def customer_params
     @params.require(:customer).permit(
-      :email, :password,
-      :family_name, :given_name,:family_name_kana, :given_name_kana, :birthday, :gender
-    )
-end
-
-  private def home_address_params
-    @params.require(:home_addrss).permit(
-      :postal_code, :prefecture, :city, :address1, :address2,
+      :email, :password, :family_name, :given_name,
+      :family_name_kana, :given_name_kana, :birthday, :gender
     )
   end
 
-  private def work_address_params
-     @params.require(:work_address).permit(
-            :postal_code, :prefecture, :city, :address1, :address2,
-            :company_name, :division_name
-
-     )
+  def home_address_params
+    @params.require(:home_address).permit(:postal_code, :prefecture, :city, :address1, :address2)
   end
+
+  def work_address_params
+    @params.require(:work_address).permit(:postal_code, :prefecture, :city, :address1, :address2, :company_name, :division_name)
   end
 end
