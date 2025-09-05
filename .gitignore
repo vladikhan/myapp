@@ -44,3 +44,4 @@ yarn-debug.log*
 
 /config/credentials/production.key
 .netrc
+.DS_Store
