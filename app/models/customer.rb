@@ -1,5 +1,8 @@
 # app/models/customer.rb
 class Customer < ApplicationRecord
+
+  has_secure_password
+  
   has_many :personal_phones, -> { where(address_id: nil).order(:id) }, class_name: "Phone", dependent: :destroy, autosave: true
   has_one :home_address, dependent: :destroy, autosave: true
   has_one :work_address, dependent: :destroy, autosave: true
