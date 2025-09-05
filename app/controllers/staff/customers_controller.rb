@@ -10,20 +10,19 @@ class Staff::CustomersController < Staff::Base
     @customer = @customer_form.customer
   end
 
-  def new
-    @customer_form = Staff::CustomerForm.new
-  end
+def new
+  @customer_form = Staff::CustomerForm.new
+end
 
   def create
-    @customer_form = Staff::CustomerForm.new
-    @customer_form.customer.assign_attributes(customer_params)
-
-    if @customer_form.customer.save
-      redirect_to staff_customers_path, notice: "顧客を登録しました。"
-    else
-      render :new
-    end
+  @customer_form = Staff::CustomerForm.new
+  @customer_form.assign_attributes(params[:customer_form] || params[:customer])
+  if @customer_form.save
+    redirect_to staff_customers_path, notice: "顧客を登録しました。"
+  else
+    render :new
   end
+end
 
   def edit
     @customer = @customer_form.customer
@@ -62,12 +61,12 @@ class Staff::CustomersController < Staff::Base
   end
 
   def customer_params
-    params.require(:form).permit(
-      customer: [:email, :password, :family_name, :given_name, :family_name_kana, :given_name_kana, :birthday, :gender],
-      home_address: [:postal_code, :prefecture, :city, :address1, :address2],
-      work_address: [:company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
-      personal_phones: [],
-      work_phones: []
+    params.require(:customer).permit(
+      :email, :password, :family_name, :given_name,
+      :family_name_kana, :given_name_kana, :birthday, :gender,
+      home_address_attributes: [:postal_code, :prefecture, :city, :address1, :address2],
+      work_address_attributes: [:company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
+      personal_phones_attributes: [:number]
     )
   end
 end
