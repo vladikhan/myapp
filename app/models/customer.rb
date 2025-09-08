@@ -1,4 +1,3 @@
-# app/models/customer.rb
 class Customer < ApplicationRecord
   has_secure_password
 
@@ -6,12 +5,12 @@ class Customer < ApplicationRecord
   has_many :personal_phones, dependent: :destroy, autosave: true
 
   # Адреса
-  has_one :home_address, dependent: :destroy, autosave: true
-  has_one :work_address, dependent: :destroy, autosave: true
-
+  has_many :addresses, dependent: :destroy
+  has_one :home_address, autosave: true
+  has_one :work_address, autosave: true
   # Телефоны для адресов
-  has_many :address_phones, through: :home_address, source: :phones
-  has_many :address_phones, through: :work_address, source: :phones
+  has_many :home_address_phones, through: :home_address, source: :phones
+  has_many :work_address_phones, through: :work_address, source: :phones
 
   # Nested attributes для формы
   accepts_nested_attributes_for :personal_phones

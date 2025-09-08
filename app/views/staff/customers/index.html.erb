@@ -7,6 +7,7 @@
   </div>
 
   <%= paginate @customers if @customers.respond_to?(:current_page) %>
+  <%= render "search_form" %> 
 
   <table class="listing">
     <tr>
@@ -19,23 +20,19 @@
     </tr>
 
     <% @customers.each do |c| %>
-      <% p = CustomerPresenter.new(c, self) rescue OpenStruct.new(
-           full_name: "#{c.family_name} #{c.given_name}",
-           full_name_kana: "#{c.family_name_kana} #{c.given_name_kana}"
-         ) %>
-      <tr>
-        <td><%= p.full_name %></td>
-        <td><%= p.full_name_kana %></td>
-        <td><%= c.email %></td>
-        <td><%= c.birthday %></td>
-        <td><%= p.gender %></td>
-        <td class="actions">
-          <%= link_to "詳細", staff_customer_path(c) %> |
-          <%= link_to "編集", edit_staff_customer_path(c) %> |
-          <%= link_to "削除", staff_customer_path(c), method: :delete, data: { confirm: "本当に削除しますか？" } %>
-        </td>
-      </tr>
-    <% end %>
+  <tr>
+    <td><%= "#{c.family_name || '不明'} #{c.given_name || ''}" %></td>
+    <td><%= "#{c.family_name_kana || '不明'} #{c.given_name_kana || ''}" %></td>
+    <td><%= c.email || '不明' %></td>
+    <td><%= c.birthday || '不明' %></td>
+    <td><%= c.gender || '不明' %></td>
+    <td class="actions">
+      <%= link_to "詳細", staff_customer_path(c) %> |
+      <%= link_to "編集", edit_staff_customer_path(c) %> |
+      <%= link_to "削除", staff_customer_path(c), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+    </td>
+  </tr>
+<% end %>
   </table>
 
   <%= paginate @customers if @customers.respond_to?(:current_page) %>

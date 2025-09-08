@@ -3,7 +3,7 @@
 
 <div class="table-wrapper">
   <div class="links">
-    <%= link_to "新人登録 とうろく", new_admin_staff_member_path %>
+    <%= link_to "新人登録", new_admin_staff_member_path %>
   </div>
 
   <table class="listing">
@@ -29,7 +29,7 @@
           <td class="date"><%= m.end_date.try(:strftime, "%Y/%m/%d") %></td>
           <td class="boolean"><%= p.suspended_mark %></td>
           <td class="actions">
-            <%= link_to "編集へんしゅう", [:edit, :admin, m] %> |
+            <%= link_to "編集", [:edit, :admin, m] %> |
             <%= link_to "Events", [:admin, m, :staff_events] %> |
             <%= link_to "削除 さくじょ", [:admin, m], method: :delete, data: { confirm: "本当に削除しますか?" } %>
           </td>
@@ -39,6 +39,6 @@
   </table>
 
   <div class="links">
-    <%= link_to "新人登録 とうろく", new_admin_staff_member_path %>
+    <%= link_to "新人登録", new_admin_staff_member_path %>
   </div>
 </div>

@@ -1,45 +1,69 @@
-# app/forms/staff/customer_search_form.rb
 class Staff::CustomerSearchForm
   include ActiveModel::Model
-  include ActiveModel::Naming   # важно для FormPresenter
+  include ActiveModel::Naming
+  include StringNormalizer
 
   attr_accessor :family_name_kana, :given_name_kana, 
                 :birth_year, :birth_month, :birth_mday, 
                 :address_type, :prefecture, :city, :phone_number
 
-  # Основной метод поиска
   def search
-    customers = Customer.all
+    normalize_values
 
-    # Фильтр по имени
-    customers = customers.where(family_name_kana: family_name_kana) if family_name_kana.present?
-    customers = customers.where(given_name_kana: given_name_kana) if given_name_kana.present?
+    rel = Customer.all
 
-    # Фильтр по дате рождения
-    if birth_year.present?
-      customers = customers.where('extract(year from birthday) = ?', birth_year)
-    end
-    if birth_month.present?
-      customers = customers.where('extract(month from birthday) = ?', birth_month)
-    end
-    if birth_mday.present?
-      customers = customers.where('extract(day from birthday) = ?', birth_mday)
+    # --- Имя ---
+    rel = rel.where(family_name_kana: family_name_kana) if family_name_kana.present?
+    rel = rel.where(given_name_kana: given_name_kana)   if given_name_kana.present?
+
+    # --- Дата рождения ---
+    rel = rel.where(birth_year: birth_year)   if birth_year.present?
+    rel = rel.where(birth_month: birth_month) if birth_month.present?
+    rel = rel.where(birth_mday: birth_mday)   if birth_mday.present?
+
+    # --- Адрес ---
+    if prefecture.present? || city.present?
+      case address_type
+      when "home"
+        rel = rel.joins(:home_address)
+        rel = rel.where(home_addresses: { prefecture: prefecture }) if prefecture.present?
+        rel = rel.where(home_addresses: { city: city }) if city.present?
+      when "work"
+        rel = rel.joins(:work_address)
+        rel = rel.where(work_addresses: { prefecture: prefecture }) if prefecture.present?
+        rel = rel.where(work_addresses: { city: city }) if city.present?
+      when ""
+  # пустой - объединяем оба адреса через left_outer_joins
+  rel = rel.left_outer_joins(:home_address, :work_address)
+  if prefecture.present?
+    rel = rel.where("home_addresses.prefecture = :pref OR work_addresses.prefecture = :pref", pref: prefecture)
+  end
+  if city.present?
+    rel = rel.where("home_addresses.city = :city OR work_addresses.city = :city", city: city)
+  end
+else
+  raise ArgumentError, "Unknown address_type: #{address_type}"
+      end
+
+      rel = rel.where("addresses.prefecture = ?", prefecture) if prefecture.present?
+      rel = rel.where("addresses.city = ?", city)             if city.present?
     end
 
-    # Фильтр по адресу
-    if address_type.present?
-      address_assoc = address_type == "work" ? :work_address : :home_address
-      customers = customers.joins(address_assoc)
-      customers = customers.where("#{address_assoc.to_s.pluralize}.prefecture = ?", prefecture) if prefecture.present?
-      customers = customers.where("#{address_assoc.to_s.pluralize}.city = ?", city) if city.present?
-    end
-
-    # Фильтр по телефону
+    # --- Телефон ---
     if phone_number.present?
-      customers = customers.left_joins(:personal_phones)
-                           .where('personal_phones.number = ?', phone_number)
+      rel = rel.joins(:personal_phones)
+               .where("personal_phones.number = ?", phone_number)
     end
 
-    customers.distinct
+    rel.distinct.order(:family_name_kana, :given_name_kana)
+  end
+
+  private
+
+  def normalize_values
+    self.family_name_kana = normalize_as_furigana(family_name_kana)
+    self.given_name_kana  = normalize_as_furigana(given_name_kana)
+    self.city             = normalize_as_name(city)
+    self.phone_number     = normalize_as_phone_number(phone_number)&.gsub(/\D/, "")
   end
 end

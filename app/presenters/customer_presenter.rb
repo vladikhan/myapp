@@ -1,31 +1,30 @@
-class CustomerPresenter < ModelPresenter
-  delegate :email, to: :object
+# app/presenters/customer_presenter.rb
+class CustomerPresenter
+  def initialize(customer)
+    @customer = customer
+  end
 
   def full_name
-    object.family_name.to_s + " " + object.given_name.to_s
+    [@customer.family_name, @customer.given_name].compact.join(' ').presence || "不明"
   end
 
   def full_name_kana
-    object.family_name_kana.to_s + " " + object.given_name_kana.to_s
+    [@customer.family_name_kana, @customer.given_name_kana].compact.join(' ').presence || "不明"
+  end
+
+  def email
+    @customer.email.presence || "不明"
   end
 
   def birthday
-    object.birthday.present? ? object.birthday.strftime("%Y/%m/%d") : ""
+    @customer.birthday.present? ? @customer.birthday.strftime("%Y-%m-%d") : "不明"
   end
 
   def gender
-    case object.gender
-    when "male"
-      "男性"
-    when "female"
-      "女性"
-    else
-      "-"
+    case @customer.gender
+    when "male" then "男性"
+    when "female" then "女性"
+    else "不明"
     end
   end
-  
-    def personal_phones
-      objedt.personal_phones
-      object.personal_phones.map(&:number)
-    end
 end

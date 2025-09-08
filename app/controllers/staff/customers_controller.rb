@@ -3,8 +3,12 @@ class Staff::CustomersController < Staff::Base
 
   def index
     @search_form = Staff::CustomerSearchForm.new(search_params)
-    @customers = Customer.order(:id)
+    @customers = @search_form.search
     @customers = @customers.page(params[:page]) if defined?(Kaminari)
+  rescue => e
+    logger.error "Index error: #{e.message}"
+    @customers = Customer.normalize_as_name
+    flash.now[:alert] = "エラーが発生しました。"
   end
 
   def show
@@ -23,7 +27,7 @@ end
   else
     render :new
   end
-end
+  end
 
   def edit
     @customer = @customer_form.customer

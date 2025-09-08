@@ -1,15 +1,49 @@
 @use '../dimensions' as *;
-@use '../colors';
+@use '../colors' as *;
+@use 'sass:color';
 
+/* Search Form */
 form.search {
 	padding: $wide;
-	border: solid $dark_gray 1px;
+	border: 5px solid $dark_gray;
+	border-radius: 10px;
 	background-color: $very_light_gray;
-	div.input-block {
-		display: inline-block;
-		margin: $moderate $very_wide $moderate 0;
-		label {
-			margin-right: $moderate;
+
+	div.row {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: $moderate;
+
+		.input-block {
+			display: flex;
+			align-items: center;
+			margin-right: $very_wide;
+			margin-bottom: $moderate;
+
+			label {
+				margin-right: $moderate;
+				min-width: 80px;
+			}
+
+			input,
+			select {
+				padding: $small;
+				border: 1px solid $dark_gray;
+				border-radius: 4px;
+			}
+		}
+	}
+
+	.btn-search {
+		padding: $small $moderate;
+		background-color: $dark_gray;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: color.adjust($dark_gray, $lightness: -10%);
 		}
 	}
 }

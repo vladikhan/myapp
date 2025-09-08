@@ -14,6 +14,8 @@
 @use 'admin';
 // @use 'customer';
 @use 'tables';
+@use 'sass:color';
+@use './staff/search';
 
 /* ========================================== */
 /* Typography */
@@ -52,7 +54,7 @@ div#wrapper {
 div#wrapper div#container h1 {
 	padding: 9px 30px;
 }
-/* ========================================== */
+
 /* Header */
 header {
 	padding: 10px 20px;
@@ -79,7 +81,6 @@ header nav a:hover {
 	color: #d4e8f9;
 }
 
-/* ========================================== */
 /* Footer */
 footer {
 	bottom: 0;
@@ -96,7 +97,40 @@ footer p {
 	font-size: 0.9em;
 }
 
-/* ========================================== */
+/* Pagination - Clean Modern Look */
+.pagination {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+	margin: 25px 0;
+	flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination span {
+	display: inline-block;
+	padding: 0px 4px;
+	border-radius: 6px;
+	background-color: #f8f9fa;
+	color: #08a;
+	font-size: 0.95em;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+	background-color: #08a;
+	color: #fff;
+	border-color: #08a;
+}
+
+.pagination .current {
+	background-color: #08a;
+	color: #fff;
+	font-weight: bold;
+	border-color: #08a;
+}
 /* Error Box */
 div#error {
 	width: 600px;
@@ -112,7 +146,19 @@ div#error p.url {
 	font-family: monospace;
 }
 
-/* ========================================== */
+/* Links */
+a {
+	color: #08a;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.3s ease;
+}
+
+a:hover {
+	color: #055d73;
+	text-decoration: underline;
+}
+
 /* Forms */
 #login-form fieldset {
 	border: 1px solid #c8cfe4;
@@ -156,136 +202,18 @@ div#error p.url {
 	transition: all 0.3s ease;
 }
 
-/* Specific tweaks */
-#login-form input[type='password'] {
-	width: 100%;
-}
-
-#login-form input[type='date'],
-#login-form select {
-	font-size: 0.95em;
-	color: #6d6875;
-}
-
-/* Focus effect */
 #login-form input:focus,
 #login-form select:focus {
 	border-color: #08a;
 	box-shadow: 0 0 8px rgba(0, 136, 170, 0.3);
 	outline: none;
 }
-table.listing {
-	width: 60%;
-}
+
 /* Buttons */
 #login-form .buttons {
-	margin-top: 15px;
-	display: flex;
-	gap: 10px;
-}
-
-#login-form .buttons input,
-#login-form .buttons a {
-	padding: 8px 14px;
-	font-size: 0.95em;
-	border-radius: 6px;
-	background-color: #08a;
-	color: #fff;
-	border: none;
-	cursor: pointer;
-	text-decoration: none;
-	transition: background-color 0.3s ease;
-}
-
-#login-form .buttons input:hover,
-#login-form .buttons a:hover {
-	background-color: #066d8e;
-}
-
-.check_boxes {
-	color: #08a;
-}
-
-/* ========================================== */
-/* Links */
-a {
-	color: #08a;
-	text-decoration: none;
-	font-weight: 500;
-	transition: color 0.3s ease;
-}
-
-a:hover {
-	color: #055d73;
-	text-decoration: underline;
-}
-
-/* ========================================== */
-/* Pagination - Clean Modern Look */
-.pagination {
 	display: flex;
 	justify-content: center;
-	gap: 6px;
-	margin: 25px 0;
-	flex-wrap: wrap;
-}
-
-.pagination a,
-.pagination span {
-	display: inline-block;
-	padding: 0px 4px;
-	border-radius: 6px;
-	background-color: #f8f9fa;
-	color: #08a;
-	font-size: 0.95em;
-	font-weight: 500;
-	text-decoration: none;
-	transition: all 0.3s ease;
-}
-
-.pagination a:hover {
-	background-color: #08a;
-	color: #fff;
-	border-color: #08a;
-}
-
-.pagination .current {
-	background-color: #08a;
-	color: #fff;
-	font-weight: bold;
-	border-color: #08a;
-}
-
-/* ========================================== */
-/* Page Navigation (Prev/Next links) */
-.page-nav {
-	display: flex;
-	justify-content: space-between;
-	margin: 30px 0;
-}
-
-.page-nav a {
-	display: inline-block;
-	padding: 10px 18px;
-	border-radius: 6px;
-	background-color: #f8f9fa;
-	border: 1px solid #d0d0d0;
-	color: #08a;
-	font-size: 1em;
-	font-weight: 500;
-	text-decoration: none;
-	transition: all 0.3s ease;
-}
-
-.page-nav a:hover {
-	background-color: #08a;
-	color: #fff;
-	border-color: #08a;
-}
-#login-form .buttons {
-	display: flex;
-	justify-content: center; /* center horizontally */
-	gap: 12px; /* space between buttons */
+	gap: 12px;
 	margin-top: 20px;
 }
 
@@ -294,7 +222,7 @@ a:hover {
 	padding: 8px 16px;
 	font-size: 0.95em;
 	border-radius: 6px;
-	background-color: #08a;
+	background-color: $dark_gray;
 	color: #fff;
 	border: none;
 	cursor: pointer;
@@ -304,5 +232,5 @@ a:hover {
 
 #login-form .buttons input:hover,
 #login-form .buttons a:hover {
-	background-color: #066d8e;
+	background-color: color.adjust($dark_gray, $lightness: -10%);
 }

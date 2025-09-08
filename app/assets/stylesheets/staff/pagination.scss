@@ -1,5 +1,6 @@
 @use '../dimensions' as *;
-@use '../colors';
+@use '../colors' as *;
+@use 'sass:color';
 
 div.pagination {
 	margin: $moderate 0;

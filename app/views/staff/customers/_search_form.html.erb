@@ -1,24 +1,35 @@
-<%= form_with model: @search_form, scope: "search", url: staff_customer_path, 
-html: { method: :get, class: "search" } do |f|%>
-<%= markup do |m|
-  p = FormPresenter.new(f, self)
-  m << p.text_field_block(:family_name_kana, "フリガナ（性）:")
-  m << p.text_field_block(:given_name_kana, "フリガナ（名）:")
-  m.br
-  m << p.drop_down_list_block(:birth_year, "誕生年:",
-  (1900..Time.current.year).to_a.reverse)
-  m << p.drop_down_list_block(:birth_month, "誕生月:", 1..12)
-  m << p.drop_down_list_block(:birth_mday, "誕生日:", 1..31)
-  m.br
-  m.div do
-  m << p.drop_down_list_block(:address_type, "住所の検索。。。：",
-  [["住宅住所のみ", "home" ],["勤務先のみ", "work" ] ])
-  end
-  m << p.drop_down_list_block(:prefecture, "都道府県:", 
-  Address::PREFECTURE_NAMES)
-  m << p.text_field_block(:city, "市区町村")
-  m.br
-  m << p.text_field_block(:phone_number, "電話番号:")
-  m << f.submit("検索")
+<%= form_with model: @search_form, scope: "search", url: staff_customers_path, html: { method: :get, class: "search" } do |f| %>
+  <%= markup do |m| 
+    p = FormPresenter.new(f, self)
+
+    m.div(class: "row") do
+      # フリガナ
+      m << p.text_field_block(:family_name_kana, "フリガナ（性）:")
+      m << p.text_field_block(:given_name_kana, "フリガナ（名）:")
+    end
+
+    m.div(class: "row") do
+      # 誕生日
+      m << p.drop_down_list_block(:birth_year, "誕生年:", (1900..Time.current.year).to_a.reverse)
+      m << p.drop_down_list_block(:birth_month, "誕生月:", 1..12)
+      m << p.drop_down_list_block(:birth_mday, "誕生日:", 1..31)
+    end
+
+    m.div(class: "row") do
+      # 住所
+      m << p.drop_down_list_block(:address_type, "住所の検索:", [["住宅住所のみ", "home"], ["勤務先のみ", "work"]])
+      m << p.drop_down_list_block(:prefecture, "都道府県:", Address::PREFECTURE_NAMES)
+      m << p.text_field_block(:city, "市区町村")
+    end
+
+    m.div(class: "row") do
+      # 電話番号
+      m << p.text_field_block(:phone_number, "電話番号:")
+    end
+
+    m.div(class: "row") do
+      # 検索ボタン
+      m << f.submit("検索", class: "btn-search")
+    end
   end %>
-  <%end %>
+<% end %>

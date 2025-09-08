@@ -25,6 +25,8 @@ class FormPresenter
   def text_field_block(name, label_text = nil, options = {})
   label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
   merged_options = options.merge(@current_options || {})
+  merged_options[:class] = [merged_options[:class], ("error-field" if object.errors[name].any?)].compact.join(" ")
+
   markup(:div, class: "input-block") do |m|
     m << decorated_label(name, label_text, merged_options)
     m << text_field(name, merged_options)
@@ -32,43 +34,36 @@ class FormPresenter
   end
   end
 
-def date_field_block(name, label_text = nil, options = {})
-  label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
-  merged_options = options.merge(@current_options || {})
-  markup(:div, class: "input-block") do |m|
-    m << decorated_label(name, label_text, merged_options)
-    m << date_field(name, merged_options)
-    m << error_messages_for(name)
-  end
-end
-
-def drop_down_list_block(name, label_text, choices, options = {})
-  markup(:div, class: "input-block") do |m|
-    m << decorated_label(name, label_text, options)
-    m << form_builder.select(name, choices, { include_blank: true }, options)
-    m << error-full_messages_for(name)
-end
-end
-
-  def password_field_block(name, label_text, options = {})
-  merged_options = options.merge(@current_options || {})
-  markup(:div, class: "input-block") do |m|
-    m << decorated_label(name, label_text, merged_options)
-    m << password_field(name, merged_options)
-    m << error_messages_for(name)
-  end
-end
-
-  def date_field_block(name, label_text, options = {})
+  def date_field_block(name, label_text = nil, options = {})
+    label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}") rescue name.to_s
     merged_options = options.merge(@current_options || {})
     markup(:div, class: "input-block") do |m|
       m << decorated_label(name, label_text, merged_options)
       m << date_field(name, merged_options)
-      m << error_messages_for(name)
+      m << error_messages_for(name) if object.respond_to?(:errors)
+    end
+  end
+
+  def drop_down_list_block(name, label_text, choices, options = {})
+    markup(:div, class: "input-block") do |m|
+      m << decorated_label(name, label_text, options)
+      m << form_builder.select(name, choices, { include_blank: true }, options)
+      m << error_messages_for(name) if object.respond_to?(:errors)
+    end
+  end
+
+  def password_field_block(name, label_text, options = {})
+    merged_options = options.merge(@current_options || {})
+    markup(:div, class: "input-block") do |m|
+      m << decorated_label(name, label_text, merged_options)
+      m << password_field(name, merged_options)
+      m << error_messages_for(name) if object.respond_to?(:errors)
     end
   end
 
   def error_messages_for(name)
+    return "" unless object.respond_to?(:errors)
+
     markup do |m|
       object.errors.full_messages_for(name).each do |message|
         m.div(class: "error-message") do |m|
@@ -77,7 +72,6 @@ end
       end
     end
   end
-
 
   def decorated_label(name, label_text, options = {})
     label(name, label_text, class: options[:required] ? "required" : nil)
