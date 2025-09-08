@@ -23,7 +23,7 @@ class Staff::Base < ApplicationController
 
   def authorize
     unless current_staff_member
-      flash[:notice] = "職員(しょくいん)としてログインしてください"
+      flash[:notice] = "職員としてログインしてください"
       redirect_to staff_login_path
     end
   end

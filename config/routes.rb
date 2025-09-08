@@ -82,6 +82,12 @@ Rails.application.routes.draw do
   # -------------------------
   namespace :customer do
     root "top#index"
+
+    get    "login" => "sessions#new", as: :login
+    post   "login" => "sessions#create", as: :login_create
+    delete "logout" => "sessions#destroy", as: :logout
+
+    resource :session, only: [ :create, :destroy ]
   end
 
   # -------------------------

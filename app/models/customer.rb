@@ -8,6 +8,7 @@ class Customer < ApplicationRecord
   has_many :addresses, dependent: :destroy
   has_one :home_address, autosave: true
   has_one :work_address, autosave: true
+
   # Телефоны для адресов
   has_many :home_address_phones, through: :home_address, source: :phones
   has_many :work_address_phones, through: :work_address, source: :phones
@@ -20,6 +21,19 @@ class Customer < ApplicationRecord
   # Валидации
   validates :gender, inclusion: { in: %w(male female), allow_blank: true }
   validates :birthday, timeliness: { after: Date.new(1900,1,1), before: ->(obj){ Date.today }, allow_blank: true }
+
+  # Проверка, заблокирован ли пользователь
+  def suspended?
+    respond_to?(:suspended) ? suspended : false
+  end
+
+  # Проверка активности по датам
+  def active_today?
+    today = Date.today
+    start_ok = respond_to?(:start_date) ? (start_date.nil? || start_date <= today) : true
+    end_ok   = respond_to?(:end_date)   ? (end_date.nil? || end_date > today) : true
+    start_ok && end_ok
+  end
 
   # Автоматическая установка года, месяца, дня рождения
   before_save do

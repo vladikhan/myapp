@@ -1,0 +1,29 @@
+<%# Login Page style %>
+<% @title = "ログイン" %>
+
+<div id="wrapper">
+  <div id="container">
+    <div id="login-form">
+      <h1><%= @title %></h1>
+
+      <%= form_with model: @form, url: customer_login_create_path, method: :post do |f| %>
+        <div>
+          <%= f.label :email, "メールアドレス" %>
+          <%= f.text_field :email %>
+        </div>
+        <div>
+          <%= f.label :password, "パスワード" %>
+          <%= f.password_field :password %>
+        </div>
+        <div>
+          <%= f.check_box :remember_me %>
+          <%= f.label :remember_me, "次回から自動でログインする" %>
+        </div>
+        <div class="buttons">
+          <%= f.submit "ログイン" %>
+        </div>
+      <% end %>
+        </div>
+        </div>
+        </div>
+

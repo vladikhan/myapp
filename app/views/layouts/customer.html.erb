@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Customer Area</title>
-<%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <title>Customer Area</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
-
-
 </head>
   <body>
     <div id="wrapper">
