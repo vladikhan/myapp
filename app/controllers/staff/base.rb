@@ -1,13 +1,12 @@
 class Staff::Base < ApplicationController
   layout "staff"
+  before_action :check_source_ip_address
   before_action :authorize
-  # before_action :check_account
-  # before_action :check_timeout
+  before_action :check_account
+  before_action :check_timeout
   # before_action :set_staff_member
 
-
   private
-
 
   def staff_member
     current_staff_member
@@ -21,12 +20,6 @@ class Staff::Base < ApplicationController
 
   helper_method :current_staff_member, :staff_member
 
-  def authorize
-    unless current_staff_member
-      flash[:notice] = "職員としてログインしてください"
-      redirect_to staff_login_path
-    end
-  end
 
   def check_account
     if current_staff_member && !current_staff_member.active?
@@ -47,6 +40,17 @@ class Staff::Base < ApplicationController
     else
       session.delete(:staff_member_id)
       flash[:notice] = "セッションがタイムアウトしました"
+      redirect_to staff_login_path
+    end
+  end
+
+  private def check_source_ip_address
+    return IpAddressRejected unless AllowedSource.include?("staff", request.ip)
+  end
+  
+  def authorize
+    unless current_staff_member
+      flash[:notice] = "職員としてログインしてください"
       redirect_to staff_login_path
     end
   end

@@ -14,7 +14,12 @@ class Customer::SessionsController < Customer::Base
     customer = Customer.find_by("LOWER(email) = ?", @form.email.downcase) if @form.email.present?
 
     if customer && Customer::Authenticator.new(customer).authenticate(@form.password)
-      session[:customer_id] = customer.id
+      if @form.remember_me?
+        cookies.permanent.signed[:customer_id] = customer.id
+      else
+        cookies.delete(:customer_id)
+        session[:customer_id] = customer.id 
+      end
       flash[:notice] = "ログインしました。"
       redirect_to customer_root_path
     else
@@ -28,6 +33,7 @@ class Customer::SessionsController < Customer::Base
   end
 
   def destroy
+    cookies.delete(:customer_id)
     session.delete(:customer_id)
     @current_customer = nil
     flash[:notice] = "ログアウトしました。"

@@ -15,7 +15,7 @@ services:
 
   web:
     build: .
-    command: bash -c "bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0"
+    command: bash -c "sleep 5 && bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0"
     volumes:
       - .:/myapp
       - ~/.ssh:/root/.ssh:ro
@@ -25,6 +25,7 @@ services:
       - db
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/baukis2_development
+      RAILS_ENV: development
       GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
 
 volumes:

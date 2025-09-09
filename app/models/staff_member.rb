@@ -11,6 +11,11 @@ class StaffMember < ApplicationRecord
   
   before_validation :normalize_email
   before_validation :set_email_for_index
+  
+# 有効な状態かどうか
+  def active?
+    !suspended? && (end_date.nil? || end_date >= Date.today)
+  end
 
   # メールアドレスの正規化
   def normalize_email
@@ -64,11 +69,5 @@ class StaffMember < ApplicationRecord
         I18n.t("activerecord.errors.models.staff_member.attributes.end_date.after")
       )
     end
-  end
-
-  # 有効な状態かどうか
-  def active?
-    return false unless start_date
-    !suspended && start_date <= Date.today && (end_date.nil? || end_date >= Date.today)
   end
 end

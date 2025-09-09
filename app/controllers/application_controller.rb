@@ -4,7 +4,9 @@ class ApplicationController < ActionController::Base
   class Forbidden < ActionController::ActionControllerError; end
   class IpAddressRejected < ActionController::ActionControllerError; end
 
-  include ErrorHandlers 
+  include ErrorHandlers if Rails.env.production?
+  rescue_from Forbidden, with: :rescue403
+  rescue_from IpAddressRejected, with: :rescue403
 
   helper_method :current_admin_member, :current_staff_member
 
@@ -31,5 +33,10 @@ class ApplicationController < ActionController::Base
     else
       "customer"
     end
+  end
+
+  private def rescue403(e)
+    @exception = e
+    render "errors/forbidden", status: 403
   end
 end

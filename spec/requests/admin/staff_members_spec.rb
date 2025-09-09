@@ -26,7 +26,7 @@ RSpec.describe "Admin::StaffMembers", type: :request do
 
   describe "ログインしていない場合" do
     before do
-      delete admin_session_url  # разлогиниваемся
+      delete admin_logout_url  # разлогиниваемся
     end
 
     it "ログインページにリダイレクトされること" do

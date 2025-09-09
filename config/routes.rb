@@ -56,9 +56,12 @@ Rails.application.routes.draw do
       delete "logout" => "sessions#destroy", as: :logout
 
       resources :staff_members do
-        resources :staff_events, only: [:index]
+      resources :staff_events, only: [:index]
       end
       resources :staff_events, only: [:index]
+      resources :allowed_sources, only: [ :index, :create ] do
+        delete :delete, on: :collection
+      end
     end
   end
 
@@ -81,7 +84,7 @@ Rails.application.routes.draw do
   # Customer routes (без host constraint)
   # -------------------------
   namespace :customer do
-    root "top#index"
+    root to: "top#index"
 
     get    "login" => "sessions#new", as: :login
     post   "login" => "sessions#create", as: :login_create
