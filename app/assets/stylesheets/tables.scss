@@ -52,3 +52,24 @@ table.listing {
 		background-color: $light_gray;
 	}
 }
+
+/* IP address input fields */
+.ip-input {
+	width: 50px !important; // make them small, fixed width
+	text-align: center; // center the numbers
+	border: 1px solid $very_dark_magenta; // match table border color
+	border-radius: 4px; // slight rounding
+	padding: 2px 4px;
+	font-family: monospace; // consistent with td.ip
+	margin-right: $narrow; // space between octets
+
+	&:focus {
+		width: 60px !important; // при фокусе ширина не меняется
+		outline: 2px solid $very_dark_magenta; // опционально: подсветка активного поля
+	}
+}
+
+.allowed-ip-fields {
+	display: flex; // arrange 4 inputs in a row
+	align-items: center;
+}

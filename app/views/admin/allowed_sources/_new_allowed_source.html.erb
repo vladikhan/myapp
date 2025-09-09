@@ -3,10 +3,15 @@
 	<div>
 		<%= f.label(:octet1, "．．．許可IPアドレス")%>
 
-<%= f.text_field(:octet1, size: 3) %>
-<%= f.text_field(:octet2, size: 3) %>
-<%= f.text_field(:octet3, size: 3) %>
-<%= f.text_field(:last_octet, size:3) %>
-<%= f.submit "追加" %>
+<div class="allowed-ip-fields">
+  <%= f.text_field(:octet1, size: 3, class: "ip-input") %>
+  <%= f.text_field(:octet2, size: 3, class: "ip-input") %>
+  <%= f.text_field(:octet3, size: 3, class: "ip-input") %>
+  <%= f.text_field(:last_octet, size: 3, class: "ip-input") %>
+			<div class="buttons">
+
+		<%= f.submit "追加" %>
+</div>
+</div>
 	</div>
 <% end %>
