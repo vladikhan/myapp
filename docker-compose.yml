@@ -1,25 +1,31 @@
+version: '3.9'
+
 services:
   db:
     image: postgres:13
-    volumes:
-      - db-data:/var/lib/postgresql/data
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: baukis2_development
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
 
   web:
     build: .
-    command: bin/rails server -b 0.0.0.0
+    command: bash -c "bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0"
     volumes:
       - .:/myapp
-      - ~/.ssh:/root/.ssh:ro # <- добавили проброс SSH ключей
+      - ~/.ssh:/root/.ssh:ro
     ports:
       - '3000:3000'
     depends_on:
       - db
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/baukis2_development
-      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no' # чтобы не спрашивал подтверждение ключа
+      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
 
 volumes:
   db-data:

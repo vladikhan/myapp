@@ -1,6 +1,6 @@
 FROM ruby:3.1.4
 
-# Устанавливаем системные пакеты и PostgreSQL клиент
+# Устанавливаем системные пакеты, PostgreSQL клиент и Git
 RUN apt-get update -qq && apt-get install -y \
     curl \
     build-essential \
@@ -9,7 +9,7 @@ RUN apt-get update -qq && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем Node 20.x
+# Устанавливаем Node.js 20.x
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
@@ -20,21 +20,21 @@ RUN corepack enable \
 # Устанавливаем bundler
 RUN gem install bundler -v 2.6.9
 
-# Устанавливаем рабочую директорию
+# Создаём рабочую директорию
 WORKDIR /myapp
 
-# Копируем Gemfile и устанавливаем зависимости
+# Копируем Gemfile и устанавливаем Ruby зависимости
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 # Копируем весь проект
 COPY . .
 
-# Настраиваем переменную окружения для Node/OpenSSL
+# Настройка переменной окружения для Node/OpenSSL (нужно для некоторых сборок Webpacker)
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
-# Открываем порт
+# Открываем порт 3000
 EXPOSE 3000
 
-# Старт приложения
+# Запуск сервера Rails
 CMD ["bin/rails", "server", "-b", "0.0.0.0"]

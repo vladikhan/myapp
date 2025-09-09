@@ -2,6 +2,7 @@
  *= require_self
  *= require_tree .
  */
+@use 'sass:color';
 @use 'dimensions' as *;
 @use 'colors' as *;
 @use 'admin/form';
@@ -14,9 +15,8 @@
 @use 'admin';
 // @use 'customer';
 @use 'tables';
-@use 'sass:color';
 @use './staff/search';
-
+$dark_gray: #666666;
 /* ========================================== */
 /* Typography */
 h1,
@@ -232,5 +232,5 @@ a:hover {
 
 #login-form .buttons input:hover,
 #login-form .buttons a:hover {
-	background-color: color.adjust($dark_gray, $lightness: -10%);
+	background-color: color.adjust($dark_gray, $lightness: 10%);
 }

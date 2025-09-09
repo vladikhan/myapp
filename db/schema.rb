@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_09_05_173359) do
+ActiveRecord::Schema.define(version: 2025_09_09_004213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,13 +75,13 @@ ActiveRecord::Schema.define(version: 2025_09_05_173359) do
     t.integer "birth_month"
     t.integer "birth_mday"
     t.index "lower((email)::text)", name: "index_customers_on_LOWER_email", unique: true
-    t.index ["birth_mday", "family_name_kana", "given_name_kana"], name: "index_customers_on_birth_mday_and_furigana"
+    t.index ["birth_mday", "family_name_kana", "given_name_kana"], name: "idx_birth_mday_furigana"
     t.index ["birth_mday", "given_name_kana"], name: "index_customers_on_birth_mday_and_given_name_kana"
     t.index ["birth_month", "birth_mday"], name: "index_customers_on_birth_month_and_birth_mday"
-    t.index ["birth_month", "family_name_kana", "given_name_kana"], name: "index_customers_on_birth_month_and_furigana"
+    t.index ["birth_month", "family_name_kana", "given_name_kana"], name: "idx_birth_month_furigana"
     t.index ["birth_month", "given_name_kana"], name: "index_customers_on_birth_month_and_given_name_kana"
     t.index ["birth_year", "birth_month", "birth_mday"], name: "index_customers_on_birth_year_and_birth_month_and_birth_mday"
-    t.index ["birth_year", "family_name_kana", "given_name_kana"], name: "index_customers_on_birth_year_and_furigana"
+    t.index ["birth_year", "family_name_kana", "given_name_kana"], name: "idx_birth_year_furigana"
     t.index ["birth_year", "given_name_kana"], name: "index_customers_on_birth_year_and_given_name_kana"
     t.index ["family_name_kana", "given_name_kana"], name: "index_customers_on_family_name_kana_and_given_name_kana"
     t.index ["given_name_kana"], name: "index_customers_on_given_name_kana"
