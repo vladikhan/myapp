@@ -16,6 +16,7 @@
 // @use 'customer';
 @use 'tables';
 @use './staff/search';
+@use './staff/pagination';
 $dark_gray: #666666;
 /* ========================================== */
 /* Typography */
@@ -97,40 +98,6 @@ footer p {
 	font-size: 0.9em;
 }
 
-/* Pagination - Clean Modern Look */
-.pagination {
-	display: flex;
-	justify-content: center;
-	gap: 6px;
-	margin: 25px 0;
-	flex-wrap: wrap;
-}
-
-.pagination a,
-.pagination span {
-	display: inline-block;
-	padding: 0px 4px;
-	border-radius: 6px;
-	background-color: #f8f9fa;
-	color: #08a;
-	font-size: 0.95em;
-	font-weight: 500;
-	text-decoration: none;
-	transition: all 0.3s ease;
-}
-
-.pagination a:hover {
-	background-color: #08a;
-	color: #fff;
-	border-color: #08a;
-}
-
-.pagination .current {
-	background-color: #08a;
-	color: #fff;
-	font-weight: bold;
-	border-color: #08a;
-}
 /* Error Box */
 div#error {
 	width: 600px;

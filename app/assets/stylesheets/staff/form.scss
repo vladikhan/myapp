@@ -23,6 +23,10 @@ div#wrapper {
 						padding-left: $narrow;
 						color: colors.$red;
 					}
+					span.instruction {
+						font-size: $small;
+						color: colors.$dark_gray;
+					}
 				}
 				div.notes {
 					text-align: right;

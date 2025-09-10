@@ -1,0 +1,50 @@
+/* Pagination - Elegant Neutral Style (Fixed) */
+.pagination {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin: 30px 0;
+	flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination span {
+	padding: 1px 7px; /* pill shape */
+	border-radius: 50px; /* fully rounded */
+	background-color: #f8f9fa; /* neutral background */
+	color: #4f4f4f; /* dark gray text */
+	font-size: 0.95em;
+	font-weight: 500;
+	text-decoration: none;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	transition: background-color 0.25s ease, color 0.25s ease;
+	cursor: pointer;
+}
+
+.pagination a:hover {
+	background-color: #4f4f4f; /* hover dark background */
+	color: #faf9f9;
+
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+	transform: none; /* no jumping */
+}
+
+.pagination .current {
+	background-color: #2a9d8f; /* active page teal */
+	color: #ffffff;
+	font-weight: bold;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+	transform: none; /* keep in place */
+}
+
+.pagination .disabled {
+	background-color: #faf9f9;
+	color: #b0b0b0;
+	pointer-events: none;
+	box-shadow: none;
+}
+
+.pagination .gap {
+	background-color: transparent;
+	margin-right: 6px;
+}
