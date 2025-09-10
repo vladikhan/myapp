@@ -34,6 +34,9 @@ table {
 		td.boolean {
 			text-align: center;
 		}
+		td.numeric {
+			text-align: right;
+		}
 		td.actions {
 			text-align: center;
 			color: $dark_gray;
@@ -56,15 +59,16 @@ table.listing {
 /* IP address input fields */
 .ip-input {
 	width: 50px !important; // make them small, fixed width
+	font-size: small;
 	text-align: center; // center the numbers
 	border: 1px solid $very_dark_magenta; // match table border color
 	border-radius: 4px; // slight rounding
 	padding: 2px 4px;
 	font-family: monospace; // consistent with td.ip
 	margin-right: $narrow; // space between octets
+	font-size: 12px;
 
 	&:focus {
-		width: 60px !important; // при фокусе ширина не меняется
 		outline: 2px solid $very_dark_magenta; // опционально: подсветка активного поля
 	}
 }

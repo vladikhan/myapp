@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
       # Customers
       resources :customers
+      resources :programs
     end
   end
 
@@ -41,9 +42,6 @@ Rails.application.routes.draw do
     resources :customers
   end
 
-  # -------------------------
-  # Admin routes
-  # -------------------------
     # -------------------------
   # Admin routes (с host constraint)
   # -------------------------

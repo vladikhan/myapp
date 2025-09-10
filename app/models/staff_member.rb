@@ -5,16 +5,20 @@ class StaffMember < ApplicationRecord
   include PasswordHolder
 
   has_many :events, class_name: "StaffEvent", foreign_key: "staff_member_id"
+  has_many :programs, foreign_key: "registrant_id", dependent: :restrict_with_exception
 
   # 正規化 (Normalization)
-
   
   before_validation :normalize_email
   before_validation :set_email_for_index
-  
+
 # 有効な状態かどうか
   def active?
     !suspended? && (end_date.nil? || end_date >= Date.today)
+  end
+
+  def deletable?
+    programs.empty?
   end
 
   # メールアドレスの正規化

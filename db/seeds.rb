@@ -4,7 +4,7 @@ puts "Seeding customers..."
 Customer.destroy_all
 
 city_names = %w(青巻市 赤巻市 黄巻市)
-prefectures = Address::PREFECTURE_NAMES # предполагаем, что у тебя есть константа с префектурами
+prefectures = Address::PREFECTURE_NAMES
 company_names = %w(OIAX ABC XYZ)
 
 family_names = %w{
@@ -33,6 +33,7 @@ given_names = %w{
   亀子:カメコ:kameko
 }
 
+# --- Customers
 10.times do |n|
   10.times do |m|
     fn = family_names[n % family_names.size].split(":")
@@ -49,11 +50,9 @@ given_names = %w{
       gender: m < 5 ? "male" : "female"
     )
 
-    # Личные телефоны
     c.personal_phones.create!(number: sprintf("090-0000-%04d", n * 10 + m)) if m.even?
     c.personal_phones.create!(number: sprintf("03-0000-%04d", n)) if m % 10 == 0
 
-    # Домашний адрес
     c.create_home_address!(
       postal_code: sprintf("%07d", rand(10000000)),
       prefecture: prefectures.sample,
@@ -62,7 +61,6 @@ given_names = %w{
       address2: "レイルズハイツ301号室"
     )
 
-    # Рабочий адрес
     c.create_work_address!(
       postal_code: sprintf("%07d", rand(10000000)),
       prefecture: prefectures.sample,
@@ -77,7 +75,7 @@ end
 
 puts "Created #{Customer.count} customers"
 
-
+# --- Staff members
 puts "Creating staff_members..."
 
 def debug_create_staff(attrs)
@@ -129,3 +127,21 @@ given_names = %w{
     suspended: n == 1
   )
 end
+
+# --- Programs
+puts "Creating programs..."
+
+staff_members = StaffMember.order(:id)
+
+20.times do |n|
+  t = (18 - n).weeks.ago.midnight
+  Program.create!(
+    title: "プログラム No.#{n + 1}",
+    description: "会員向け特別プログラムです．" * 10,
+    application_start_time: t,
+    application_end_time: t.advance(days: 7),
+    registrant: staff_members.sample
+  )
+end
+
+puts "Created #{Program.count} programs"

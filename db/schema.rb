@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_09_09_090432) do
+ActiveRecord::Schema.define(version: 2025_09_10_051750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,9 +137,8 @@ ActiveRecord::Schema.define(version: 2025_09_09_090432) do
     t.integer "registrant_id", null: false
     t.string "title", null: false
     t.text "description"
-    t.datetime "application_start_date", null: false
-    t.datetime "application_start_time"
-    t.datetime "application_end_date", null: false
+    t.datetime "application_start_time", null: false
+    t.datetime "application_end_time", null: false
     t.integer "min_number_of_participants"
     t.integer "max_number_of_participants"
     t.datetime "created_at", precision: 6, null: false

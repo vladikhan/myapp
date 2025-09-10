@@ -2,8 +2,12 @@ class Customer < ApplicationRecord
   has_secure_password
 
   # Личные телефоны, не связанные с адресами
+  has_many :phones, dependent: :destroy
   has_many :personal_phones, dependent: :destroy, autosave: true
 
+  has_many :entries,dependent: :destroy
+  has_many :programs, through: :entries
+  
   # Адреса
   has_many :addresses, dependent: :destroy
   has_one :home_address, autosave: true
