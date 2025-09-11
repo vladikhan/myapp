@@ -45,7 +45,7 @@ class FormPresenter
     markup(:div) do |m|
       m << decorated_label(name, label_text, options)
       m << form_builder.number_field(name, options)
-      if oprions[:max]
+      if options[:max]
         max = view_context.number_with_delimiter(options[:max].to_i)
         m.span " (最大値: #{max}) ", class: "instruction"
       end

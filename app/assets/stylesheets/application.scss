@@ -132,7 +132,7 @@ a:hover {
 	padding: 12px 15px;
 	margin-bottom: 15px;
 	border-radius: 6px;
-	color: #3a42a8;
+	color: $very_dark_magenta;
 }
 
 #login-form fieldset h3 {
@@ -164,7 +164,7 @@ a:hover {
 	border-radius: 8px;
 	font-size: 16px;
 	box-sizing: border-box;
-	color: #333;
+	color: $dark_gray;
 	background-color: #fff;
 	transition: all 0.3s ease;
 }

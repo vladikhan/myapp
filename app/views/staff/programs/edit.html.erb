@@ -1,0 +1,16 @@
+<% @title = "プログラム編集" %>
+<h1><%= @title %></h1>
+
+<div id="login-form">
+  <%= form_with model: @program, scope: "program", url: staff_program_path(@program) do |f| %>
+
+	  <fieldset id="staff-edit-fields">
+    	<%= render "form", f: f %>
+    </fieldset>
+
+    <div class="buttons">
+      <%= f.submit "更新" %>
+      <%= link_to "キャンセル", staff_programs_path %>
+    </div>
+  <% end %>
+</div>

@@ -5,13 +5,12 @@ class Program < ApplicationRecord
   has_many :applicants, through: :entries, source: :customer
 
   scope :listing, -> {
-    left_joins(:entries)
-      .select("programs.*, COUNT(entries.id) AS number_of_applicants")
-      .group("programs.id")
-      .order(application_start_time: :desc)
-      .includes(:registrant)
-  }
-
+  left_joins(:entries)
+    .select("programs.*, COUNT(entries.id) AS number_of_applicants")
+    .group("programs.id")
+    .order(application_start_time: :desc)
+    .includes(:registrant)
+}
   # Virtual attributes for forms
   attribute :application_start_date, :date, default: Date.today
   attribute :application_start_hour, :integer, default: 9
@@ -55,6 +54,26 @@ class Program < ApplicationRecord
         hours: application_end_hour,
         minutes: application_end_minute
       )
+    end
+  end
+
+  validates :title, presence: true, length: { maximum:32 }
+  validates :description, presence: true, length: { maximum: 800 }
+  validates :application_start_time, timeliness: {
+    after_or_equal_to: Time.zone.local(2000, 1, 1),
+    before: -> (obj) { 1.year.from_now },
+    allow_blank: true
+  }
+  validates :application_end_time, timeliness: {
+    after: :application_start_time,
+    before: -> (obj) { obj.application_start_time.advance(days: 90) },
+    allow_blank: true,
+    if: -> (obj) { obj.application_start_time }
+  }
+  validate do
+    if min_number_of_participants && max_number_of_participants && 
+        min_number_of_participants > max_number_of_participants
+      errors.add(:max_number_of_participants, :less_than_min_number)
     end
   end
 end

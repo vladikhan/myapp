@@ -1,5 +1,5 @@
-@use '../colors' as *;
 @use '../dimensions' as *;
+@use '../colors' as *;
 
 div#wrapper {
 	div#container {
@@ -13,7 +13,7 @@ div#wrapper {
 
 			h1 {
 				background-color: transparent;
-				color: $very_dark_cyan;
+				color: $very_dark_yellow;
 				font-size: $huge;
 				font-weight: bold;
 			}
@@ -32,6 +32,9 @@ div#wrapper {
 					}
 					input[type='submit'] {
 						padding: $wide $wide * 2;
+					}
+					input[type='checkbox'] + label {
+						display: inline-block;
 					}
 				}
 			}
