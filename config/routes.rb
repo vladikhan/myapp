@@ -19,7 +19,11 @@ Rails.application.routes.draw do
 
       # Customers
       resources :customers
-      resources :programs
+      resources :programs do 
+        resources :entries, only: [] do
+          patch :update_all, on: :collection
+        end
+      end
     end
   end
 

@@ -21,6 +21,10 @@
     <fieldset id="staff-fields">
       <h3>基本情報</h3>
       <%= render "form", f: f %>
+    <div class="buttons">
+      <%= f.submit "更新" %>
+      <%= link_to "キャンセル", staff_programs_path %>
+    </div>
     </fieldset>
 
   <% end %>

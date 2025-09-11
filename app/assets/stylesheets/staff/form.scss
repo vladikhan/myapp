@@ -60,6 +60,15 @@ div#wrapper {
 						background-color: $pink;
 					}
 				}
+				div.with-errors {
+					label: {
+						color: $red;
+					}
+					input: {
+						background-color: $pink;
+					}
+				}
+
 				div.error-message {
 					color: colors.$red;
 					font-size: $small;

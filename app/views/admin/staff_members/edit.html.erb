@@ -17,10 +17,14 @@
 
   <%= form_with model: @staff_member, url: [:admin, @staff_member] do |f| %>
     
+    
     <fieldset id="staff-edit-fields">
       <h3>基本情報</h3>
       <%= render "form", f: f %>
     </fieldset>
-
-  <% end %>
+    <div class="buttons">
+      <%= f.submit "更新" %>
+      <%= link_to "キャンセル", staff_programs_path %>
+    </div>
 </div>
+  <% end %>

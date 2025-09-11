@@ -55,4 +55,11 @@ class Staff::ProgramsController < Staff::Base
       :description
     ])
   end
+
+  def destroy
+    program = Program.find(params[:id])
+    program.destroy!
+    flash.notice = "プログラムを編集しました。"
+    redirect_to :staff_programs
+  end
 end

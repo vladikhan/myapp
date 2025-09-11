@@ -3,7 +3,10 @@
 
 <div id='login-form'>
 	<%= form_with model: @program, url: :staff_programs do |f| %>
+	<fieldset id="staff-edit-fields">
+
 	<%= render "form", f: f %>
+	</fieldset>
 	<div class="buttons">
 		<%= f.submit "登録" %>
 		<%= link_to "キャンセル", :staff_programs %>

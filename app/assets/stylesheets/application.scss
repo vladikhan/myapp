@@ -17,6 +17,9 @@
 @use 'tables';
 @use './staff/search';
 @use './staff/pagination';
+@use './staff/divs_and_spans';
+@use './staff/entries';
+
 $dark_gray: #666666;
 /* ========================================== */
 /* Typography */
