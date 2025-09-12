@@ -1,9 +1,10 @@
 <%# Login Page style %>
-<% @title = "ログイン" %>
 
 <div id="wrapper">
   <div id="container">
     <div id="login-form">
+        <fieldset id="customer-login-fields">
+      <% @title = "ログイン" %>
       <h1><%= @title %></h1>
 
       <%= form_with model: @form, url: customer_login_create_path, method: :post do |f| %>
@@ -22,8 +23,8 @@
         <div class="buttons">
           <%= f.submit "ログイン" %>
         </div>
+        </fieldset>
       <% end %>
         </div>
         </div>
         </div>
-

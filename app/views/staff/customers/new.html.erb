@@ -3,13 +3,11 @@
 
 <div id="login-form">
   <%= form_with model: @customer_form, scope: "form", url: staff_customers_path do |f| %>
-    <fieldset id="staff-edit-fields">
       <%= render "form", f: f %>
 
       <div class="buttons">
         <%= f.submit "登録" %>
         <%= link_to "キャンセル", staff_customers_path %>
       </div>
-    </fieldset>
   <% end %>
 </div>

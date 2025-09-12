@@ -11,8 +11,3 @@
   end
   m << p.suspended_check_box
 end %>
-
-<div class="buttons">
-  <%= f.submit(@staff_member.new_record? ? "登録" : "更新") %>
-  <%= link_to "キャンセル", admin_staff_members_path, class: "cancel-button" %>
-</div>
