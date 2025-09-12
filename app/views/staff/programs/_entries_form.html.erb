@@ -39,19 +39,17 @@
     </tbody>
   </table>
 
-  <div class="centered-controls">
-    <%= form_with model: Staff::EntriesForm.new(@program), scope: "form",
-          url: update_all_staff_program_entries_path(@program), method: :patch do |f| %>
-      <%= f.hidden_field :approved %>
-      <%= f.hidden_field :not_approved %>
-      <%= f.hidden_field :canceled %>
-      <%= f.hidden_field :not_canceled %>
+  <div class="buttons-wrapper">
+  <%= form_with model: Staff::EntriesForm.new(@program), scope: "form",
+        url: update_all_staff_program_entries_path(@program), method: :patch do |f| %>
+    <%= f.hidden_field :approved %>
+    <%= f.hidden_field :not_approved %>
+    <%= f.hidden_field :canceled %>
+    <%= f.hidden_field :not_canceled %>
 
+    <div class="buttons">
       <%= f.submit "申し込みのフラグを更新する", class: "unified-button" %>
-    <% end %>
-
-    <div class="pagination">
-      <%= paginate @program.entries %>
     </div>
-  </div>
+  <% end %>
+</div>
 <% end %>
