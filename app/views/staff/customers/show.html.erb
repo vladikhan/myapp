@@ -1,7 +1,7 @@
 <% @title = "顧客詳細情報" %>
 <h1><%= @title %></h1>
 
-<% customer = @customer_form.customer %>
+<% customer = @customer %>
 
 <div class="table-wrapper">
   <table class="attributes">
@@ -25,52 +25,15 @@
       <th>メールアドレス</th>
       <td><%= customer.email %></td>
     </tr>
-      <% phones = customer.personal_phones %>
-  <tr>
-    <th>個人電話番号(1)</th>
-    <td><%= phones[0]&.number || "-" %></td>
-  </tr>
-  <tr>
-    <th>個人電話番号(2)</th>
-    <td><%= phones[1]&.number || "-" %></td>
-  </tr>
-
-    <tr><th colspan="2">自宅住所</th></tr>
-    <% if customer.home_address.present? %>
-      <tr><th>郵便番号</th><td><%= customer.home_address&.postal_code || "-" %></td></tr>
-      <tr><th>都道府県</th><td><%= customer.home_address&.prefecture || "-" %></td></tr>
-      <tr><th>市区町村</th><td><%= customer.home_address&.city || "-" %></td></tr>
-      <tr><th>町域、番地等</th><td><%= customer.home_address&.address1 || "-" %></td></tr>
-      <tr><th>建物名、部屋番号等</th><td><%= customer.home_address&.address2 || "-" %></td></tr>
-        <tr>
-        <th>自宅電話番号(1)</th>
-        <td><%= phones[0]&.number || "-" %></td>
-      </tr>
-      <tr>
-        <th>自宅電話番号(2)</th>
-        <td><%= phones[1]&.number || "-" %></td>
-    <% else %>
-      <tr><td colspan="2">登録されていません</td></tr>
-    <% end %>
-
-    <tr><th colspan="2">勤務先住所</th></tr>
-    <% if customer.work_address.present? %>
-      <tr><th>会社名</th><td><%= customer.work_address&.company_name || "-" %></td></tr>
-      <tr><th>部署名</th><td><%= customer.work_address&.division_name || "-" %></td></tr>
-      <tr><th>郵便番号</th><td><%= customer.work_address&.postal_code || "-" %></td></tr>
-      <tr><th>都道府県</th><td><%= customer.work_address&.prefecture || "-" %></td></tr>
-      <tr><th>市区町村</th><td><%= customer.work_address&.city || "-" %></td></tr>
-      <tr><th>町域、番地等</th><td><%= customer.work_address&.address1 || "-" %></td></tr>
-      <tr><th>建物名、部屋番号等</th><td><%= customer.work_address&.address2 || "-" %></td></tr>
-      <tr>
-        <th>個人電話番号(1)</th>
-        <td><%= phones[0]&.number || "-" %></td>
-      </tr>
-      <tr>
-        <th>個人電話番号(2)</th>
-        <td><%= phones[1]&.number || "-" %></td>
-    <% else %>
-      <tr><td colspan="2">登録されていません</td></tr>
-    <% end %>
+    <% phones = customer.personal_phones %>
+    <tr>
+      <th>個人電話番号(1)</th>
+      <td><%= phones[0]&.number || "-" %></td>
+    </tr>
+    <tr>
+      <th>個人電話番号(2)</th>
+      <td><%= phones[1]&.number || "-" %></td>
+    </tr>
+    ...
   </table>
 </div>
