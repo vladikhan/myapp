@@ -1,6 +1,11 @@
 puts "Seeding customers..."
 
-# Удаляем старые записи
+# --- Удаляем старые записи в правильном порядке ---
+# Сначала зависимости, потом родительские таблицы
+AddressPhone.destroy_all
+PersonalPhone.destroy_all
+WorkAddress.destroy_all
+HomeAddress.destroy_all
 Customer.destroy_all
 
 city_names = %w(青巻市 赤巻市 黄巻市)
@@ -33,7 +38,7 @@ given_names = %w{
   亀子:カメコ:kameko
 }
 
-# --- Customers
+# --- Создание клиентов ---
 10.times do |n|
   10.times do |m|
     fn = family_names[n % family_names.size].split(":")
@@ -75,7 +80,7 @@ end
 
 puts "Created #{Customer.count} customers"
 
-# --- Staff members
+# --- Создание сотрудников ---
 puts "Creating staff_members..."
 
 def debug_create_staff(attrs)
@@ -96,20 +101,8 @@ debug_create_staff(
   end_date: Date.today + 365,
 )
 
-family_names = %w{
-  佐藤:サトウ:sato
-  鈴木:スズキ:suzuki
-  高橋:タカハシ:takahashi
-  田中:タナカ:tanaka
-}
-
-given_names = %w{
-  二郎:ジロウ:jiro
-  三郎:サブロウ:saburo
-  マツコ:マツコ:matsuko
-  武子:タケコ:takeko
-  梅子:ウメコ:umeko
-}
+family_names = %w{ 佐藤:サトウ:sato 鈴木:スズキ:suzuki 高橋:タカハシ:takahashi 田中:タナカ:tanaka }
+given_names = %w{ 二郎:ジロウ:jiro 三郎:サブロウ:saburo マツコ:マツコ:matsuko 武子:タケコ:takeko 梅子:ウメコ:umeko }
 
 20.times do |n|
   fn = family_names[n % 4].split(":")
@@ -128,7 +121,7 @@ given_names = %w{
   )
 end
 
-# --- Programs
+# --- Создание программ ---
 puts "Creating programs..."
 
 staff_members = StaffMember.order(:id)
@@ -145,3 +138,18 @@ staff_members = StaffMember.order(:id)
 end
 
 puts "Created #{Program.count} programs"
+
+# --- Создание заявок для тестирования ---
+puts "Creating entries for programs..."
+
+Program.all.each do |program|
+  Customer.limit(5).each do |customer|
+    program.entries.create!(
+      customer: customer,
+      approved: false,
+      canceled: false
+    )
+  end
+end
+
+puts "Entries created for programs"

@@ -1,49 +1,57 @@
 <%
-  entries = @program.entries.includes(:customer).order("entries.id").to_a
+  entries = @program.entries.includes(:customer).order(:id).to_a
   cols = 4
   rows = (entries.size.to_f / cols).ceil
 %>
 
-<table class="entries">
-  <tr>
-    <% cols.times do %>
-      <th></th>
-      <th>氏名</th>
-      <th>A</th>
-      <th>C</th>
+<% if entries.any? %>
+  <table class="entries">
+    <thead>
+      <tr>
+        <% cols.times do %>
+          <th>#</th>
+          <th>氏名</th>
+          <th>A</th>
+          <th>C</th>
+        <% end %>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% rows.times do |i| %>
+        <tr>
+          <% cols.times do |j| %>
+            <% index = i * cols + j %>
+            <% e = entries[index] || break %>
+            <th><%= index + 1 %></th>
+            <td><%= "#{e.customer.family_name} #{e.customer.given_name}" %></td>
+            <td>
+              <%= check_box_tag "approved_#{e.id}", "1", e.approved?,
+                    class: "approved", data: { entry_id: e.id } %>
+            </td>
+            <td>
+              <%= check_box_tag "canceled_#{e.id}", "1", e.canceled?,
+                    class: "canceled", data: { entry_id: e.id } %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="centered-controls">
+    <%= form_with model: Staff::EntriesForm.new(@program), scope: "form",
+          url: update_all_staff_program_entries_path(@program), method: :patch do |f| %>
+      <%= f.hidden_field :approved %>
+      <%= f.hidden_field :not_approved %>
+      <%= f.hidden_field :canceled %>
+      <%= f.hidden_field :not_canceled %>
+
+      <%= f.submit "申し込みのフラグを更新する", class: "unified-button" %>
     <% end %>
-  </tr>
 
-  <% rows.times do |i| %>
-    <tr>
-      <% cols.times do |j| %>
-        <% index = i * cols + j %>
-        <% e = entries[index] || break %>
-
-        <th><%= index + 1 %></th>
-        <td><%= e.customer.family_name + " " + e.customer.given_name %></td>
-        <td>
-          <%= check_box_tag "approved_#{e.id}", "1", e.approved?,
-                class: "approved", data: { entry_id: e.id } %>
-        </td>
-        <td>
-          <%= check_box_tag "canceled_#{e.id}", "1", e.canceled?,
-                class: "canceled", data: { entry_id: e.id } %>
-        </td>
-      <% end %>
-    </tr>
-  <% end %>
-</table>
-
-<div class="button-wrapper">
-  <%= form_with model: Staff::EntriesForm.new(@program), scope: "form", 
-    url: [ :update_all, :staff, @program, :entries ],
-    html: { method: :patch } do |f| %>
-    <%= f.hidden_field :approved %>
-    <%= f.hidden_field :not_approved %>
-    <%= f.hidden_field :canceled %>
-    <%= f.hidden_field :not_caneled %>
-    <%= button_tag "申し込みのフラグを更新する", type: "button",
-      id: "update-entries-button" %>
-      <% end %>
-</div>
+    <div class="pagination">
+      <%= paginate @program.entries %>
+    </div>
+  </div>
+<% end %>

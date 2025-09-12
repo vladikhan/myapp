@@ -1,6 +1,7 @@
 puts "Seeding customers..."
 
 # Удаляем старые записи, чтобы избежать конфликтов
+AddressPhone.destroy_all
 PersonalPhone.destroy_all
 WorkAddress.destroy_all
 HomeAddress.destroy_all
@@ -61,10 +62,10 @@ company_names = %w(OIAX ABC XYZ)
       address2: "レイルズハイツ301号室"
     )
 
-    # Добавляем телефоны к home_address
+    # Добавляем телефоны к home_address через address_phones
     if m % 10 == 0
-      home.phones.create!(number: sprintf("03-0000-%04d", n))
-      home.phones.create!(number: "03-0000-0001")
+      home.address_phones.create!(number: sprintf("03-0000-%04d", n))
+      home.address_phones.create!(number: "03-0000-0001")
     end
 
     # Личные телефоны клиента

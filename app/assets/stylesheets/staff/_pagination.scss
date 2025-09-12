@@ -1,50 +1,42 @@
-/* Pagination - Elegant Neutral Style (Fixed) */
-.pagination {
-	display: flex;
-	justify-content: center;
-	gap: 8px;
-	margin: 30px 0;
-	flex-wrap: wrap;
-}
-
+/* Unified style for buttons and pagination */
+.unified-button,
 .pagination a,
 .pagination span {
-	padding: 1px 7px; /* pill shape */
-	border-radius: 50px; /* fully rounded */
-	background-color: #f8f9fa; /* neutral background */
-	color: #4f4f4f; /* dark gray text */
-	font-size: 0.95em;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: 3px 10px; // базовый padding
+	border-radius: 6px;
+	font-size: 1em;
 	font-weight: 500;
 	text-decoration: none;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-	transition: background-color 0.25s ease, color 0.25s ease;
+	color: #4f4f4f;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
 	cursor: pointer;
-}
+	transition: all 0.25s ease;
 
-.pagination a:hover {
-	background-color: #4f4f4f; /* hover dark background */
-	color: #faf9f9;
-
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-	transform: none; /* no jumping */
+	&:hover {
+		background: #7b82e2;
+		color: #fff;
+		transform: translateY(-1px) scale(1); // немного меньше подъём
+		padding: 3px 10px; // уменьшаем padding
+		text-decoration: none;
+	}
 }
 
 .pagination .current {
-	background-color: #2a9d8f; /* active page teal */
-	color: #ffffff;
-	font-weight: bold;
-	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
-	transform: none; /* keep in place */
+	background-color: #d0d4f7;
+	color: #333;
+	font-weight: 600;
+	padding: 3px 10px;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
 
-.pagination .disabled {
-	background-color: #faf9f9;
-	color: #b0b0b0;
-	pointer-events: none;
-	box-shadow: none;
-}
-
-.pagination .gap {
-	background-color: transparent;
-	margin-right: 6px;
+.centered-controls {
+	display: flex;
+	flex-direction: column; /* кнопка сверху, пагинация снизу */
+	align-items: center; /* горизонтальный центр */
+	gap: 15px; /* расстояние между кнопкой и пагинацией */
+	margin-top: 20px;
+	margin-bottom: 30px;
 }
