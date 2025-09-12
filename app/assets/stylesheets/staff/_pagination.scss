@@ -1,42 +1,40 @@
-/* Unified style for buttons and pagination */
+@use 'sass:color';
+
 .unified-button,
 .pagination a,
 .pagination span {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	padding: 3px 10px; // базовый padding
+	padding: 3px 10px;
 	border-radius: 6px;
-	font-size: 1em;
+	margin: 0 3px;
+	font-size: 0.95em;
 	font-weight: 500;
 	text-decoration: none;
-	color: #4f4f4f;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+	background-color: #7b82e2;
+	color: #fff;
+	// box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 	cursor: pointer;
-	transition: all 0.25s ease;
+	transition: background-color 0.25s ease, transform 0.2s ease,
+		box-shadow 0.25s ease;
 
 	&:hover {
-		background: #7b82e2;
+		transform: translateY(-1px);
+		background-color: color.adjust(
+			#7b82e2,
+			$lightness: 15%
+		); // ✅ новый синтаксис
 		color: #fff;
-		transform: translateY(-1px) scale(1); // немного меньше подъём
-		padding: 3px 10px; // уменьшаем padding
 		text-decoration: none;
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 	}
 }
 
 .pagination .current {
-	background-color: #d0d4f7;
-	color: #333;
+	background-color: color.adjust(#7b82e2); // чуть темнее для выделения
 	font-weight: 600;
-	padding: 3px 10px;
-	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
-}
-
-.centered-controls {
-	display: flex;
-	flex-direction: column; /* кнопка сверху, пагинация снизу */
-	align-items: center; /* горизонтальный центр */
-	gap: 15px; /* расстояние между кнопкой и пагинацией */
-	margin-top: 20px;
-	margin-bottom: 30px;
+	color: #fff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	pointer-events: none;
 }

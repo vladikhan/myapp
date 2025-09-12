@@ -1,0 +1,10 @@
+@use '../dimensions' as *;
+@use '../colors' as *;
+
+div.description {
+	margin: $wide;
+	padding: $wide;
+	background-color: aliceblue;
+	width: inherit;
+	margin: auto;
+}

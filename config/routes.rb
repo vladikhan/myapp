@@ -93,6 +93,11 @@ Rails.application.routes.draw do
     delete "logout" => "sessions#destroy", as: :logout
 
     resource :session, only: [ :create, :destroy ]
+    resources :programs, only: [ :index, :show ] do
+      resource :entry, only: [ :create ] do
+        patch :cancel
+      end
+    end
   end
 
   # -------------------------
