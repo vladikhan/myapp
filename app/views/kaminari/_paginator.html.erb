@@ -1,15 +1,21 @@
-<%# The container tag
-  - available local variables
-    current_page:  a page object for the currently displayed page
-    total_pages:   total number of pages
-    per_page:      number of items to fetch per page
-    remote:        data-remote
-    paginator:     the paginator that renders the pagination tags inside
+<%# 
+  Pagination container
+  Available local variables:
+    current_page: a page object for the currently displayed page
+    total_pages: total number of pages
+    per_page: number of items to fetch per page
+    remote: data-remote
+    paginator: renders the pagination tags inside
 -%>
+
 <%= paginator.render do -%>
   <nav class="pagination" role="navigation" aria-label="pager">
+    
+    <%# First and Previous buttons %>
     <%= first_page_tag %>
-    <%= prev_page_tag  %>
+    <%= prev_page_tag %>
+
+    <%# Individual page links with optional gap %>
     <% each_page do |page| -%>
       <% if page.display_tag? -%>
         <%= page_tag page %>
@@ -17,9 +23,12 @@
         <%= gap_tag %>
       <% end -%>
     <% end -%>
-    <% unless current_page.out_of_range? %>
-      <%= next_page_tag unless current_page.last? %>
-      <%= last_page_tag unless current_page.last? %>
+
+    <%# Next and Last buttons (skip if out of range or last page) %>
+    <% unless current_page.out_of_range? || current_page.last? %>
+      <%= next_page_tag %>
+      <%= last_page_tag %>
     <% end %>
+
   </nav>
 <% end -%>

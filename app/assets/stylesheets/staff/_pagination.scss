@@ -1,40 +1,52 @@
 @use 'sass:color';
 
-.unified-button,
-.pagination a,
+.pagination a {
+	color: #fff;
+}
+.pagination a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+/* Unified pagination button style */
 .pagination span {
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	padding: 3px 10px;
+	padding: 2px 5px; // компактный padding
+	min-width: 10px; // минимальная ширина, чтобы все кнопки одинаковы
+	height: auto; // убрали фиксированную высоту
+	font-size: 0.85em; // чуть меньше шрифт
+	font-weight: 500;
 	border-radius: 6px;
 	margin: 0 3px;
-	font-size: 0.95em;
-	font-weight: 500;
 	text-decoration: none;
 	background-color: #7b82e2;
 	color: #fff;
-	// box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+	border: none;
 	cursor: pointer;
-	transition: background-color 0.25s ease, transform 0.2s ease,
+	transition: background-color 0.3s ease, transform 0.2s ease,
 		box-shadow 0.25s ease;
 
 	&:hover {
-		transform: translateY(-1px);
-		background-color: color.adjust(
-			#7b82e2,
-			$lightness: 15%
-		); // ✅ новый синтаксис
+		background-color: color.adjust(#7b82e2, $lightness: 15%);
+		transform: translateY(-1px); // чуть меньше движения
 		color: #fff;
 		text-decoration: none;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	}
+
+	&:active {
+		transform: translateY(0);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 	}
 }
 
+/* Current page styling */
 .pagination .current {
-	background-color: color.adjust(#7b82e2); // чуть темнее для выделения
+	background-color: color.adjust(#7b82e2, $lightness: -10%);
 	font-weight: 600;
 	color: #fff;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 	pointer-events: none;
+	transform: translateY(0);
 }
