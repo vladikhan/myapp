@@ -3,6 +3,7 @@
 
 <div id="login-form">
   <%= form_with model: @staff_member, url: staff_account_path, local: true do |f| %>
+  <fieldset id="staff-edit-fields">
     
     <div class="field">
       <%= f.label :email, "メールアドレス" %>
@@ -33,6 +34,7 @@
       <%= f.submit "更新" %>
       <%= link_to "キャンセル", staff_account_path %>
     </div>
+  </fieldset>
 
   <% end %>
 </div>

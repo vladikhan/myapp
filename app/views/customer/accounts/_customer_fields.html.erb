@@ -1,0 +1,31 @@
+<fieldset id="customer-fields">
+  <legend>基本情報</legend>
+  <% markup do |m| 
+    begin
+      p = confirming ? CustomerCustomerFormPresenter.new(f, self) :
+      CustomerFormPresenter.new(f, self) 
+      p.with_options(required: true) do |q|
+        m << q.text_field_block(:email, "メールアドレス", size: 32, disabled: true)
+        m << q.full_name_block(:family_name, :given_name, "氏名")
+        m << q.full_name_block(:family_name_kana, :given_name_kana, "フリガナ")
+      end
+      m << p.date_field_block(:birthday, "生年月日")
+      m << p.gender_field_block
+
+      m.div(class: "input-block") do
+        m << p.decorated_label(:personal_phones, "電話番号")
+        m.ol do
+          p.object.personal_phones.each_with_index do |phone, index|
+          if confirming
+            m << render("confirming_phone_fields", f: ff, phone: phone, index: index)
+            else
+            m << render("confirming_phone_fields", f :ff, phone: phone, index: index)
+          else
+          m << render("phone_fields", f: ff, phone: phone,index: index)
+          end
+        
+    rescue => e
+      m << "<p>Presenter error: #{e.message}</p>".html_safe
+    end
+  end %>
+</fieldset>

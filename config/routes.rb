@@ -93,7 +93,9 @@ Rails.application.routes.draw do
     delete "logout" => "sessions#destroy", as: :logout
 
     resource :session, only: [ :create, :destroy ]
-    resource :account, except: [ :new, :create, :destroy ]
+    resource :account, except: [ :new, :create, :destroy ] do 
+      patch :confirm
+    end
     resources :programs, only: [ :index, :show ] do
       resource :entry, only: [ :create ] do
         patch :cancel
