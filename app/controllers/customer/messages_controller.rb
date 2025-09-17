@@ -6,22 +6,27 @@ class Customer::MessagesController < Customer::Base
   def confirm
     @message = CustomerMessage.new(customer_message_params)
     @message.customer = current_customer
+
     if @message.valid?
-      render action: "confirm"
+      render :confirm
     else
       flash.now.alert = "入力に誤りがあります。"
-      render action: "new"
+      render :new
     end
   end
 
   def create
     @message = CustomerMessage.new(customer_message_params)
-    @message.customer = current_customer
-    if @message.save
-      flash.notice = "メッセージを送信しました。"
-      redirect_to :customer_root
+    if params[:commit]
+      @message.customer = current_customer
+      if @message.save
+        flash.notice = "問い合わせを送信しました。"
+        redirect_to :customer_root
+      else
+        flash.now.alert = "入力に誤りがあります。"
+        render action: "new"
+      end
     else
-      flash.now.alert = "入力に誤りがあります。"
       render action: "new"
     end
   end

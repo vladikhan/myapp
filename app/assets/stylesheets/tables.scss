@@ -68,10 +68,6 @@ table.listing {
 	font-family: monospace; // consistent with td.ip
 	margin-right: $narrow; // space between octets
 	font-size: 12px;
-
-	&:focus {
-		outline: 2px solid $very_dark_magenta; // опционально: подсветка активного поля
-	}
 }
 
 .allowed-ip-fields {

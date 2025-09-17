@@ -184,10 +184,13 @@ a:hover {
 	background-color: #fff;
 	transition: all 0.3s ease;
 }
+#login-form textarea:focus {
+	box-shadow: 0 0 8px rgba(0, 136, 170, 0.3);
+	outline: none;
+}
 
 #login-form input:focus,
-#login-form select:focus,
-#login-form textarea:focus {
+#login-form select:focus {
 	box-shadow: 0 0 8px rgba(0, 136, 170, 0.3);
 	outline: none;
 }
