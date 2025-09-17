@@ -33,12 +33,16 @@ class Customer::AccountsController < Customer::Base
     @customer_form = Customer::AccountForm.new(current_customer)
     @customer_form.assign_attributes(params.require(:customer).permit!)
 
-    if @customer_form.save
-      flash.notice = "アカウント情報を更新しました。"
-      redirect_to :customer_account
+    if params[:commit]
+      if @customer_form.save
+        flash.notice = "アカウント情報を更新しました。"
+        redirect_to :customer_account
+      else
+        flash.now.alert = "入力に誤りがあります。"
+        render :edit
+      end
     else
-      flash.now.alert = "入力に誤りがあります。"
-      render :edit
+      render action: "edit"
     end
   end
 end

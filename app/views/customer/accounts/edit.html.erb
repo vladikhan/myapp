@@ -55,74 +55,10 @@
         <%= f.label :inputs_home_address, "自宅住所を入力する" %>
       </div>
 
-    <!-- 自宅住所 -->
-    <fieldset>
-      <legend>自宅住所</legend>
-      <%= f.fields_for :home_address do |home| %>
-        <div class="field">
-          <%= home.label :postal_code, "郵便番号" %>
-          <%= home.text_field :postal_code %>
-        </div>
-        <div class="field">
-          <%= home.label :prefecture, "都道府県" %>
-          <%= home.select :prefecture, Address::PREFECTURE_NAMES %>
-        </div>
-        <div class="field">
-          <%= home.label :city, "市区町村" %>
-          <%= home.text_field :city %>
-        </div>
-        <div class="field">
-          <%= home.label :address1, "町域、番地等" %>
-          <%= home.text_field :address1 %>
-        </div>
-        <div class="field">
-          <%= home.label :address2, "建物名、部屋番号等" %>
-          <%= home.text_field :address2 %>
-        </div>
-      <% end %>
-    </fieldset>
-
       <div class="check-boxes">
         <%= f.check_box :inputs_work_address %>
         <%= f.label :inputs_work_address, "勤務先を入力する" %>
       </div>
-
-    <!-- 勤務先住所 -->
-    <fieldset>
-      <legend>勤務先住所</legend>
-      <%= f.fields_for :work_address do |work| %>
-        <div class="field">
-          <%= work.label :company_name, "会社名" %>
-          <%= work.text_field :company_name %>
-        </div>
-        <div class="field">
-          <%= work.label :division_name, "部署名" %>
-          <%= work.text_field :division_name %>
-        </div>
-        <div class="field">
-          <%= work.label :postal_code, "郵便番号" %>
-          <%= work.text_field :postal_code %>
-          <span class="notes">(7の半角数字で入力してください)</span>
-        </div>
-        <div class="field">
-          <%= work.label :prefecture, "都道府県" %>
-          <%= work.select :prefecture, Address::PREFECTURE_NAMES %>
-        </div>
-        <div class="field">
-          <%= work.label :city, "市区町村" %>
-          <%= work.text_field :city %>
-        </div>
-        <div class="field">
-          <%= work.label :address1, "町域、番地等" %>
-          <%= work.text_field :address1 %>
-        </div>
-        <div class="field">
-          <%= work.label :address2, "建物名、部屋番号等" %>
-          <%= work.text_field :address2 %>
-        </div>
-      <% end %>
-    </fieldset>
-
 
     <!-- ボタン -->
     <div class="buttons">

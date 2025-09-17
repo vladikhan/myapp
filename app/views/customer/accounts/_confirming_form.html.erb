@@ -16,6 +16,7 @@
 
   <p>性別: <%= f.object.customer.gender %></p>
   <%= f.hidden_field :gender %>
+	
 </fieldset>
 
 <% if f.object.inputs_home_address %>
@@ -53,7 +54,7 @@
   </fieldset>
 <% end %>
 
-<fieldset id="phones-fields">
+<fieldset id="phone-fields">
   <legend>電話番号</legend>
   <% f.object.customer.personal_phones.each_with_index do |phone, index| %>
     <p><%= phone.number %></p>
