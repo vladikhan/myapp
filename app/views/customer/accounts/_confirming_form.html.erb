@@ -1,22 +1,64 @@
-<fieldset id='customer-fields'>
-	<legend>基本情報</legend>
-	<%= render "customer_fields", f: f, confirming: true %>
+<fieldset id="customer-fields">
+  <legend>基本情報</legend>
+  <p>メールアドレス: <%= f.object.customer.email %></p>
+  <%= f.hidden_field :email %>
+
+  <p>氏名: <%= f.object.customer.family_name %> <%= f.object.customer.given_name %></p>
+  <%= f.hidden_field :family_name %>
+  <%= f.hidden_field :given_name %>
+
+  <p>フリガナ: <%= f.object.customer.family_name_kana %> <%= f.object.customer.given_name_kana %></p>
+  <%= f.hidden_field :family_name_kana %>
+  <%= f.hidden_field :given_name_kana %>
+
+  <p>生年月日: <%= f.object.customer.birthday %></p>
+  <%= f.hidden_field :birthday %>
+
+  <p>性別: <%= f.object.customer.gender %></p>
+  <%= f.hidden_field :gender %>
 </fieldset>
+
 <% if f.object.inputs_home_address %>
-	<div>
-		<%= f.hidden_field :inputs_home_address %>
-	</div>
-		<fieldset id='home-address-fields'>
-			<legend>自宅住所</legend>
-			<%= render "home_address_fields", f: f, confirming: true %>
-		</fieldset>
-	<% end %>
-<% if f.object.inputs_work_address %>%
-<div>
-	<%= f.hidden_field :inputs_work_address %>
-</div>
-<fieldset id='work-address-fields'>
-	<legend>勤務先</legend>
-	<%= render "work_address_fields", f: f, confirming: true %>
-</fieldset>
+  <fieldset id="home-address-fields">
+    <legend>自宅住所</legend>
+    <% addr = f.object.customer.home_address %>
+    <p>〒<%= addr.postal_code %> <%= addr.prefecture %> <%= addr.city %> <%= addr.address1 %> <%= addr.address2 %></p>
+
+    <%= f.fields_for :home_address, addr do |af| %>
+      <%= af.hidden_field :postal_code %>
+      <%= af.hidden_field :prefecture %>
+      <%= af.hidden_field :city %>
+      <%= af.hidden_field :address1 %>
+      <%= af.hidden_field :address2 %>
+    <% end %>
+  </fieldset>
 <% end %>
+
+<% if f.object.inputs_work_address %>
+  <fieldset id="work-address-fields">
+    <legend>勤務先住所</legend>
+    <% addr = f.object.customer.work_address %>
+    <p><%= addr.company_name %> <%= addr.division_name %></p>
+    <p>〒<%= addr.postal_code %> <%= addr.prefecture %> <%= addr.city %> <%= addr.address1 %> <%= addr.address2 %></p>
+
+    <%= f.fields_for :work_address, addr do |af| %>
+      <%= af.hidden_field :company_name %>
+      <%= af.hidden_field :division_name %>
+      <%= af.hidden_field :postal_code %>
+      <%= af.hidden_field :prefecture %>
+      <%= af.hidden_field :city %>
+      <%= af.hidden_field :address1 %>
+      <%= af.hidden_field :address2 %>
+    <% end %>
+  </fieldset>
+<% end %>
+
+<fieldset id="phones-fields">
+  <legend>電話番号</legend>
+  <% f.object.customer.personal_phones.each_with_index do |phone, index| %>
+    <p><%= phone.number %></p>
+    <%= f.fields_for :personal_phones, phone do |pf| %>
+      <%= pf.hidden_field :number %>
+    <% end %>
+  <% end %>
+</fieldset>

@@ -16,9 +16,8 @@ class Customer::AccountForm
   def assign_attributes(params = {})
     @params = params || {}
 
-    customer.assign_attributes(customer_params)
-    customer.home_address.assign_attributes(home_address_params) if inputs_home_address
-    customer.work_address.assign_attributes(work_address_params) if inputs_work_address
+   self.inputs_home_address = params[:inputs_home_address].in? %w(1 true)
+   self.inputs_work_address = params[:inputs_work_address].in? %w(1 true)
 
     if @params[:personal_phones_attributes]
       customer.personal_phones.each_with_index do |phone, i|
