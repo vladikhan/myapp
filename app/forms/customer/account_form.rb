@@ -7,8 +7,11 @@ class Customer::AccountForm
   def initialize(customer)
     @customer = customer || Customer.new(gender: "male")
     (2 - @customer.personal_phones.size).times { @customer.personal_phones.build }
+
+    # Показываем блок, если есть домашний адрес
     self.inputs_home_address = @customer.home_address.present?
     self.inputs_work_address = @customer.work_address.present?
+
     @customer.build_home_address unless @customer.home_address
     @customer.build_work_address unless @customer.work_address
   end
@@ -35,6 +38,10 @@ class Customer::AccountForm
     end
   rescue ActiveRecord::RecordInvalid
     false
+  end
+
+  def edit
+    @customer_form = Customer::AccountForm.n(current_customer)
   end
 
   private

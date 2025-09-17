@@ -86,7 +86,7 @@ Rails.application.routes.draw do
   # Customer routes (без host constraint)
   # -------------------------
   namespace :customer do
-    root to: "top#index"
+    root to: "top#index", as: :root
 
     get    "login" => "sessions#new", as: :login
     post   "login" => "sessions#create", as: :login_create
@@ -100,6 +100,9 @@ Rails.application.routes.draw do
       resource :entry, only: [ :create ] do
         patch :cancel
       end
+    end
+    resources :messages, only: [ :new, :create ] do
+      post :confirm, on: :collection
     end
   end
 

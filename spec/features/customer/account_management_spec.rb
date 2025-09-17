@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "顧客によるあアカウント管理" do
   include FeaturesSpecHelper
-  let(:customer) { create(:customer) }
+  let(:customer) { create(:customer, :with_home_address) }
 
   before do 
     switch_namespace(:customer)
