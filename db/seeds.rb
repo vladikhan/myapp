@@ -1,3 +1,8 @@
+table_names = %w(
+  staff_members admin_member staff_events customers
+  programs entries messages
+)
+
 puts "Seeding customers..."
 
 # --- Удаляем старые записи в правильном порядке ---

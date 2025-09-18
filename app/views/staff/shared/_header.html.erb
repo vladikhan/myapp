@@ -14,4 +14,5 @@
 
   <%# Ссылка на аккаунт только если current_staff_member есть %>
   <%= link_to "アカウント", staff_account_path if current_staff_member.present? %>
+  <%= number_of_unprocessed_messages if current_staff_member %>
 </header>
