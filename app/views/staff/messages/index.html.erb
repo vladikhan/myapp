@@ -15,7 +15,7 @@
 
 	<table class='listing'>
 		<tr>
-			<th></th>
+			<th>種類</th>
 			<th>送信</th>
 			<th>返信者</th>
 			<th>件名</th>
@@ -38,6 +38,6 @@
 		</tr>
 		<% end %>
 	</table>
+	<%= paginate @messages %>
 
-	<% paginate @messages %>
 </div>

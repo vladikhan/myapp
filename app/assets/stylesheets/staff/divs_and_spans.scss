@@ -1,8 +1,11 @@
 @use '../dimensions' as *;
 @use '../colors' as *;
 
-div.description {
+div.description,
+div.body {
 	margin: $wide;
 	padding: $wide;
 	background-color: aliceblue;
+	width: inherit;
+	margin: 6px auto 0;
 }
