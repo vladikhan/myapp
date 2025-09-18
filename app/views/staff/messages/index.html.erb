@@ -25,7 +25,7 @@
 		<% @messages.each do |m|%>
 		<% p = MessagePresenter.new(m, self) %>
 		<tr>
-			<td><%= p.type %></td>
+			<td><%= p.message_type %></td>
 			<td><%= p.sender %></td>
 			<td><%= p.receiver %></td>
 			<td><%= p.truncated_subject %></td>

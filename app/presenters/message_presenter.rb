@@ -1,16 +1,16 @@
 class MessagePresenter < ModelPresenter
   delegate :subject, :body, to: :object
 
-  def type
-    case object
-    when CustomerMessage
-      "問い合わせ"
-    when Staff::MessagesController
-      "返信"
-    else
-      raise
-    end
+ def message_type
+  case object.type
+  when "CustomerMessage"
+    "問い合わせ"
+  when "StaffMessage"
+    "返信"
+  else
+    "不明"
   end
+end
 
   def sender
     case object
@@ -42,6 +42,8 @@ class MessagePresenter < ModelPresenter
     if object.created_at > Time.current.midnight
       object.created_at.strftime("%H:%M:%S")
     elsif object.created_at > 5.month.ago.beginning_of_month
+      object.created_at.strftime("%m/%d %H:%M")
+
     else
       object.created_at.strftime("%Y/%m/#d %H:%M")
     end
