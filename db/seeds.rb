@@ -1,7 +1,3 @@
-table_names = %w(
-  staff_members admin_member staff_events customers
-  programs entries messages
-)
 
 puts "Seeding customers..."
 
@@ -158,3 +154,63 @@ Program.all.each do |program|
 end
 
 puts "Entries created for programs"
+
+puts "Creating messages..."
+
+customers = Customer.all
+staff_members = StaffMember.where(suspended: false)
+
+s = 2.years.ago
+23.times do |n|
+  m = CustomerMessage.create!(
+    customer: customers.sample,
+    subject: "これは問い合わせ。" * 4,
+    body: "これは問い合わせです。\n" * 8,
+    created_at: s.advance(months: n),
+    status: "new"   # <--- обязательно
+  )
+  r = StaffMessage.create!(
+    customer: m.customer,
+    staff_member: staff_members.sample,
+    root: m,
+    parent: m,
+    subject: "これは返信です。" * 4,
+    body: "これは返信です。\n" * 8,
+    created_at: s.advance(months: n, hours: 1),
+    status: "processed"   # <--- тоже укажем
+  )
+  if n % 6 == 0
+    m2 = CustomerMessage.create!(
+      customer: r.customer,
+      root: m,
+      parent: r,
+      subject: "これは返信への回答です。",
+      body: "これは返信への回答です。",
+      created_at: s.advance(months: n, hours: 2),
+      status: "new"
+    )
+    StaffMessage.create!(
+      customer: m2.customer,
+      staff_member: staff_members.sample,
+      root: m,
+      parent: m2,
+      subject: "これは回答への返信です。",
+      body: "これは回答への返信です。",
+      created_at: s.advance(months: n, hours: 3),
+      status: "processed"
+    )
+  end
+end
+
+s = 24.hours.ago
+8.times do |n|
+  CustomerMessage.create!(
+    customer: customers.sample,
+    subject: "これは問い合わせです。" * 4,
+    body: "これは問い合わせです。\n" * 8,
+    created_at: s.advance(hours: n * 3),
+    status: "new"
+  )
+end
+
+puts "Created #{Message.count} messages"
