@@ -26,9 +26,9 @@ class Admin::AllowedSourcesController < ApplicationController
   end
 
   def delete
-    if Admin::AllowedSourcesController.new.delete(params[:form])
-      flash.notice = "許可IPアドレスを削除しました．"
-    end
-    redirect_to action: "index"
+  ids = params[:form] || []
+  AllowedSource.where(id: ids).destroy_all
+  flash.notice = "許可IPアドレスを削除しました．"
+  redirect_to action: "index"
   end
 end
