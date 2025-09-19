@@ -46,10 +46,10 @@ class MessagePresenter < ModelPresenter
     if object.created_at > Time.current.midnight
       object.created_at.strftime("%H:%M:%S")
     elsif object.created_at > 5.month.ago.beginning_of_month
-      object.created_at.strftime("%m/%d %H:%M")
+      object.created_at.strftime("%Y/%m/%d %H:%M")
 
     else
-      object.created_at.strftime("%Y/%m/#d %H:%M")
+      object.created_at.strftime("%Y/%m/%d %H:%M")
     end
   end
 

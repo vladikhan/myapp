@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_09_17_021205) do
+ActiveRecord::Schema.define(version: 2025_09_19_082711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,6 +125,16 @@ ActiveRecord::Schema.define(version: 2025_09_17_021205) do
     t.index ["customer_id"], name: "index_home_addresses_on_customer_id"
   end
 
+  create_table "message_tag_links", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["message_id", "tag_id"], name: "index_message_tag_links_on_message_id_and_tag_id", unique: true
+    t.index ["message_id"], name: "index_message_tag_links_on_message_id"
+    t.index ["tag_id"], name: "index_message_tag_links_on_tag_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.bigint "customer_id", null: false
     t.bigint "staff_member_id"
@@ -147,6 +157,16 @@ ActiveRecord::Schema.define(version: 2025_09_17_021205) do
     t.index ["staff_member_id"], name: "index_messages_on_staff_member_id"
     t.index ["type", "customer_id"], name: "index_messages_on_type_and_customer_id"
     t.index ["type", "staff_member_id"], name: "index_messages_on_type_and_staff_member_id"
+  end
+
+  create_table "my_hashes", force: :cascade do |t|
+    t.string "table", null: false
+    t.string "column", null: false
+    t.string "key", null: false
+    t.boolean "lock"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["table", "column", "key"], name: "index_my_hashes_on_table_and_column_and_key", unique: true
   end
 
   create_table "personal_phones", force: :cascade do |t|
@@ -195,6 +215,13 @@ ActiveRecord::Schema.define(version: 2025_09_17_021205) do
     t.index "lower((email)::text)", name: "index_staff_members_on_LOWER_email", unique: true
     t.index ["email_for_index"], name: "index_staff_members_on_email_for_index", unique: true
     t.index ["family_name_kana", "given_name_kana"], name: "index_staff_members_on_family_name_kana_and_given_name_kana"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "value", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["value"], name: "index_tags_on_value", unique: true
   end
 
   create_table "work_addresses", force: :cascade do |t|

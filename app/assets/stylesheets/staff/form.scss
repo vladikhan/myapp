@@ -8,7 +8,7 @@ div#wrapper {
 			margin: $wide * 2 auto;
 			padding: $wide * 2;
 			border-radius: $wide;
-			border: solid 4px colors.$dark_cyan;
+			border: solid 2px colors.$dark_cyan;
 			background-color: colors.$very_light_gray;
 
 			form {
@@ -28,6 +28,7 @@ div#wrapper {
 						color: colors.$dark_gray;
 					}
 				}
+
 				div.notes {
 					text-align: right;
 					font-size: $small;

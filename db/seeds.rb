@@ -1,4 +1,11 @@
-
+common_table_names = %w(hash_locks)
+common_table_names.each do |table_name|
+  path = Rails.root.join("db", "seeds", "#{table_name}.rb")
+  if File.exist?(path)
+    puts "Creating #{table_name}..."
+    require(path)
+  end
+end
 puts "Seeding customers..."
 
 # --- Удаляем старые записи в правильном порядке ---
@@ -214,3 +221,24 @@ s = 24.hours.ago
 end
 
 puts "Created #{Message.count} messages"
+
+puts "Created #{Message.count} messages"
+
+puts "Creating tags..."
+
+names = %w(緊急 苦情 請求書 法人)
+tags = names.map do |name|
+  Tag.create!(value: name)
+end
+
+tag_for_test = Tag.create!(value: "TEST")
+
+Message.all.each do |m|
+  tags.sample(rand(3)).each do |tag|
+    MessageTagLink.create!(message: m, tag: tag)
+  end
+
+  MessageTagLink.create!(message: m, tag: tag_for_test)
+end
+
+puts "Created #{Tag.count} tags and linked them to messages"

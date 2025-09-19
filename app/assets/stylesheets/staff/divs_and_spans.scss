@@ -9,3 +9,13 @@ div.body {
 	width: inherit;
 	margin: 6px auto 0;
 }
+
+div.tags {
+	margin: $wide 0;
+	padding: $wide;
+	background-color: $very_light_gray;
+
+	span.current_tag {
+		font-weight: bold;
+	}
+}

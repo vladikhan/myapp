@@ -48,7 +48,12 @@ body {
 	background-color: #f7f8fa;
 	color: #333;
 }
-
+ul {
+	padding: 0 100px;
+}
+span.instruction {
+	font-size: small;
+}
 div#wrapper {
 	position: relative;
 	box-sizing: border-box;
