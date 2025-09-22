@@ -44,7 +44,7 @@ class MessagePresenter < ModelPresenter
 
   def created_at
     if object.created_at > Time.current.midnight
-      object.created_at.strftime("%H:%M:%S")
+      object.created_at.strftime("%Y/%m/%d %H:%M:%S")
     elsif object.created_at > 5.month.ago.beginning_of_month
       object.created_at.strftime("%Y/%m/%d %H:%M")
 

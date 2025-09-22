@@ -49,16 +49,40 @@
         <%= f.radio_button :gender, "female" %> 女性
       </div>
     </fieldset>
-    
-      <div class="check-boxes">
-        <%= f.check_box :inputs_home_address %>
-        <%= f.label :inputs_home_address, "自宅住所を入力する" %>
-      </div>
 
-      <div class="check-boxes">
-        <%= f.check_box :inputs_work_address %>
-        <%= f.label :inputs_work_address, "勤務先を入力する" %>
-      </div>
+    <%# 自宅住所フィールド %>
+    <div class="check-boxes">
+      <%= f.check_box :inputs_home_address %>
+      <%= f.label :inputs_home_address, "自宅住所を入力する" %>
+    </div>
+
+    <fieldset id="home-address-fields">
+      <legend>自宅住所</legend>
+      <%= f.fields_for :home_address do |ha| %>
+        <div class="field">
+          <%= ha.label :postal_code, "郵便番号" %>
+          <%= ha.text_field :postal_code, id: "form_home_address_postal_code" %>
+        </div>
+        <%# 他の自宅住所フィールドも必要なら追加 %>
+      <% end %>
+    </fieldset>
+
+    <%# 勤務先フィールド %>
+    <div class="check-boxes">
+      <%= f.check_box :inputs_work_address %>
+      <%= f.label :inputs_work_address, "勤務先を入力する" %>
+    </div>
+
+    <fieldset id="work-address-fields">
+      <legend>勤務先</legend>
+      <%= f.fields_for :work_address do |wa| %>
+        <div class="field">
+          <%= wa.label :company_name, "会社名" %>
+          <%= wa.text_field :company_name, id: "form_work_address_company_name" %>
+        </div>
+        <%# 他の勤務先フィールドも必要なら追加 %>
+      <% end %>
+    </fieldset>
 
     <!-- ボタン -->
     <div class="buttons">

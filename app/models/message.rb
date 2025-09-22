@@ -1,12 +1,13 @@
 class Message < ApplicationRecord
   belongs_to :customer
   belongs_to :staff_member, optional: true
-  belongs_to :root, class_name: "Message", foreign_key: "root_id",
-  optional: true
-  belongs_to :parent, class_name: "Message", foreign_key: "parent_id", 
-  optional: true
+  belongs_to :root, class_name: "Message", foreign_key: "root_id", optional: true
+  belongs_to :parent, class_name: "Message", foreign_key: "parent_id", optional: true
   has_many :message_tag_links, dependent: :destroy
-  has_many :tags, -> { order(:value) },through: :message_tag_links
+  has_many :tags, -> { order(:value) }, through: :message_tag_links
+
+  # Устанавливаем статус по умолчанию при создании нового объекта
+  after_initialize :set_default_status, if: :new_record?
 
   before_validation do
     if parent
@@ -15,16 +16,15 @@ class Message < ApplicationRecord
     end
   end
 
-  validates :subject, presence: true, length: { maximum:80 }
+  validates :subject, presence: true, length: { maximum: 80 }
   validates :body, presence: true, length: { maximum: 600 }
+  validates :status, presence: true
 
   scope :not_deleted, -> { where(deleted: false) }
   scope :deleted, -> { where(deleted: true) }
   scope :sorted, -> { order(created_at: :desc) }
 
-  scope :sorted, -> { order(created_at: :desc) }
-
-  scope :tagged_as, -> (tag_id) do
+  scope :tagged_as, ->(tag_id) do
     if tag_id
       joins(:message_tag_links).where("message_tag_links.tag_id" => tag_id)
     else
@@ -46,7 +46,7 @@ class Message < ApplicationRecord
       HashLock.acquire("tags", "value", label)
       tag = Tag.find_by(value: label)
       tag ||= Tag.create!(value: label)
-      unless message_tag_links.where(tag_id: tag.id).exist?
+      unless message_tag_links.where(tag_id: tag.id).exists?
         message_tag_links.create!(tag_id: tag.id)
       end
     end
@@ -56,11 +56,15 @@ class Message < ApplicationRecord
     self.class.transaction do
       HashLock.acquire("tags", "value", label)
       if tag = Tag.find_by(value: label)
-        message_tag_links.find_by(tag_id: tag.id).destroy
-        if tag.message_tag_links.empty?
-          tag.destroy
-        end
+        message_tag_links.find_by(tag_id: tag.id)&.destroy
+        tag.destroy if tag.message_tag_links.empty?
       end
     end
+  end
+
+  private
+
+  def set_default_status
+    self.status ||= "unread"
   end
 end

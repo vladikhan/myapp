@@ -13,27 +13,25 @@ Rails.application.routes.draw do
       post   "login"  => "sessions#create",  as: :session
       delete "logout" => "sessions#destroy", as: :logout
 
-      # Аккаунт сотрудника
       resource :account, except: [:new, :create, :destroy]
       resource :password, only: [:show, :edit, :update]
 
-      # Customers
       resources :customers
       resources :programs do 
         resources :entries, only: [] do
           patch :update_all, on: :collection
         end
       end
-      get "messages/count" => "ajax#message_count"
-      post "message/:id/tag" => "ajax#add_tag", as: :tag_message
+      get    "messages/count" => "ajax#message_count"
+      post   "message/:id/tag" => "ajax#add_tag", as: :tag_message
       delete "message/:id/tag" => "ajax#remove_tag"
       resources :messages, only: [ :index, :show, :destroy ] do
         get :inbound, :outbound, :deleted, on: :collection
         resource :reply, only: [ :new, :create ] do
           post :confirm
         end
-       end
-       resources :tags, only: [] do
+      end
+      resources :tags, only: [] do
         resources :messages, only: [ :index ] do
           get :inbound, :outbound, :deleted, on: :collection
         end
@@ -47,20 +45,17 @@ Rails.application.routes.draw do
   namespace :staff do
     root "top#index", as: :root_dev
 
-    # Сессии
     get    "login"  => "sessions#new"
     post   "login"  => "sessions#create"
     delete "logout" => "sessions#destroy"
 
-    # Аккаунт сотрудника
     resource :account, except: [:new, :create, :destroy]
     resource :password, only: [:show, :edit, :update]
 
-    # Customers
     resources :customers
   end
 
-    # -------------------------
+  # -------------------------
   # Admin routes (с host constraint)
   # -------------------------
   constraints host: config[:admin][:host] do
@@ -72,7 +67,7 @@ Rails.application.routes.draw do
       delete "logout" => "sessions#destroy", as: :logout
 
       resources :staff_members do
-      resources :staff_events, only: [:index]
+        resources :staff_events, only: [:index]
       end
       resources :staff_events, only: [:index]
       resources :allowed_sources, only: [ :index, :create ] do
@@ -96,6 +91,7 @@ Rails.application.routes.draw do
     end
     resources :staff_events, only: [:index]
   end
+
   # -------------------------
   # Customer routes (без host constraint)
   # -------------------------
@@ -111,14 +107,19 @@ Rails.application.routes.draw do
       patch :confirm
     end
     resources :programs, only: [ :index, :show ] do
-    resource :entry, only: [ :create ] do
-      patch :cancel
+      resource :entry, only: [ :create ] do
+        patch :cancel
       end
     end
     resources :messages, only: [ :new, :create ] do
       post :confirm, on: :collection
     end
   end
+
+  # -------------------------
+  # Root по умолчанию (для разработки)
+  # -------------------------
+  root to: "staff/sessions#new"
 
   # -------------------------
   # Health check & PWA

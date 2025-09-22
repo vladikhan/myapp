@@ -1,40 +1,53 @@
 FROM ruby:3.1.4
 
-# Устанавливаем системные пакеты, PostgreSQL клиент и Git
-RUN apt-get update -qq && apt-get install -y \
-    curl \
-    build-essential \
-    libpq-dev \
-    postgresql-client \
-    git \
+# -------------------------
+# Системные пакеты
+# -------------------------
+# Устанавливаем Chromium и Chromedriver
+RUN apt-get update && apt-get install -y \
+    chromium \
+    chromium-driver \
     && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем Node.js 20.x
+# -------------------------
+# Node.js 20.x и Yarn
+# -------------------------
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
-# Включаем Corepack и активируем стабильную версию Yarn 1.x
 RUN corepack enable \
     && corepack prepare yarn@1.22.22 --activate
 
-# Устанавливаем bundler
+# -------------------------
+# Установка bundler
+# -------------------------
 RUN gem install bundler -v 2.6.9
 
-# Создаём рабочую директорию
+# -------------------------
+# Рабочая директория
+# -------------------------
 WORKDIR /myapp
 
-# Копируем Gemfile и устанавливаем Ruby зависимости
+# -------------------------
+# Ruby зависимости
+# -------------------------
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-# Копируем весь проект
+# -------------------------
+# Копируем проект
+# -------------------------
 COPY . .
 
-# Настройка переменной окружения для Node/OpenSSL (нужно для некоторых сборок Webpacker)
+# -------------------------
+# Переменные окружения
+# -------------------------
 ENV NODE_OPTIONS=--openssl-legacy-provider
+ENV BROWSER=chromium-browser
+ENV CHROMEDRIVER_PATH=/usr/lib/chromium-browser/chromedriver
 
-# Открываем порт 3000
+# -------------------------
+# Порт и запуск
+# -------------------------
 EXPOSE 3000
-
-# Запуск сервера Rails
 CMD ["bin/rails", "server", "-b", "0.0.0.0"]

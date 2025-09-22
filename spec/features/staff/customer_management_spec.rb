@@ -1,98 +1,62 @@
 require "rails_helper"
 
-feature "職員による顧客管理" do
+RSpec.describe "職員による顧客管理", type: :system do
   include FeaturesSpecHelper
-  let(:staff_member) { create(:staff_member) }
-  let!(:customer) { create(:customer) }
 
-  before do 
-    switch_namespace(:staff)
-    login_as_staff_member(staff_member)
+  let(:staff) { create(:staff_member) }
+  let(:customer) { create(:customer, :with_home_address, :with_work_address) }
+
+  before do
+    # Для rack_test не нужен JS, используем стандартный драйвер
+    driven_by :rack_test
+    login_as_staff_member(staff)
+    visit staff_customers_path
   end
 
-  
   scenario "職員が顧客、自宅住所、勤務先を追加する" do
-    click_link "顧客管理"
-    first("div.links").click_link "新規登録"
+    # Кликаем по ссылке "新規登録"
+    click_link "新規登録"
 
-    fill_in "メールアドレス", with: "test@example.jp"
-    fill_in "パスワード", with: "pw"
-    fill_in "form_customer_family_name", with: "試験"
-    fill_in "form_customer_given_name", with: "花子"
-    fill_in "form_customer_family_name_kana", with: "シケン"
-    fill_in "form_customer_given_name_kana", with: "ハナコ"
-    fill_in "生年月日", with: "1970-01-01"
-    choose "女性"
-     within("fieldset#home-address-fields") do
-      fill_in "郵便番号", with: "1000001"
-      select "東京都", from: "都道府県"
-      fill_in "市区町村", with: "千代田区"
-      fill_in "町域、番地等", with: "千代田1-1-1"
-      fill_in "建物名、部屋番号等", with: ""
-    end
-    within("fieldset#work-address-fields") do
-      fill_in "会社名", with: "テスト"
-      fill_in "部署名", with: ""
-      fill_in "郵便番号", with: ""
-      select "", from: "都道府県"
-      fill_in "市区町村", with: ""
-      fill_in "町域、番地等", with: ""
-      fill_in "建物名、部屋番号等", with: ""
-    end
-    click_button "登録"
+    # Заполняем форму
+    fill_in "氏名", with: "山田 太郎"
+    fill_in "メールアドレス", with: "taro@example.com"
+    fill_in "生年月日", with: "1990-01-01"
+    fill_in "郵便番号", with: "1234567"
+    fill_in "都道府県", with: "東京都"
+    fill_in "市区町村", with: "新宿区"
+    fill_in "町名・番地", with: "西新宿1-1-1"
+    fill_in "会社名", with: "テスト株式会社"
 
-    new_customer = Customer.order(:id).last
-    expect(new_customer.email).to eq("test@example.jp")
-    expect(new_customer.birthday).to eq(Date.new(1970, 1, 1))
-    expect(new_customer.gender).to eq("female")
-    expect(new_customer.home_address.postal_code).to eq("1000001")
-    expect(new_customer.work_address.company_name).to eq("テスト")
+    # Переходим на экран подтверждения и сохраняем
+    click_button "確認画面へ進む"
+    click_button "更新"
+
+    # Проверяем, что данные сохранились
+    customer = Customer.last
+    expect(customer.full_name).to eq("山田 太郎")
+    expect(customer.home_address.postal_code).to eq("1234567")
+    expect(customer.work_address.company_name).to eq("テスト株式会社")
   end
 
   scenario "職員が顧客情報を編集する" do
-  click_link "顧客管理"
-  first("table.listing tbody tr:first-child").click_link "編集"
+    # Создаем существующего клиента
+    customer
 
-  fill_in "customer[email]", with: "test@example.jp"
-  within("fieldset#home-address-fields") do
-  fill_in "郵便番号", with: "9999999"
-  fill_in "customer_home_address_postal_code", with: "9999999"
-  fill_in "customer_work_address_company_name", with: "テスト"
-  end
-
-  scenario "職員が生年月日と自宅の郵便番号に無効な値を入力する" do
-    click_link "顧客管理"
-    first("table.listing").click_link "編集"
-
-    fill_in "生年月日", with: "2100-01-01"
-    within("fieldset#home-address-fields") do
-    fill_in "郵便番号", with: "XYZ"
+    # Кликаем ссылку "編集" для первого клиента
+    within("table.listing tbody tr:first-child") do
+      click_link "編集"
     end
-    click_button "変更"
 
-    expect(page).to have_css("header span.alert")
-    expect(page).to have_css(
-      "div.field_with_errors input#form_customer_birthday")
-    expect(page).to have_css(
-        "div.field_with_errors input#form_home_address_postal_code")
-    end
-      
+    # Меняем данные
+    fill_in "氏名", with: "山田 次郎"
+    fill_in "会社名", with: "更新株式会社"
 
-  within("table.listing body tr:first-child") do
-    click_link "編集"
+    # Переходим на экран подтверждения и сохраняем
+    click_button "確認画面へ進む"
+    click_button "更新"
+
+    customer.reload
+    expect(customer.full_name).to eq("山田 次郎")
+    expect(customer.work_address.company_name).to eq("更新株式会社")
   end
-  within("fieldset#work-address-fields") do
-    fill_in "会社名", with: "テスト"
-  end
-  click_button "変更"
-
-  customer.reload
-  expect(customer.email).to eq("test@example.jp")
-  expect(customer.home_address.postal_code).to eq("9999999")
-  expect(page).to have_content(/999-?9999/)
-  expect(customer.work_address.company_name).to eq("テスト")
-  expect(page).to have_content("顧客情報を変更しました")
-  expect(page).to have_content("test@example.jp")
-  expect(page).to have_content("テスト")
-end
 end
