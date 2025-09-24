@@ -4,7 +4,7 @@
   when "inbound"; "問い合わせ一覧"
   when "outbound"; "返信"
   when "deleted"; "メッセージ一覧（ゴミ箱）"
-  else; raise
+  else; "メッセージ一覧"
   end
 %>
 <h1><%= @title %></h1>
@@ -39,7 +39,9 @@
           <td class='actions'>
             <%= link_to "詳細", staff_message_path(m) %>
             <% if m.kind_of?(CustomerMessage) %>
-              | <%= link_to "削除", staff_message_path(m), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+              | <%= link_to "削除", staff_message_path(m), 
+                  method: :delete, 
+                  data: { confirm: "本当に削除しますか？" } %>
             <% end %>
           </td>
         </tr>

@@ -1,4 +1,5 @@
-//= require rails-ujs
-//= require turbolinks
-//= require activestorage
-//= require_tree ./customer
+import Rails from '@rails/ujs'
+Rails.start()
+
+import '@hotwired/turbo-rails'
+import 'controllers'

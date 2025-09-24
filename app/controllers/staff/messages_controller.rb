@@ -30,11 +30,14 @@ class Staff::MessagesController < Staff::Base
   end
 
   def destroy
-    message = CustomerMessage.find(params[:id])
-    message.update_column(:deleted, true)
-    flash.notice = "問い合わせを削除しました。"
-    redirect_back(fallback_location: :staff_root)
-  end
+    message = current_customer.messages.find(params[:id])
+    message.update!(discarded: true)
+    flash[:notice] = "メッセージを削除しました。"
+    redirect_to customer_messages_path
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "メッセージが見つかりません。"
+    redirect_to customer_messages_path
+  end 
 
   def bulk_delete
     ids = params[:form][:messages].values

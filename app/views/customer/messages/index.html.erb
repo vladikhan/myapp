@@ -50,6 +50,7 @@
           </td>
         <% end %>
         <td class='actions'>
+          <!-- Правильные ссылки с namespace customer -->
           <%= link_to "詳細", customer_message_path(message) %>
           <%= link_to "削除", customer_message_path(message), method: :delete, data: { confirm: "本当に削除しますか？" } %>
         </td>
