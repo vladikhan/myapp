@@ -11,45 +11,53 @@
 
 <div class="table-wrapper">
   <%= render "links" %>
-  <%= paginate @messages %>
+
+  <% if defined?(Kaminari) && @messages.respond_to?(:current_page) %>
+    <%= paginate @messages %>
+  <% end %>
 
   <%= form_with url: destroy_selected_staff_messages_path, method: :delete do |f| %>
-  <table class='listing'>
-    <tr>
-      <th>削除</th>
-      <th>種類</th>
-      <th>送信</th>
-      <th>返信者</th>
-      <th>件名</th>
-      <th>作成日時</th>
-      <th>アクション</th>
-    </tr>
+    <table class='listing'>
+      <tr>
+        <th>削除</th>
+        <th>種類</th>
+        <th>送信</th>
+        <th>返信者</th>
+        <th>件名</th>
+        <th>作成日時</th>
+        <th>アクション</th>
+      </tr>
 
-    <% @messages.each_with_index do |m, i| %>
-      <%= f.fields_for :messages, m, index: i do |ff| %>
-        <%= ff.hidden_field :id %>
+      <% @messages.each_with_index do |m, i| %>
+        <% p = MessagePresenter.new(m, self) %>
         <tr>
-          <td><%= ff.check_box :_destroy %></td>
-          <% p = MessagePresenter.new(m, self) %>
+          <%= f.fields_for :messages, m, index: i do |ff| %>
+            <td><%= ff.check_box :_destroy %></td>
+            <%= ff.hidden_field :id %>
+          <% end %>
           <td><%= p.message_type %></td>
           <td><%= p.sender %></td>
           <td><%= p.receiver %></td>
           <td><%= p.truncated_subject %></td>
           <td><%= p.created_at %></td>
           <td class='actions'>
-  <%= link_to "詳細", staff_message_path(m) %>
-  <%= link_to "削除", staff_message_path(m), method: :delete, data: { confirm: "本当に削除しますか？" } %>
-</td>
+            <%= link_to "詳細", staff_message_path(m) %>
+            <%= link_to "削除", staff_message_path(m), 
+                        method: :delete, 
+                        data: { turbo_confirm: "本当に削除しますか？" } %>
+          </td>
         </tr>
       <% end %>
-    <% end %>
-  </table>
+    </table>
 
-  <div class="buttons">
-    <%= f.submit "チェックしたメッセージを削除", data: { confirm: "本当に削除しますか？" } %>
-  </div>
-<% end %>
+    <div class="buttons">
+      <%= f.submit "チェックしたメッセージを削除", data: { turbo_confirm: "本当に削除しますか？" } %>
+    </div>
+  <% end %>
 
-  <%= paginate @messages %>
+  <% if defined?(Kaminari) && @messages.respond_to?(:current_page) %>
+    <%= paginate @messages %>
+  <% end %>
+
   <%= render "tags" %>
 </div>
