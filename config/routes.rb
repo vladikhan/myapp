@@ -55,6 +55,10 @@ Rails.application.routes.draw do
     resource :password, only: [:show, :edit, :update]
 
     resources :customers
+    resources :messages, only: [:index, :show, :destroy] do
+      get :inbound, :outbound, :deleted, on: :collection
+      delete :destroy_selected, on: :collection
+    end
   end
 
   # -------------------------

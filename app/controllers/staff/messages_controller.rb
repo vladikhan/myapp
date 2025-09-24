@@ -30,20 +30,20 @@ class Staff::MessagesController < Staff::Base
   end
 
   def destroy
-    message = current_customer.messages.find(params[:id])
-    message.update!(discarded: true)
+    message = Message.find(params[:id])
+    message.update!(deleted: true)  # или discarded: true, если используете discard gem
     flash[:notice] = "メッセージを削除しました。"
-    redirect_to customer_messages_path
+    redirect_to staff_messages_path
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "メッセージが見つかりません。"
-    redirect_to customer_messages_path
-  end 
+    redirect_to staff_messages_path
+  end
 
   def bulk_delete
     ids = params[:form][:messages].values
               .select { |h| h[:destroy] == "1" }
               .map { |h| h[:id] }
-    Messages.where(id: ids).update_all(deleted: true)
+    Message.where(id: ids).update_all(deleted: true)
     flash.notice = "選択したメッセージを削除しました。"
     redirect_to action: :index
   end

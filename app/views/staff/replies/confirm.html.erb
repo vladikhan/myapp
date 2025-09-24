@@ -2,13 +2,13 @@
 <h1><%= @title %></h1>
 
 <div id='login-form' class="table-wrapper">
-	<%= form_with model: @reply, url: staff_messages_reply_path(@message) do |f| %>
-	<%= render "confirming_form", f: f %>
-	<div class="buttons">
-		<% f.submit "送信" %>
-		<% f.submit "訂正" %>
-		<% link_to "キャンセル", :staff_messages %>
-	</div>
-	<% end %>
+	<%= form_with model: @reply, url: confirm_staff_message_reply_path(@message) do |f| %>
+  <%= render "confirming_form", f: f %>
+  <div class="buttons">
+    <%= f.submit "送信" %>
+    <%= f.submit "訂正" %>
+    <%= link_to "キャンセル", outbound_staff_messages_path %>
+  </div>
+<% end %>
 	<%= render "message" %>
 </div>

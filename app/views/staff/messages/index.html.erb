@@ -37,13 +37,9 @@
           <td><%= p.truncated_subject %></td>
           <td><%= p.created_at %></td>
           <td class='actions'>
-            <%= link_to "詳細", staff_message_path(m) %>
-            <% if m.kind_of?(CustomerMessage) %>
-              | <%= link_to "削除", staff_message_path(m), 
-                  method: :delete, 
-                  data: { confirm: "本当に削除しますか？" } %>
-            <% end %>
-          </td>
+  <%= link_to "詳細", staff_message_path(m) %>
+  <%= link_to "削除", staff_message_path(m), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+</td>
         </tr>
       <% end %>
     <% end %>
