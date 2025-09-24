@@ -7,21 +7,21 @@ class ProgramPresenter < ModelPresenter
       status = cancellation_status(entry)
       button_to cancel_button_label_text(status),
                 [:cancel, :customer, object, :entry],
-                disabled: status != :cancellable,
                 method: :patch,
+                disabled: status != :cancellable,
                 data: { confirm: "本当にキャンセルしますか？" }
     else
       status = program_status
       button_to button_label_text(status),
                 [:customer, object, :entry],
-                disabled: status != :available,
                 method: :post,
+                disabled: status != :available,
                 data: { confirm: "申し込みますか？" }
     end
   end
 
   def registrant
-    object.registrant.family_name + " " + object.registrant.given_name
+    "#{object.registrant.family_name} #{object.registrant.given_name}"
   end
 
   def application_start_time
@@ -58,19 +58,16 @@ class ProgramPresenter < ModelPresenter
 
   def button_label_text(status)
     case status
-    when :closed
-      "募集終了"
-    when :full
-      "満員"
-    else
-      "申し込む"
+    when :closed then "募集終了"
+    when :full then "満員"
+    else "申し込む"
     end
   end
 
   def cancellation_status(entry)
     if Time.current > object.application_end_time
       :closed
-    elsif entry.cancelled?
+    elsif entry.canceled?
       :canceled
     else
       :cancellable
@@ -79,12 +76,9 @@ class ProgramPresenter < ModelPresenter
 
   def cancel_button_label_text(status)
     case status
-    when :closed
-      "申し込み済み（キャンセル不可）"
-    when :canceled
-      "キャンセル済み"
-    else
-      "キャンセルする"
+    when :closed then "申し込み済み（キャンセル不可）"
+    when :canceled then "キャンセル済み"
+    else "キャンセルする"
     end
   end
 end

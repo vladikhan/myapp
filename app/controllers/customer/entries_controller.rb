@@ -1,12 +1,9 @@
 class Customer::EntriesController < Customer::Base
   def create
-    # находим опубликованную программу
     program = Program.published.find(params[:program_id])
+    acceptor = Customer::EntryAcceptor.new(current_customer)
 
-    # вызываем сервис для приёма заявки
-    status = Customer::EntryAcceptor.new(current_customer).accept(program)
-
-    case status
+    case acceptor.accept(program)
     when :accepted
       flash.notice = "プログラムに申し込みました。"
     when :full
@@ -20,12 +17,12 @@ class Customer::EntriesController < Customer::Base
 
   def cancel
     program = Program.published.find(params[:program_id])
+    entry = program.entries.find_by!(customer_id: current_customer.id)
 
-    if program.application_end_time.try(:<, Time.current)
+    if program.application_end_time && Time.current > program.application_end_time
       flash.alert = "プログラムへの申し込みをキャンセルできません（受付期間終了）。"
     else
-      entry = program.entries.find_by!(customer_id: current_customer.id)
-      entry.update_column(:canceled, true)
+      entry.update!(canceled: true)
       flash.notice = "プログラムへの申し込みをキャンセルしました。"
     end
 

@@ -34,9 +34,11 @@ class Customer::AccountForm
       customer.save!
       customer.home_address.save! if inputs_home_address
       customer.work_address.save! if inputs_work_address
-      customer.personal_phones.each(&:save!)
+      customer.personal_phones.each(&:save!) if personal_phones.present?
     end
-  rescue ActiveRecord::RecordInvalid
+    true
+  rescue ActiveRecord::RecordInvalid => e
+     errors.add(:base, e.message)
     false
   end
 

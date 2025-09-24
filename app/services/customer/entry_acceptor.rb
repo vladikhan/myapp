@@ -9,14 +9,13 @@ class Customer::EntryAcceptor
                       Time.current >= program.application_end_time
 
     ActiveRecord::Base.transaction do
-      # блокировка записи в БД
-      program.reload if program.changed?
-      program.lock!
+      # Загружаем объект из базы заново, чтобы он был без незасейвленных изменений
+      program = Program.lock.find(program.id)
 
-      # уже есть заявка
+      # Проверяем, есть ли уже запись
       return :accepted if program.entries.where(customer_id: @customer.id).exists?
 
-      # проверка лимита участников
+      # Проверка лимита участников
       if max = program.max_number_of_participants
         if program.entries.where(canceled: false).count < max
           program.entries.create!(customer: @customer)
