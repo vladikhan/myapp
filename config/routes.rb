@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       post "message/:id/tag" => "ajax#add_tag", as: :tag_message
       delete "message/:id/tag" => "ajax#remove_tag"
 
-      resources :messages, only: [:index, :show, :destroy] do
+      resources :messages, only: [:edit, :update] do
         get :inbound, :outbound, :deleted, on: :collection
         delete :destroy_selected, on: :collection
         resource :reply, only: [:new, :create] do
@@ -121,7 +121,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :messages, only: [:new, :create] do
+    resources :messages do
       post :confirm, on: :collection
     end
   end

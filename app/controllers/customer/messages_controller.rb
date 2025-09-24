@@ -1,39 +1,57 @@
 class Customer::MessagesController < Customer::Base
-  def new 
-    @message = CustomerMessage.new
+  
+  def index
+    @messages = current_customer.messages.includes(:staff_member)
+      .order(created_at: :desc)
+    @messages = @messages.page(params[:page]) if defined?(Kaminari)
   end
 
-  def confirm
-    @message = CustomerMessage.new(customer_message_params)
-    @message.customer = current_customer
+  def show
+    @message = current_customer.messages.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "メッセージが見つかりません。"
+    redirect_to customer_messages_path
+  end
 
-    if @message.valid?
-      render :confirm
+  def new
+    @message = current_customer.outbound_messages.build
+  end
+
+  def create
+    @message = current_customer.outbound_messages.build(message_params)
+    
+    if @message.save
+      flash[:notice] = "メッセージを送信しました。"
+      redirect_to customer_messages_path
     else
-      flash.now.alert = "入力に誤りがあります。"
+      flash.now[:alert] = "入力に誤りがあります。"
       render :new
     end
   end
 
-  def create
-    @message = CustomerMessage.new(customer_message_params)
-    if params[:commit]
-      @message.customer = current_customer
-      if @message.save
-        flash.notice = "問い合わせを送信しました。"
-        redirect_to :customer_root
-      else
-        flash.now.alert = "入力に誤りがあります。"
-        render action: "new"
-      end
+  def confirm
+    @message = current_customer.outbound_messages.build(message_params)
+    
+    if @message.valid?
+      render :confirm
     else
-      render action: "new"
+      flash.now[:alert] = "入力に誤りがあります。"
+      render :new
     end
+  end
+
+  def destroy
+    message = current_customer.messages.find(params[:id])
+    message.update_column(:discarded, true)
+    flash[:notice] = "メッセージを削除しました。"
+    redirect_back(fallback_location: customer_messages_path)
   end
 
   private
 
-  def customer_message_params
-    params.require(:customer_message).permit(:subject, :body)
+  def message_params
+    params.require(:message).permit(:subject, :body, :staff_member_id)
+  rescue ActionController::ParameterMissing
+    {}
   end
 end

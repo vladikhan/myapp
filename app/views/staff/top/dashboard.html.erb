@@ -8,7 +8,7 @@
 		<ul>
 			<li><%= link_to "問い合わせ一覧", :inbound_staff_messages %></li>			
 			<li><%= link_to "返信一覧", :outbound_staff_messages %></li>
-			<li><%= link_to "全メッセージ一覧", :staff_messages %></li>
+			<li><%= link_to "全メッセージ一覧", staff_tag_messages_path(0) %></li>
 			<li><%= link_to "ゴミ箱", :deleted_staff_messages %></li>			
 		</ul>
 	</li>

@@ -1,0 +1,71 @@
+<% @title =
+  case params[:action]
+  when "index"; "メッセージ一覧"
+  else; "メッセージ一覧"
+  end
+%>
+<h1><%= @title %></h1>
+
+<div class="table-wrapper">
+  <%= render "links" if respond_to?(:render) && lookup_context.template_exists?("links", "customer/messages", true) %>
+  
+  <% if defined?(Kaminari) && @messages.respond_to?(:current_page) %>
+    <%= paginate @messages %>
+  <% end %>
+
+  <table class='listing'>
+    <tr>
+      <th>種類</th>
+      <th>宛先</th>
+      <th>件名</th>
+      <th>作成日時</th>
+      <th>ステータス</th>
+      <th>アクション</th>
+    </tr>
+
+    <% @messages.each do |message| %>
+      <tr>
+        <% if defined?(MessagePresenter) %>
+          <% p = MessagePresenter.new(message, self) %>
+          <td><%= p.message_type %></td>
+          <td><%= p.receiver %></td>
+          <td><%= p.truncated_subject %></td>
+          <td><%= p.created_at %></td>
+          <td><%= message.respond_to?(:status) ? message.status : "送信済み" %></td>
+        <% else %>
+          <td>
+            <%= message.class.name == "CustomerMessage" ? "送信" : "受信" %>
+          </td>
+          <td>
+            <%= message.respond_to?(:staff_member) && message.staff_member ? message.staff_member.family_name : "サポート" %>
+          </td>
+          <td>
+            <%= truncate(message.subject || "件名なし", length: 30) %>
+          </td>
+          <td>
+            <%= message.created_at.strftime("%Y/%m/%d %H:%M") %>
+          </td>
+          <td>
+            <%= message.respond_to?(:status) ? message.status : "送信済み" %>
+          </td>
+        <% end %>
+        <td class='actions'>
+          <%= link_to "詳細", customer_message_path(message) %>
+          <%= link_to "削除", customer_message_path(message), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+
+  <% if @messages.empty? %>
+    <p class="no-messages">メッセージはありません。</p>
+  <% end %>
+
+  <% if defined?(Kaminari) && @messages.respond_to?(:current_page) %>
+    <%= paginate @messages %>
+  <% end %>
+  
+  <div class="actions">
+    <%= link_to "新しいメッセージを作成", new_customer_message_path, class: "btn btn-primary" %>
+  </div>
+</div>
