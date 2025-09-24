@@ -25,12 +25,13 @@ Rails.application.routes.draw do
       get    "messages/count" => "ajax#message_count"
       post   "message/:id/tag" => "ajax#add_tag", as: :tag_message
       delete "message/:id/tag" => "ajax#remove_tag"
-      resources :messages, only: [ :index, :show, :destroy ] do
+     resources :messages, only: [:index, :show, :destroy] do
         get :inbound, :outbound, :deleted, on: :collection
-        resource :reply, only: [ :new, :create ] do
+        delete :destroy_selected, on: :collection
+        resource :reply, only: [:new, :create] do
           post :confirm
         end
-      end
+end
       resources :tags, only: [] do
         resources :messages, only: [ :index ] do
           get :inbound, :outbound, :deleted, on: :collection
@@ -80,17 +81,21 @@ Rails.application.routes.draw do
   # Admin routes (без host constraint, для разработки)
   # -------------------------
   namespace :admin do
-    root "top#index", as: :root_dev
+  root "top#index", as: :root_dev
 
-    get    "login"  => "sessions#new"
-    post   "login"  => "sessions#create"
-    delete "logout" => "sessions#destroy"
+  get    "login"  => "sessions#new"
+  post   "login"  => "sessions#create"
+  delete "logout" => "sessions#destroy"
 
-    resources :staff_members do
-      resources :staff_events, only: [:index]
-    end
+  resources :staff_members do
     resources :staff_events, only: [:index]
   end
+  resources :staff_events, only: [:index]
+
+  resources :allowed_sources, only: [:index, :create] do
+    delete :delete, on: :collection
+  end
+end
 
   # -------------------------
   # Customer routes (без host constraint)

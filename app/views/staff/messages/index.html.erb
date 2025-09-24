@@ -1,44 +1,57 @@
-<%
-	@title =
-	case params[:action]
-	when "index"; "全メッセージ一覧"
-	when "inbound"; "問い合わせ一覧"
-	when "outbound"; "返信"
-	when "deleted"; "メッセージ一覧（ゴミ箱）"
-	else; raise
-	end
+<% @title =
+  case params[:action]
+  when "index"; "全メッセージ一覧"
+  when "inbound"; "問い合わせ一覧"
+  when "outbound"; "返信"
+  when "deleted"; "メッセージ一覧（ゴミ箱）"
+  else; raise
+  end
 %>
 <h1><%= @title %></h1>
 
 <div class="table-wrapper">
-	<%= render "links" %>
-	<%= paginate @messages %>
+  <%= render "links" %>
+  <%= paginate @messages %>
 
-	<table class='listing'>
-		<tr>
-			<th>種類</th>
-			<th>送信</th>
-			<th>返信者</th>
-			<th>件名</th>
-			<th>作成日時</th>
-			<th>アクション</th>
-		</tr>
-		<% @messages.each do |m|%>
-		<% p = MessagePresenter.new(m, self) %>
-		<tr>
-			<td><%= p.message_type %></td>
-			<td><%= p.sender %></td>
-			<td><%= p.receiver %></td>
-			<td><%= p.truncated_subject %></td>
-			<td><%= p.created_at %></td>
-			<td class='actions'>
-				<%= link_to "詳細", staff_message_path(m)%> |
-				<%= link_to_if m.kind_of?(CustomerMessage), "削除", 
-				staff_message_path(m), method: :delete %>
-			</td>
-		</tr>
-		<% end %>
-	</table>
-	<%= paginate @messages %>
-	<%= render "tags" %>
+  <%= form_with url: destroy_selected_staff_messages_path, method: :delete do |f| %>
+  <table class='listing'>
+    <tr>
+      <th>削除</th>
+      <th>種類</th>
+      <th>送信</th>
+      <th>返信者</th>
+      <th>件名</th>
+      <th>作成日時</th>
+      <th>アクション</th>
+    </tr>
+
+    <% @messages.each_with_index do |m, i| %>
+      <%= f.fields_for :messages, m, index: i do |ff| %>
+        <%= ff.hidden_field :id %>
+        <tr>
+          <td><%= ff.check_box :_destroy %></td>
+          <% p = MessagePresenter.new(m, self) %>
+          <td><%= p.message_type %></td>
+          <td><%= p.sender %></td>
+          <td><%= p.receiver %></td>
+          <td><%= p.truncated_subject %></td>
+          <td><%= p.created_at %></td>
+          <td class='actions'>
+            <%= link_to "詳細", staff_message_path(m) %>
+            <% if m.kind_of?(CustomerMessage) %>
+              | <%= link_to "削除", staff_message_path(m), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+
+  <div class="buttons">
+    <%= f.submit "チェックしたメッセージを削除", data: { confirm: "本当に削除しますか？" } %>
+  </div>
+<% end %>
+
+  <%= paginate @messages %>
+  <%= render "tags" %>
 </div>
