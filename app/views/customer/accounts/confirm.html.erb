@@ -2,15 +2,95 @@
 <h1><%= @title %></h1>
 
 <div id="login-form" class='confirming'>
-  <%= form_with model: @customer_form, scope: :customer,
-      url: confirm_customer_account_path, method: :patch, local: true do |f| %>
-  <p>以下の内容でアカウントを更新します。よろしいですか?</p>
+  <%= form_with model: @customer_form.customer, scope: :customer,
+      url: customer_account_path, method: :patch, local: true do |f| %>
+    
+    <!-- СКРЫТЫЕ ПОЛЯ ДЛЯ ПЕРЕДАЧИ ДАННЫХ -->
+    <%= f.hidden_field :email %>
+    <%= f.hidden_field :password %>
+    <%= f.hidden_field :family_name %>
+    <%= f.hidden_field :given_name %>
+    <%= f.hidden_field :family_name_kana %>
+    <%= f.hidden_field :given_name_kana %>
+    <%= f.hidden_field :birthday %>
+    <%= f.hidden_field :gender %>
 
-  <%= render "confirming_form", f: f %>
+    <!-- Скрытые поля для домашнего адреса -->
+    <%= f.fields_for :home_address, @customer_form.customer.home_address do |ha| %>
+      <%= ha.hidden_field :id %>
+      <%= ha.hidden_field :postal_code %>
+      <%= ha.hidden_field :prefecture %>
+      <%= ha.hidden_field :city %>
+      <%= ha.hidden_field :address1 %>
+      <%= ha.hidden_field :address2 %>
+    <% end %>
 
-  <div class="buttons">
-    <%= f.submit "更新" %>
-    <%= link_to "訂正", edit_customer_account_path %>
-  </div>
-<% end %>
+    <!-- Скрытые поля для рабочего адреса -->
+    <%= f.fields_for :work_address, @customer_form.customer.work_address do |wa| %>
+      <%= wa.hidden_field :id %>
+      <%= wa.hidden_field :company_name %>
+      <%= wa.hidden_field :division_name %>
+      <%= wa.hidden_field :postal_code %>
+      <%= wa.hidden_field :prefecture %>
+      <%= wa.hidden_field :city %>
+      <%= wa.hidden_field :address1 %>
+      <%= wa.hidden_field :address2 %>
+    <% end %>
+
+    <!-- Скрытые поля для телефонов -->
+    <%= f.fields_for :personal_phones, @customer_form.customer.personal_phones do |pp| %>
+      <%= pp.hidden_field :id %>
+      <%= pp.hidden_field :number %>
+    <% end %>
+
+    <p>以下の内容でアカウントを更新します。よろしいですか?</p>
+
+    <!-- Отображение данных (как было) -->
+    <fieldset>
+      <legend>基本情報</legend>
+      <p>メールアドレス: <%= f.object.email %></p>
+      <p>氏名: <%= f.object.family_name %> <%= f.object.given_name %></p>
+      <p>フリガナ: <%= f.object.family_name_kana %> <%= f.object.given_name_kana %></p>
+      <p>生年月日: <%= f.object.birthday %></p>
+      <p>性別: <%= f.object.gender %></p>
+    </fieldset>
+
+    <fieldset>
+      <legend>電話番号</legend>
+      <% f.object.personal_phones.each do |phone| %>
+        <% if phone.number.present? %>
+          <p><%= phone.number %></p>
+        <% end %>
+      <% end %>
+    </fieldset>
+
+    <% if @customer_form.inputs_home_address && f.object.home_address %>
+      <fieldset>
+        <legend>自宅住所</legend>
+        <p>郵便番号: <%= f.object.home_address.postal_code %></p>
+        <p>都道府県: <%= f.object.home_address.prefecture %></p>
+        <p>市区町村: <%= f.object.home_address.city %></p>
+        <p>住所1: <%= f.object.home_address.address1 %></p>
+        <p>住所2: <%= f.object.home_address.address2 %></p>
+      </fieldset>
+    <% end %>
+
+    <% if @customer_form.inputs_work_address && f.object.work_address %>
+      <fieldset>
+        <legend>勤務先住所</legend>
+        <p>会社名: <%= f.object.work_address.company_name %></p>
+        <p>部署名: <%= f.object.work_address.division_name %></p>
+        <p>郵便番号: <%= f.object.work_address.postal_code %></p>
+        <p>都道府県: <%= f.object.work_address.prefecture %></p>
+        <p>市区町村: <%= f.object.work_address.city %></p>
+        <p>住所1: <%= f.object.work_address.address1 %></p>
+        <p>住所2: <%= f.object.work_address.address2 %></p>
+      </fieldset>
+    <% end %>
+
+    <div class="buttons">
+      <%= f.submit "更新" %>
+      <%= link_to "訂正", edit_customer_account_path %>
+    </div>
+  <% end %>
 </div>

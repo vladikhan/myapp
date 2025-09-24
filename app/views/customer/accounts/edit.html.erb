@@ -2,7 +2,7 @@
 <h1><%= @title %></h1>
 
 <div id="login-form">
-  <%= form_with model: @customer_form.customer, url: :confirm_customer_account, local: true do |f| %>
+  <%= form_with model: @customer_form.customer, url: confirm_customer_account_path, local: true do |f| %>
 
     <!-- 基本情報 -->
     <fieldset>
@@ -58,7 +58,8 @@
 
     <fieldset id="home-address-fields">
       <legend>自宅住所</legend>
-      <%= f.fields_for :home_address do |ha| %>
+      <%= f.fields_for :home_address, @customer_form.customer.home_address do |ha| %>
+        <%= ha.hidden_field :id %>
         <div class="field">
           <%= ha.label :postal_code, "郵便番号" %>
           <%= ha.text_field :postal_code, id: "form_home_address_postal_code" %>
@@ -75,7 +76,8 @@
 
     <fieldset id="work-address-fields">
       <legend>勤務先</legend>
-      <%= f.fields_for :work_address do |wa| %>
+      <%= f.fields_for :work_address, @customer_form.customer.work_address do |wa| %>
+        <%= wa.hidden_field :id %>
         <div class="field">
           <%= wa.label :company_name, "会社名" %>
           <%= wa.text_field :company_name, id: "form_work_address_company_name" %>
@@ -84,10 +86,22 @@
       <% end %>
     </fieldset>
 
+    <%# 携帯電話フィールド %>
+    <fieldset id="personal-phones">
+      <legend>電話番号</legend>
+      <%= f.fields_for :personal_phones, @customer_form.customer.personal_phones do |pp| %>
+        <%= pp.hidden_field :id %>
+        <div class="field">
+          <%= pp.label :number, "電話番号" %>
+          <%= pp.text_field :number %>
+        </div>
+      <% end %>
+    </fieldset>
+
     <!-- ボタン -->
     <div class="buttons">
-      <%= f.submit "確認画面へ進む" %>
-      <%= link_to "キャンセル", :customer_account %>
+      <%= f.submit "確認画面へ進む", class: "unified-button" %>
+      <%= link_to "キャンセル", customer_account_path, class: "link-button" %>
     </div>
 
   <% end %>

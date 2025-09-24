@@ -22,18 +22,20 @@ Rails.application.routes.draw do
           patch :update_all, on: :collection
         end
       end
-      get    "messages/count" => "ajax#message_count"
-      post   "message/:id/tag" => "ajax#add_tag", as: :tag_message
+      get "messages/count" => "ajax#message_count"
+      post "message/:id/tag" => "ajax#add_tag", as: :tag_message
       delete "message/:id/tag" => "ajax#remove_tag"
-     resources :messages, only: [:index, :show, :destroy] do
+
+      resources :messages, only: [:index, :show, :destroy] do
         get :inbound, :outbound, :deleted, on: :collection
         delete :destroy_selected, on: :collection
         resource :reply, only: [:new, :create] do
           post :confirm
         end
-end
+      end
+
       resources :tags, only: [] do
-        resources :messages, only: [ :index ] do
+        resources :messages, only: [:index] do
           get :inbound, :outbound, :deleted, on: :collection
         end
       end
@@ -45,7 +47,6 @@ end
   # -------------------------
   namespace :staff do
     root "top#index", as: :root_dev
-
     get    "login"  => "sessions#new"
     post   "login"  => "sessions#create"
     delete "logout" => "sessions#destroy"
@@ -71,7 +72,8 @@ end
         resources :staff_events, only: [:index]
       end
       resources :staff_events, only: [:index]
-      resources :allowed_sources, only: [ :index, :create ] do
+
+      resources :allowed_sources, only: [:index, :create] do
         delete :delete, on: :collection
       end
     end
@@ -81,21 +83,20 @@ end
   # Admin routes (без host constraint, для разработки)
   # -------------------------
   namespace :admin do
-  root "top#index", as: :root_dev
+    root "top#index", as: :root_dev
+    get    "login"  => "sessions#new"
+    post   "login"  => "sessions#create"
+    delete "logout" => "sessions#destroy"
 
-  get    "login"  => "sessions#new"
-  post   "login"  => "sessions#create"
-  delete "logout" => "sessions#destroy"
-
-  resources :staff_members do
+    resources :staff_members do
+      resources :staff_events, only: [:index]
+    end
     resources :staff_events, only: [:index]
-  end
-  resources :staff_events, only: [:index]
 
-  resources :allowed_sources, only: [:index, :create] do
-    delete :delete, on: :collection
+    resources :allowed_sources, only: [:index, :create] do
+      delete :delete, on: :collection
+    end
   end
-end
 
   # -------------------------
   # Customer routes (без host constraint)
@@ -107,16 +108,20 @@ end
     post   "login" => "sessions#create", as: :login_create
     delete "logout" => "sessions#destroy", as: :logout
 
-    resource :session, only: [ :create, :destroy ]
-    resource :account, except: [ :new, :create, :destroy ] do 
-      patch :confirm
+    resource :session, only: [:create, :destroy]
+
+    resource :account, except: [:new, :create, :destroy] do
+      get   :confirm  # показать страницу подтверждения
+      patch :confirm  # обработка формы перед сохранением
     end
-    resources :programs, only: [ :index, :show ] do
-      resource :entry, only: [ :create ] do
+
+    resources :programs, only: [:index, :show] do
+      resource :entry, only: [:create] do
         patch :cancel
       end
     end
-    resources :messages, only: [ :new, :create ] do
+
+    resources :messages, only: [:new, :create] do
       post :confirm, on: :collection
     end
   end
