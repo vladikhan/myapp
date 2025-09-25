@@ -1,19 +1,25 @@
 <header>
-  <%= link_to "BAUKIS2", customer_root_path, class: "logo-mark" %>
+  <div class="header-left">
+    <%= link_to "BAUKIS2", customer_root_path, class: "logo-mark" %>
+    
+    <% if flash.notice %>
+      <span class="notice"><%= flash.notice %></span>
+    <% end %>
 
-  <% if flash.notice %>
-    <span class="notice"><%= flash.notice %></span>
-  <% end %>
+    <% if flash.alert %>
+      <span class="alert"><%= flash.alert %></span>
+    <% end %>
+  </div>
 
-  <% if flash.alert %>
-    <span class="alert"><%= flash.alert %></span>
-  <% end %>
-
-  <% if current_customer %>
-    <%= button_to "ログアウト", customer_logout_path, method: :delete, class: "logout-button" %>
-    <%= link_to "アカウント", customer_account_path %>
-    <%= link_to "問い合わせ", new_customer_message_path %>
-  <% else %>
-    <%= button_to "ログイン", customer_login_path, class: "login-btn", form: { class: "auth-form" }  %>
-  <% end %>
+  <div class="header-right">
+    <% if current_customer %>
+      <%= link_to "アカウント", customer_account_path %>
+      <%= link_to "問い合わせ", new_customer_message_path %>
+      <%= button_to "ログアウト", customer_logout_path, method: :delete, 
+          class: "logout-btn", form: { class: "auth-form" } %>
+    <% else %>
+      <%= button_to "ログイン", customer_login_path, method: :get,
+          class: "login-btn", form: { class: "auth-form" } %>
+    <% end %>
+  </div>
 </header>
