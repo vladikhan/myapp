@@ -41,10 +41,13 @@ class Customer::MessagesController < Customer::Base
   end
 
   def destroy
-    message = current_customer.messages.find(params[:id])
-    message.update_column(:discarded, true)
+    message = Message.find(params[:id])
+    message.update!(deleted: true)
     flash[:notice] = "メッセージを削除しました。"
-    redirect_back(fallback_location: customer_messages_path)
+    redirect_to customer_messages_path
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "メッセージが見つかりません。"
+    redirect_to customer_messages_path
   end
 
   private

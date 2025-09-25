@@ -31,7 +31,7 @@ class Staff::MessagesController < Staff::Base
 
   def destroy
     message = Message.find(params[:id])
-    message.update!(deleted: true)  # или discarded: true, если используете discard gem
+    message.update!(deleted: true)  
     flash[:notice] = "メッセージを削除しました。"
     redirect_to staff_messages_path
   rescue ActiveRecord::RecordNotFound
