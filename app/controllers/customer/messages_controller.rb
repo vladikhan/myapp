@@ -41,15 +41,10 @@ class Customer::MessagesController < Customer::Base
   end
 
   def destroy
-  # Найти сообщение, которое принадлежит текущему пользователю
   message = current_customer.messages.find(params[:id])
-  
-  # "Удаляем" сообщение логически
-  message.update!(deleted: true)
-  
-  flash[:notice] = "メッセージを削除しました。"
-  redirect_to customer_messages_path
-
+    message.destroy!
+    flash[:notice] = "メッセージを削除しました。"
+    redirect_to customer_messages_path
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "メッセージが見つかりません。"
     redirect_to customer_messages_path
