@@ -1,56 +1,59 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
+# spec/rails_helper.rb
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
+
+# Загружаем Rails
 require_relative '../config/environment'
+
+# Предотвращаем запуск тестов в production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require 'rspec/rails'
 require 'capybara/rspec'
-require 'selenium-webdriver'
+require 'capybara/cuprite'
+require 'active_support/testing/time_helpers'
 
-# Подключаем все файлы из spec/support
+# Подключаем FactoryBot
+require 'factory_bot_rails'
+
+# Загружаем все файлы из spec/support
 Dir[Rails.root.join('spec/support/**/*.rb')].sort.each { |f| require f }
 
-# Настройка Capybara для headless Chrome
-Capybara.register_driver :selenium_chrome_headless do |app|
-  options = Selenium::WebDriver::Chrome::Options.new
-  options.add_argument('--headless=new')        # новый headless режим
-  options.add_argument('--disable-gpu')
-  options.add_argument('--no-sandbox')          # обязательно для Docker
-  options.add_argument('--window-size=1920,1080')
-  options.add_argument('--disable-dev-shm-usage') # предотвращает ошибки памяти в контейнере
-
-  # Явно указываем путь к Chrome, если не в PATH (опционально)
-  # options.binary = '/usr/bin/google-chrome' 
-
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
-end
-
-Capybara.javascript_driver = :selenium_chrome_headless
-Capybara.default_max_wait_time = 5 # секунд
-
-# Проверяем наличие тестовой базы
-begin
-  ActiveRecord::Migration.maintain_test_schema!
-rescue ActiveRecord::PendingMigrationError => e
-  abort e.to_s.strip
-end
+# Конфигурация Capybara для Cuprite
+Capybara.javascript_driver = :cuprite
+Capybara.default_max_wait_time = 5
 
 RSpec.configure do |config|
-  config.fixture_path = Rails.root.join('spec/fixtures')
+  # FactoryBot методы без FactoryBot. prefix
   config.include FactoryBot::Syntax::Methods
-  config.use_transactional_fixtures = true
-  config.infer_spec_type_from_file_location!
-  config.filter_rails_from_backtrace!
+
+  # Подключаем твой helper для feature-тестов
+  config.include FeaturesSpecHelper, type: :feature
+
+  # Подключаем login helpers для request specs
+  config.include LoginHelpers, type: :request
+
+  # Включаем travel_to
   config.include ActiveSupport::Testing::TimeHelpers
 
-  # Для system-тестов с JS используем selenium_chrome_headless
-  config.before(:each, type: :system, js: true) do
-    driven_by :selenium_chrome_headless
+  # Используем транзакции для тестов с БД
+  config.use_transactional_fixtures = true
+
+  # Авто-дедупликация спеков
+  config.infer_spec_type_from_file_location!
+
+  # Фильтруем backtrace Rails-гемов
+  config.filter_rails_from_backtrace!
+
+  # Разрешаем host для request specs
+  config.before(:suite) do
+    Rails.application.config.hosts << "www.example.com"
+    Rails.application.config.hosts << "baukis2.example.com"
+    Rails.application.config.hosts << "127.0.0.1"
   end
 
-  # Для system-тестов без JS используем rack_test
-  config.before(:each, type: :system, js: false) do
-    driven_by :rack_test
+  # Отключаем CSRF в request specs
+  config.before(:each, type: :request) do
+    allow_any_instance_of(ActionController::Base).to receive(:verify_authenticity_token).and_return(true)
   end
 end

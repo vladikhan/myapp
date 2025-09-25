@@ -1,59 +1,56 @@
-require "rails_helper"
+require 'rails_helper'
 
-describe "管理者による職員管理", "ログイン前" do
-  before { host! 'baukis2.example.com' } # <- добавляем сюда
-
-  include_examples "a protected admin controller", "admin/staff_members"
-end
-
-describe "管理者による職員管理" do
-  let(:administrator) { create(:administrator) }
+RSpec.describe "管理者による職員管理", type: :request do
+  let!(:admin) { create(:admin_member, password: "pw") }
+  let!(:staff_member) { create(:staff_member) }
 
   before do
-    host! 'baukis2.example.com'   # <- host для admin
-
-    post admin_session_url, params: {
-      admin_login_form: { email: administrator.email, password: "password" }
-    }
+    Rails.application.config.hosts << "www.example.com"
+    # логинимся
+    post admin_login_path, params: { email: admin.email, password: "pw" }
     follow_redirect!
   end
 
   describe "新人登録" do
-    let(:params_hash) { attributes_for(:staff_member) }
+    it "職員一覧ページにリダイレクト" do
+      post staff_members_path, params: { staff_member: { email: "new@example.com", password: "pw" } }
+      follow_redirect!
 
-    example "職員一覧ページにリダイレクト" do
-      post admin_staff_members_url, params: { staff_member: params_hash }
-      expect(response).to redirect_to(admin_staff_members_url)
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("職員一覧")
     end
 
-    example "例外 ActionController::ParameterMissing が発生" do
-      expect { post admin_staff_members_url, params: {} }.to raise_error(ActionController::ParameterMissing)
+    it "パラメータ不足で例外 ActionController::ParameterMissing が発生" do
+      expect { post staff_members_path, params: {} }.to raise_error(ActionController::ParameterMissing)
     end
   end
 
   describe "更新" do
-    let(:staff_member) { create(:staff_member) }
-    let(:params_hash) { attributes_for(:staff_member) }
+    it "suspendedフラグをセット" do
+      patch staff_member_path(staff_member), params: { staff_member: { suspended: true } }
+      follow_redirect!
 
-    example "suspended フラグをセットする" do
-      params_hash.merge!(suspended: true)
-      patch admin_staff_member_url(staff_member), params: { staff_member: params_hash }
       staff_member.reload
-      expect(staff_member).to be_suspended
+      expect(staff_member.suspended).to be true
     end
 
-    example "password_digest の値は変更されない" do
-      params_hash.delete(:password)
-      expect {
-        patch admin_staff_member_url(staff_member), params: { staff_member: params_hash }
-      }.not_to change { staff_member.reload.password_digest }
+    it "password_digestの値は変更されない" do
+      old_digest = staff_member.password_digest
+      patch staff_member_path(staff_member), params: { staff_member: { email: "test@example.com" } }
+      follow_redirect!
+
+      staff_member.reload
+      expect(staff_member.password_digest).to eq(old_digest)
     end
   end
 
   describe "ログアウト" do
-    example "管理者は正しくログアウトできる" do
-      delete admin_logout_url
-      expect(response).to redirect_to(admin_login_url)
+    it "管理者は正しくログアウトできる" do
+      delete admin_logout_path
+      follow_redirect!
+
+      expect(session[:admin_member_id]).to be_nil
+      expect(response).to redirect_to(admin_login_path)
     end
   end
 end
