@@ -10,18 +10,19 @@ Rails.application.routes.draw do
 
       # Сессии
       get    "login"  => "sessions#new",     as: :login
-      post   "login"  => "sessions#create",  as: :session
+      post   "login"  => "sessions#create",  as: :session  # => staff_session_path
       delete "logout" => "sessions#destroy", as: :logout
 
       resource :account, except: [:new, :create, :destroy]
       resource :password, only: [:show, :edit, :update]
 
       resources :customers
-      resources :programs do 
+      resources :programs do
         resources :entries, only: [] do
           patch :update_all, on: :collection
         end
       end
+
       get "messages/count" => "ajax#message_count"
       post "message/:id/tag" => "ajax#add_tag", as: :tag_message
       delete "message/:id/tag" => "ajax#remove_tag"
@@ -43,22 +44,21 @@ Rails.application.routes.draw do
   end
 
   # -------------------------
-  # Staff routes (без host constraint, для разработки)
+  # Staff routes (для разработки)
   # -------------------------
   namespace :staff do
     root "top#index", as: :root_dev
-    get    "login"  => "sessions#new"
-    post   "login"  => "sessions#create"
-    delete "logout" => "sessions#destroy"
+    get    "login"  => "sessions#new",     as: :login_dev
+    post   "login"  => "sessions#create",  as: :session_dev
+    delete "logout" => "sessions#destroy", as: :logout_dev
 
     resource :account, except: [:new, :create, :destroy]
     resource :password, only: [:show, :edit, :update]
-
     resources :customers
     resources :messages, only: [:index, :show, :destroy] do
       get :inbound, :outbound, :deleted, on: :collection
       delete :destroy_selected, on: :collection
-  end
+    end
   end
 
   # -------------------------
@@ -69,7 +69,7 @@ Rails.application.routes.draw do
       root "top#index", as: :root
 
       get    "login"  => "sessions#new",     as: :login
-      post   "login"  => "sessions#create",  as: :session
+      post   "login"  => "sessions#create",  as: :session  # => admin_session_path
       delete "logout" => "sessions#destroy", as: :logout
 
       resources :staff_members do
@@ -84,13 +84,13 @@ Rails.application.routes.draw do
   end
 
   # -------------------------
-  # Admin routes (без host constraint, для разработки)
+  # Admin routes (для разработки)
   # -------------------------
   namespace :admin do
     root "top#index", as: :root_dev
-    get    "login"  => "sessions#new"
-    post   "login"  => "sessions#create"
-    delete "logout" => "sessions#destroy"
+    get    "login"  => "sessions#new",     as: :login_dev
+    post   "login"  => "sessions#create",  as: :session_dev
+    delete "logout" => "sessions#destroy", as: :logout_dev
 
     resources :staff_members do
       resources :staff_events, only: [:index]
@@ -103,20 +103,20 @@ Rails.application.routes.draw do
   end
 
   # -------------------------
-  # Customer routes (без host constraint)
+  # Customer routes (для разработки)
   # -------------------------
   namespace :customer do
     root to: "top#index", as: :root
 
-    get    "login" => "sessions#new", as: :login
+    get    "login" => "sessions#new",    as: :login
     post   "login" => "sessions#create", as: :login_create
     delete "logout" => "sessions#destroy", as: :logout
 
     resource :session, only: [:create, :destroy]
 
     resource :account, except: [:new, :create, :destroy] do
-      get   :confirm  # показать страницу подтверждения
-      patch :confirm  # обработка формы перед сохранением
+      get   :confirm
+      patch :confirm
     end
 
     resources :programs, only: [:index, :show] do

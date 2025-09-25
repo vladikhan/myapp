@@ -42,8 +42,15 @@ RSpec.configure do |config|
   # Авто-дедупликация спеков
   config.infer_spec_type_from_file_location!
 
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
+
   # Фильтруем backtrace Rails-гемов
   config.filter_rails_from_backtrace!
+
+  config.include FactoryBot::Syntax::Methods
+
+  
 
   # Разрешаем host для request specs
   config.before(:suite) do

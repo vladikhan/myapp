@@ -27,6 +27,8 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.2'
   gem 'rspec-rails', '~> 6.1.3'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'devise'
+
 end
 
 
@@ -59,4 +61,6 @@ gem "dartsass-rails", "~> 0.5.1"
 gem 'sprockets-rails'
 
 gem 'debug'
+
+
 # gem 'jquery-rails'

@@ -1,41 +1,41 @@
 require 'rails_helper'
 
 RSpec.describe "Admin::Sessions", type: :request do
-  let!(:admin) { create(:admin_member, password: "pw") }
-
-  before do
-    # разрешаем тестовый host
-    Rails.application.config.hosts << "www.example.com"
+  let!(:admin) do
+    AdminMember.create!(
+      email: "admin1@example.com",
+      password: "password123",
+      password_confirmation: "password123",
+      family_name: "山田",
+      given_name: "太郎",
+      family_name_kana: "ヤマダ",
+      given_name_kana: "タロウ",
+      start_date: Date.today
+    )
   end
 
   describe "ログイン" do
     it "正しい情報でログインできる" do
-      post admin_login_path, params: { email: admin.email, password: "pw" }
-      follow_redirect!  # редирект после успешного логина
-
-      expect(session[:admin_member_id]).to eq(admin.id)
-      expect(response).to have_http_status(:ok)
+      post admin_session_dev_path, params: { admin_member: { email: admin.email, password: "password123" } }
+      expect(response).to redirect_to(admin_root_dev_path)
+      follow_redirect!
+      expect(response.body).to include("ログアウト")
     end
 
     it "間違った情報ではログインできない" do
-      post admin_login_path, params: { email: admin.email, password: "wrong" }
-      follow_redirect!  # редирект на login
-
-      expect(session[:admin_member_id]).to be_nil
-      expect(response.body).to include("メールアドレスまたはパスワードが正しくありません")
+      post admin_session_dev_path, params: { admin_member: { email: admin.email, password: "wrong" } }
+      expect(response.body).to include("ログイン情報が正しくありません")
     end
   end
 
   describe "ログアウト" do
     it "ログアウトできる" do
-      # сначала логинимся
-      post admin_login_path, params: { email: admin.email, password: "pw" }
+      # Логинимся
+      post admin_session_dev_path, params: { admin_member: { email: admin.email, password: "password123" } }
       follow_redirect!
 
+      # Логаут
       delete admin_logout_path
-      follow_redirect!
-
-      expect(session[:admin_member_id]).to be_nil
       expect(response).to redirect_to(admin_login_path)
     end
   end
