@@ -58,7 +58,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:index, :show, :destroy] do
       get :inbound, :outbound, :deleted, on: :collection
       delete :destroy_selected, on: :collection
-    end
+  end
   end
 
   # -------------------------

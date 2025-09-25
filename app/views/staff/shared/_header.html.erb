@@ -1,18 +1,22 @@
 <header>
-  <%= link_to "BAUKIS2", :staff_root, class: "logo-mark" %>
+  <div class="header-left">
+    <%= link_to "BAUKIS2", :staff_root, class: "logo-mark" %>
+    
+    <%= content_tag(:span, flash.notice, class: "notice") if flash.notice %>
+    <%= content_tag(:span, flash.alert, class: "alert") if flash.alert %>
+  </div>
 
-  <%= content_tag(:span, flash.notice, class: "notice") if flash.notice %>
-  <%= content_tag(:span, flash.alert, class: "alert") if flash.alert %>
-
-  <%# Логин / логаут %>
-  <%= if current_staff_member
-        link_to "ログアウト", staff_logout_path, method: :delete
-      else
-        link_to "ログイン", staff_login_path
-      end
-  %>
-
-  <%# Ссылка на аккаунт только если current_staff_member есть %>
-  <%= link_to "アカウント", staff_account_path if current_staff_member.present? %>
-  <%= number_of_unprocessed_messages if current_staff_member %>
+  <div class="header-right">
+    <% if current_staff_member %>
+      <%= link_to "アカウント", staff_account_path %>
+      <%= number_of_unprocessed_messages %>
+      <%= button_to "ログアウト", staff_logout_path, method: :delete, 
+          class: "logout-btn", 
+          form: { class: "auth-form" } %>
+    <% else %>
+      <%= button_to "ログイン", staff_login_path, method: :get,
+          class: "login-btn",
+          form: { class: "auth-form" } %>
+    <% end %>
+  </div>
 </header>

@@ -1,6 +1,3 @@
-import Rails from '@rails/ujs'
-import './application'
-Rails.start()
-
-import '@hotwired/turbo-rails'
-import 'controllers'
+//= require rails-ujs
+//= require turbolinks
+//= require_tree .

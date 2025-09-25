@@ -74,3 +74,5 @@ gem "dartsass-rails", "~> 0.5.1"
 # gem 'sassc-rails', '~> 2.1.0'
 
 gem 'sprockets-rails'
+
+# gem 'jquery-rails'
