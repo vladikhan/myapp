@@ -30,25 +30,23 @@ class Customer::MessagesController < Customer::Base
   end
 
   def confirm
-    @message = current_customer.outbound_messages.build(message_params)
-    
+    @message = current_customer.messages.new(message_params)
     if @message.valid?
       render :confirm
     else
-      flash.now[:alert] = "入力に誤りがあります。"
       render :new
     end
   end
 
   def destroy
   message = current_customer.messages.find(params[:id])
-    message.destroy!
-    flash[:notice] = "メッセージを削除しました。"
-    redirect_to customer_messages_path
-  rescue ActiveRecord::RecordNotFound
-    flash[:alert] = "メッセージが見つかりません。"
-    redirect_to customer_messages_path
-  end
+  message.update!(deleted: true)
+  flash[:notice] = "メッセージを削除しました。"
+  redirect_to customer_messages_path
+    rescue ActiveRecord::RecordNotFound
+      flash[:alert] = "メッセージが見つかりません。"
+      redirect_to customer_messages_path
+    end
 
   private
 
