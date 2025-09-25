@@ -38,15 +38,22 @@ class Customer::MessagesController < Customer::Base
     end
   end
 
+  
   def destroy
-  message = current_customer.messages.find(params[:id])
-  message.update!(deleted: true)
-  flash[:notice] = "メッセージを削除しました。"
-  redirect_to customer_messages_path
-    rescue ActiveRecord::RecordNotFound
-      flash[:alert] = "メッセージが見つかりません。"
-      redirect_to customer_messages_path
-    end
+    message = current_customer.messages.find(params[:id])
+
+  if message.deletable?
+    message.update!(deleted: true)
+    flash[:notice] = "メッセージを削除しました。"
+  else
+    flash[:alert] = "このメッセージは削除できません。返信が存在します。"
+  end
+    redirect_to customer_messages_path
+
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "メッセージが見つかりません。"
+    redirect_to customer_messages_path
+  end
 
   private
 

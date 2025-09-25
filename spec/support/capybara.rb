@@ -1,6 +1,5 @@
 require 'capybara/rails'
 require 'capybara/rspec'
-require 'selenium-webdriver'
 
 if ENV['SELENIUM_URL']
   puts "Using Selenium Grid at #{ENV['SELENIUM_URL']}"
@@ -13,15 +12,8 @@ if ENV['SELENIUM_URL']
     options.add_argument('--disable-gpu')
     options.add_argument('--window-size=1400,1400')
 
-    Capybara::Selenium::Driver.new(
-      app,
-      browser: :remote,
-      url: ENV['SELENIUM_URL'],
-      options: options
-    )
   end
 
- require 'capybara/rspec'
 
 
 

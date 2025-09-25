@@ -49,5 +49,8 @@ RSpec.configure do |config|
     driven_by :selenium_chrome_headless
   end
 
- 
+  # Для system-тестов без JS используем rack_test
+  config.before(:each, type: :system, js: false) do
+    driven_by :rack_test
+  end
 end

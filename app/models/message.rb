@@ -5,6 +5,7 @@ class Message < ApplicationRecord
   belongs_to :parent, class_name: "Message", foreign_key: "parent_id", optional: true
   has_many :message_tag_links, dependent: :destroy
   has_many :tags, -> { order(:value) }, through: :message_tag_links
+  has_many :replies, class_name: "Message", foreign_key: "parent_id"
 
   # Устанавливаем статус по умолчанию при создании нового объекта
   after_initialize :set_default_status, if: :new_record?
@@ -60,6 +61,10 @@ class Message < ApplicationRecord
         tag.destroy if tag.message_tag_links.empty?
       end
     end
+  end
+
+  def deletable?
+    replies.empty?
   end
 
   private
