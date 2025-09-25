@@ -10,7 +10,7 @@ s = 2.years.ago
     subject: "これは問い合わせ。" * 4,
     body: "これは問い合わせです。\n" * 8,
     created_at: s.advance(months: n),
-    status: "new"   # <--- обязательно
+    status: "新"   # <--- обязательно
   )
   r = StaffMessage.create!(
     customer: m.customer,
@@ -20,7 +20,8 @@ s = 2.years.ago
     subject: "これは返信です。" * 4,
     body: "これは返信です。\n" * 8,
     created_at: s.advance(months: n, hours: 1),
-    status: "processed"   # <--- тоже укажем
+    status: "処理済み
+"   # <--- тоже укажем
   )
   if n % 6 == 0
     m2 = CustomerMessage.create!(
@@ -30,7 +31,7 @@ s = 2.years.ago
       subject: "これは返信への回答です。",
       body: "これは返信への回答です。",
       created_at: s.advance(months: n, hours: 2),
-      status: "new"
+      status: "新"
     )
     StaffMessage.create!(
       customer: m2.customer,
@@ -40,7 +41,8 @@ s = 2.years.ago
       subject: "これは回答への返信です。",
       body: "これは回答への返信です。",
       created_at: s.advance(months: n, hours: 3),
-      status: "processed"
+      status: "処理済み
+"
     )
   end
 end
@@ -52,7 +54,7 @@ s = 24.hours.ago
     subject: "これは問い合わせです。" * 4,
     body: "これは問い合わせです。\n" * 8,
     created_at: s.advance(hours: n * 3),
-    status: "new"
+    status: "新"
   )
 end
 

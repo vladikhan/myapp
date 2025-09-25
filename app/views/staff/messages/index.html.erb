@@ -16,7 +16,7 @@
     <%= paginate @messages %>
   <% end %>
 
-  <%= form_tag destroy_selected_staff_messages_path, method: :delete do %>
+  
   <table class='listing'>
     <tr>
       <th>削除</th>
@@ -52,7 +52,6 @@
     <% end %>
   </table>
 
-<% end %>
 
   <% if defined?(Kaminari) && @messages.respond_to?(:current_page) %>
     <%= paginate @messages %>

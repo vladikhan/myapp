@@ -8,8 +8,8 @@
 
   <div class="header-right">
     <% if current_staff_member %>
-      <%= link_to "アカウント", staff_account_path %>
       <%= number_of_unprocessed_messages %>
+      <%= link_to "アカウント", staff_account_path %>
       <%= button_to "ログアウト", staff_logout_path, method: :delete, 
           class: "logout-btn", 
           form: { class: "auth-form" } %>
