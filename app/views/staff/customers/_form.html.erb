@@ -1,4 +1,4 @@
-<div id="login-form">
+<div id="customer-form">
   <%= form_with model: @customer_form.customer,
                 url: @customer_form.customer.new_record? ? staff_customers_path : staff_customer_path(@customer_form.customer),
                 local: true do |f| %>

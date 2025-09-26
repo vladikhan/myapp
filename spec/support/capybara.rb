@@ -1,22 +1,25 @@
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'capybara/cuprite'
+
 
 if ENV['SELENIUM_URL']
   puts "Using Selenium Grid at #{ENV['SELENIUM_URL']}"
   
-  Capybara.register_driver :selenium_remote_chrome do |app|
-    options = Selenium::WebDriver::Chrome::Options.new
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--window-size=1400,1400')
-
+  Capybara.register_driver(:curpite) do |app|
+    Capybara::Curpite::Driver.new(app, {
+      headless: true,
+      js_errors: false,
+      process_timeout: 10, 
+      browser_options: {
+        'no-sandbox' =>  nil,
+        'disable-dev-shm-usage' => nil 
+        }
+    })
   end
 
-
-
-
+Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :cuprite
 Capybara.default_max_wait_time = 5
   
   # ВАЖНО: настройки для Docker сети
@@ -26,8 +29,7 @@ Capybara.default_max_wait_time = 5
   # Chrome обращается к Rails по внутреннему имени Docker контейнера
   Capybara.app_host = "http://web:3001"
   
-  Capybara.default_max_wait_time = 10
 else
   Capybara.default_driver = :rack_test
-  Capybara.javascript_driver = :rack_test
+  Capybara.javascript_driver = :curpite
 end

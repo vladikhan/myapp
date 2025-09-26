@@ -1,24 +1,24 @@
 <div id="wrapper">
   <div id="container">
     <div id="login-form">
-        <fieldset id="staff-edit-fields">
-      <% @title = "ログイン" %>
-      <h1><%= @title %></h1>
 
-      <%= form_with model: @form, url: staff_login_path, method: :post do |f| %>
-          <div>
-            <%= f.label :email, "メールアドレス" %>
-            <%= f.text_field :email %>
-          </div>
-          <div>
-            <%= f.label :password, "パスワード" %>
-            <%= f.password_field :password %>
-          </div>
-          <div class="buttons">
-            <%= f.submit "ログイン" %>
-        </fieldset>
-          </div>
-      <% end %>
+      <%= form_with model: @form, url: staff_login_path, method: :post, id: "login-form" do |f| %>
+  <% @title = "ログイン" %>
+  <h1><%= @title %></h1>
+
+  <fieldset id="staff-edit-fields">
+    <div>
+      <%= f.label :email, "メールアドレス" %>
+      <%= f.text_field :email %>
     </div>
+    <div>
+      <%= f.label :password, "パスワード" %>
+      <%= f.password_field :password %>
+    </div>
+    <div class="buttons">
+      <%= f.submit "ログイン" %>
+    </div>
+  </fieldset>
+<% end %>
   </div>
 </div>

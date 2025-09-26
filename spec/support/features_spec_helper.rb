@@ -8,7 +8,7 @@ module FeaturesSpecHelper
     visit staff_login_path
     within("#login-form") do
     fill_in "メールアドレス",	with: staff_member.email
-     fill_in "パスワード", with: password
+     fill_in "パスワード", with: staff_member.password
      click_button "ログイン"
     end
   end
@@ -17,7 +17,7 @@ module FeaturesSpecHelper
     visit customer_login_path
     within("#login-form") do
     fill_in "メールアドレス", with: customer.email
-    fill_in "パスワード", with: password
+    fill_in "パスワード", with: customer.password
     click_button "ログイン"
     end
   end
