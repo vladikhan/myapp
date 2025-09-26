@@ -59,6 +59,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
 
+
   
 
   # Разрешаем host для request specs
@@ -70,6 +71,8 @@ RSpec.configure do |config|
 
   # Отключаем CSRF в request specs
   config.before(:each, type: :request) do
+    host! 'baukis2.example.com'
     allow_any_instance_of(ActionController::Base).to receive(:verify_authenticity_token).and_return(true)
+
   end
 end

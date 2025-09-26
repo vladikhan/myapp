@@ -4,7 +4,7 @@ RSpec.describe "次回から自動ログインする", type: :request do
   let(:customer) { create(:customer) }
 
   example "チェックボックスをoffにした場合" do
-    post customer_login_path, 
+    post customer_session_path, 
       params: {
         customer_login_form: {
           email: customer.email,
@@ -14,11 +14,11 @@ RSpec.describe "次回から自動ログインする", type: :request do
       } 
 
     expect(session[:customer_id]).to eq(customer.id)
-    expect(cookies["customer_id"]).to be_nil
+    expect(cookies[:customer_id]).to be_nil
   end
 
   example "チェックボックスをonにした場合" do
-    post customer_login_path,
+    post customer_session_path,
       params: {
         customer_login_form: {
           email: customer.email,
@@ -27,7 +27,7 @@ RSpec.describe "次回から自動ログインする", type: :request do
         }
       }
 
+    expect(cookies[:customer_id]).to eq(customer.id.to_s)
     expect(session[:customer_id]).to be_nil
-    expect(cookies.signed[:customer_id]).to eq(customer.id)
   end
 end

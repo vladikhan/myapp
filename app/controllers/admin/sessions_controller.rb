@@ -1,46 +1,27 @@
 class Admin::SessionsController < Admin::Base
-  layout "admin"
-  
-  skip_before_action :authorize
-  
-  def new 
-    if current_admin_member
-      redirect_to :admin_root
+  skip_before_action :authenticate_admin_member!, only: [:new, :create]
+
+  def create
+    @form = Admin::LoginForm.new(login_params)
+    if @form.authenticate
+      session[:admin_member_id] = @form.admin_member.id
+      flash.notice = "ログインしました。"
+      redirect_to admin_root_path
     else
-      @form = Admin::LoginForm.new
-      render action: "new"
-    end
-  end
-  def create 
-    @form = Admin::LoginForm.new(login_form_params)
-    if @form.email.present?
-      admin_member = 
-      AdminMember.find_by("LOWER(email) = ?", @form.email.downcase)
-    end
-    if Admin::Authenticator.new(admin_member).authenticate(@form.password)
-      if admin_member.suspended?
-        flash.now.alert = "アカウントが止されています．"
-        render action :"new"
-      else
-        session[:admin_member_id] = admin_member.id
-        flash.notice = "ログインしました."
-        redirect_to :admin_root
-      end
-    else
-      flash.now.alert =  "メールアドレスまたパスワードが正しくありません．"
-      render action: "new"
+      flash.now.alert = "メールアドレスまたはパスワードが正しくありません。"
+      render :new, status: :unprocessable_entity
     end
   end
 
-  private def login_form_params
-    params.require(:admin_login_form).permit(:email, :password)
-  end
-
-  
   def destroy
     session.delete(:admin_member_id)
-    flash.notice = "ログアウトしました．"
-    redirect_to admin_login_path
+    flash.notice = "ログアウトしました。"
+    redirect_to admin_root_path
+  end
+
+  private
+
+  def login_params
+    params.require(:admin_login_form).permit(:email, :password)
   end
 end
-
