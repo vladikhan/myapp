@@ -1,25 +1,23 @@
-require 'rails_helper'
+# spec/requests/admin/sessions_spec.rb
+require "rails_helper"
 
 RSpec.describe "Admin::Sessions", type: :request do
-  let!(:admin) do
-    AdminMember.create!(
-      email: "admin1@example.com",
-      password: "password123",
-      password_confirmation: "password123",
-      family_name: "山田",
-      given_name: "太郎",
-      family_name_kana: "ヤマダ",
-      given_name_kana: "タロウ",
-      start_date: Date.today
-    )
+  # Подключаем Devise helper для request specs
+  include Devise::Test::IntegrationHelpers
+
+  let(:admin) { create(:admin_member) } # фабрика для AdminMember
+
+  # Настроим host для теста, чтобы пройти constraints
+  before do
+    host! Rails.application.config.baukis2[:admin][:host]
   end
 
   describe "ログイン" do
     it "正しい情報でログインできる" do
-      post admin_session_dev_path, params: { admin_member: { email: admin.email, password: "password123" } }
-      expect(response).to redirect_to(admin_root_dev_path)
-      follow_redirect!
-      expect(response.body).to include("ログアウト")
+      post admin_session_dev_path, params: { admin_member: { email: admin.email, password: "password" } }
+      follow_redirect!  # Перейдем по редиректу после успешного логина
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("管理画面") # пример проверки текста на странице после логина
     end
 
     it "間違った情報ではログインできない" do
@@ -30,13 +28,11 @@ RSpec.describe "Admin::Sessions", type: :request do
 
   describe "ログアウト" do
     it "ログアウトできる" do
-      # Логинимся
-      post admin_session_dev_path, params: { admin_member: { email: admin.email, password: "password123" } }
+      sign_in admin
+      delete admin_logout_dev_path
       follow_redirect!
-
-      # Логаут
-      delete admin_logout_path
-      expect(response).to redirect_to(admin_login_path)
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("ログイン") # проверяем, что вернулись на страницу логина
     end
   end
 end

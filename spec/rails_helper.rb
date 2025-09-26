@@ -25,6 +25,13 @@ Capybara.javascript_driver = :cuprite
 Capybara.default_max_wait_time = 5
 Capybara.default_driver = :rack_test
 
+
+# разрешаем тестовый хост
+Rails.application.config.hosts << "www.example.com"
+Rails.application.config.hosts << "example.com"
+Rails.application.config.hosts << nil   # иногда нужно для docker
+
+
 RSpec.configure do |config|
   # FactoryBot методы без FactoryBot. prefix
   config.include FactoryBot::Syntax::Methods
