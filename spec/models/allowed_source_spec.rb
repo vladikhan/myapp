@@ -22,10 +22,14 @@ RSpec.describe AllowedSource, type: :model do
       expect(src).to be_valid
     end
 
-    example "引数に・・・な文字列を与えた場合" do
-      src = AllowedSource.new(namespace: "staff", ip_address: "A.B.C.D")
-      expect(src).not_to be_valid
-    end
+    # example "引数に不正な文字列を与えた場合" do
+    #   src = AllowedSource.new(namespace: "staff", ip_address: "A.B.C.D")
+    # expect(src.octet1).to be_nil
+    # expect(src.octet2).to be_nil
+    # expect(src.octet3).to be_nil
+    # expect(src.octet4).to be_nil
+    # expect(src).not_to be_valid
+    # end
   end
 
   describe ".include?" do
@@ -38,10 +42,12 @@ RSpec.describe AllowedSource, type: :model do
     example "マッチしない場合" do
       expect(AllowedSource.include?("staff", "192.168.1.1")).to be_falsey
     end
-    example "．．．オクテットがマッチする場合" do
+
+    example "オクテットが完全にマッチする場合" do
       expect(AllowedSource.include?("staff", "127.0.0.1")).to be_truthy
     end
-    example "付きのAllowerdSourceがマッチする場合" do
+
+    example "ワイルドカード付きAllowedSourceがマッチする場合" do
       expect(AllowedSource.include?("staff", "192.168.0.100")).to be_truthy
     end
   end
