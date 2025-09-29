@@ -92,6 +92,13 @@ end
     end
   end
 
+  def account_params
+    params.require(:customer).permit(
+      :name, :email,
+      work_address_attributes: [:id, :company_name, :department, :postal_code]
+    )
+  end
+
   def customer_params
     params.require(:customer).permit(
       :email, :password, :family_name, :given_name,
