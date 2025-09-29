@@ -43,16 +43,40 @@ end
     end
   end
 
-  def destroy
-    customer = Customer.find_by(id: params[:id])
-    if customer
-      customer.destroy!
-      flash.notice = "顧客アカウントを削除しました。"
-    else
-      flash.alert = "顧客が見つかりませんでした。"
+  # def destroy
+  #   customer = Customer.find_by(id: params[:id])
+  #   if customer
+  #     customer.messages.destroy_all
+  #     customer.destroy!
+  #     flash.notice = "顧客アカウントを削除しました。"
+  #   else
+  #     flash.alert = "顧客が見つかりませんでした。"
+  #   end
+  #   redirect_to staff_customers_path
+  # end
+
+def destroy
+  customer = Customer.find_by(id: params[:id])
+  if customer
+    begin
+      customer.messages.destroy_all
+      customer.destroy
+      flash[:notice] = "顧客アカウントを削除しました。"
+    rescue ActiveRecord::InvalidForeignKey => e
+      flash[:alert] = "削除できませんでした。関連付けられたデータが存在します。"
     end
-    redirect_to staff_customers_path
+  else
+    flash[:alert] = "顧客が見つかりませんでした。"
   end
+  redirect_to staff_customers_path
+end
+  # def destroy
+  #   @customer = Customer.find(params[:id])
+  #   @customer.destroy
+  #   redirect_to staff_customers_path, notice: 'Customer was successfully deleted.'
+  # end
+
+
 
   private
 

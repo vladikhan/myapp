@@ -6,7 +6,7 @@ class Customer < ApplicationRecord
 
   has_many :entries,dependent: :destroy
   has_many :programs, through: :entries
-  has_many :messages
+  has_many :messages, dependent: :destroy
   has_many :outbound_messages, class_name: "CustomerMessage",
     foreign_key: "customer_id"
   has_many :inbound_messages, class_name: "StaffMessage",
