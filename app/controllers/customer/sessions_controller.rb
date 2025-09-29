@@ -10,6 +10,8 @@ class Customer::SessionsController < Customer::Base
   end
 
   def create
+    Rails.logger.debug params.inspect
+
     @form = Customer::LoginForm.new(login_form_params)
     customer = Customer.find_by("LOWER(email) = ?", @form.email.downcase) if @form.email.present?
 

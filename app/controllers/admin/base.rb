@@ -2,6 +2,7 @@ class Admin::Base < ApplicationController
   
   layout "admin"
   before_action :authorize
+  
 
   def current_admin_member
   @current_admin_member ||= AdminMember.find_by(id: session[:admin_member_id])

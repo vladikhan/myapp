@@ -63,4 +63,4 @@ class Admin::StaffMembersController < Admin::Base
     :start_date, :end_date, :suspended
   )
   end
-end
+end 
