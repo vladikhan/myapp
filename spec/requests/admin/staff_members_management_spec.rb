@@ -26,9 +26,10 @@ RSpec.describe "管理者による職員管理", type: :request do
     end
 
     it "セッションタイムアウト" do
-      travel_to Admin::Base::TIMEOUT.from_now + 1.second
-      get admin_staff_members_path
-      expect(response).to redirect_to(admin_login_path)
+      travel_to 1.hour.from_now + 1.second do
+        get admin_staff_members_path
+        expect(response).to redirect_to(admin_login_path)
+      end
     end
   end
 
@@ -47,7 +48,6 @@ RSpec.describe "管理者による職員管理", type: :request do
 
   describe "更新" do
     let(:staff_member) { create(:staff_member) }
-    let(:params_hash) { attributes_for(:staff_member) }
 
     it "suspendedフラグをセットする" do
       patch admin_staff_member_path(staff_member), params: { staff_member: { suspended: true } }

@@ -1,9 +1,14 @@
-# spec/support/login_helpers.rb
+  # spec/support/login_helpers.rb
 module LoginHelpers
-  def login_admin(admin = nil)
-    admin ||= create(:admin_member) # 修正: :admin → :admin_member
-    post admin_session_path, params: { admin_member: { email: admin.email, password: "password" } } # 修正: admin → admin_member, password: "password"
-    admin
+  def login_admin(admin_member = nil)
+    admin_member ||= create(:admin_member, password: "pw")
+    post admin_login_path, params: {
+      admin_login_form: {
+        email: admin_member.email,
+        password: "pw"
+      }
+    }
+    admin_member
   end
 
   def login_customer(customer = nil)
