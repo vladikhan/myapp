@@ -1,56 +1,65 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "管理者による職員管理", type: :request do
-  let!(:admin) { create(:admin_member, password: "pw") }
-  let!(:staff_member) { create(:staff_member) }
+  let(:admin_member) { create(:admin_member, password: "pw") }
 
   before do
-    Rails.application.config.hosts << "www.example.com"
-    # логинимся
-    post admin_login_path, params: { email: admin.email, password: "pw" }
-    follow_redirect!
+    # Авторизация администратора перед каждым тестом
+    post admin_login_path, params: {
+      admin_login_form: {
+        email: admin_member.email,
+        password: "pw"
+      }
+    }
   end
 
-  describe "新人登録" do
-    it "職員一覧ページにリダイレクト" do
-      post staff_members_path, params: { staff_member: { email: "new@example.com", password: "pw" } }
-      follow_redirect!
-
+  describe "一覧" do
+    it "成功" do
+      get admin_staff_members_path
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("職員一覧")
     end
 
-    it "パラメータ不足で例外 ActionController::ParameterMissing が発生" do
-      expect { post staff_members_path, params: {} }.to raise_error(ActionController::ParameterMissing)
+    it "停止フラグがセットされたら強制的にログアウト" do
+      admin_member.update!(suspended: true)
+      get admin_staff_members_path
+      expect(response).to redirect_to(admin_login_path)
+    end
+
+    it "セッションタイムアウト" do
+      travel_to Admin::Base::TIMEOUT.from_now + 1.second
+      get admin_staff_members_path
+      expect(response).to redirect_to(admin_login_path)
+    end
+  end
+
+  describe "新規登録" do
+    let(:params_hash) { attributes_for(:staff_member) }
+
+    it "職員一覧ページにリダイレクト" do
+      post admin_staff_members_path, params: { staff_member: params_hash }
+      expect(response).to redirect_to(admin_staff_members_path)
+    end
+
+    it "例外ActionController::ParameterMissingが発生" do
+      expect { post admin_staff_members_path }.to raise_error(ActionController::ParameterMissing)
     end
   end
 
   describe "更新" do
-    it "suspendedフラグをセット" do
-      patch staff_member_path(staff_member), params: { staff_member: { suspended: true } }
-      follow_redirect!
+    let(:staff_member) { create(:staff_member) }
+    let(:params_hash) { attributes_for(:staff_member) }
 
+    it "suspendedフラグをセットする" do
+      patch admin_staff_member_path(staff_member), params: { staff_member: { suspended: true } }
       staff_member.reload
-      expect(staff_member.suspended).to be true
+      expect(staff_member).to be_suspended
     end
 
-    it "password_digestの値は変更されない" do
+    it "password_digestの値は書き換え不可" do
       old_digest = staff_member.password_digest
-      patch staff_member_path(staff_member), params: { staff_member: { email: "test@example.com" } }
-      follow_redirect!
-
+      patch admin_staff_member_path(staff_member), params: { staff_member: { password_digest: "x" } }
       staff_member.reload
       expect(staff_member.password_digest).to eq(old_digest)
-    end
-  end
-
-  describe "ログアウト" do
-    it "管理者は正しくログアウトできる" do
-      delete admin_logout_path
-      follow_redirect!
-
-      expect(session[:admin_member_id]).to be_nil
-      expect(response).to redirect_to(admin_login_path)
     end
   end
 end

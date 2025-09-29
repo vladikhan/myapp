@@ -2,7 +2,7 @@
 FactoryBot.define do
   factory :admin_member do
     sequence(:email) { |n| "admin#{n}@example.com" }
-    password { "password" }
+    password { "pw" }
     family_name { "山田" }
     given_name { "太郎" }
     family_name_kana { "ヤマダ" }
@@ -14,7 +14,7 @@ FactoryBot.define do
   # Алиас для администратора
   factory :administrator, class: "AdminMember" do
     sequence(:email) { |n| "administrator#{n}@example.com" }
-    password { "password" }
+    password { "pw" }
     family_name { "山田" }
     given_name { "太郎" }
     family_name_kana { "ヤマダ" }
@@ -25,7 +25,7 @@ FactoryBot.define do
 
     factory :admin, class: "AdminMember" do
     sequence(:email) { |n| "admin#{n}@example.com" }
-    password { "password" }
+    password { "pw" }
     family_name { "山田" }
     given_name { "太郎" }
     family_name_kana { "ヤマダ" }
