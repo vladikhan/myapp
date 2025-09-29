@@ -43,17 +43,6 @@ end
     end
   end
 
-  # def destroy
-  #   customer = Customer.find_by(id: params[:id])
-  #   if customer
-  #     customer.messages.destroy_all
-  #     customer.destroy!
-  #     flash.notice = "顧客アカウントを削除しました。"
-  #   else
-  #     flash.alert = "顧客が見つかりませんでした。"
-  #   end
-  #   redirect_to staff_customers_path
-  # end
 
 def destroy
   customer = Customer.find_by(id: params[:id])
@@ -70,11 +59,7 @@ def destroy
   end
   redirect_to staff_customers_path
 end
-  # def destroy
-  #   @customer = Customer.find(params[:id])
-  #   @customer.destroy
-  #   redirect_to staff_customers_path, notice: 'Customer was successfully deleted.'
-  # end
+ 
 
 
 

@@ -44,7 +44,7 @@ class Admin::StaffMembersController < Admin::Base
   end
 
   def destroy
-    @staff_member = StaffMember.find(params[:id])
+    @staff_member = StaffMember.find_by(id: params[:id])
     if @staff_member.deletable?
       @staff_member.destroy!
       flash.notice = "職員アカウントを削除しました．"
