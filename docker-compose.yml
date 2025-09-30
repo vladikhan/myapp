@@ -1,30 +1,37 @@
+# docker-compose.yml
 services:
   db:
     image: postgres:13
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: baukis2_development
+    # Переменные окружения теперь берутся из файла .env
+    env_file:
+      - .env
     volumes:
+      # Важно: база данных НЕ должна монтировать код приложения.
+      # Строка '.:/myapp' была здесь лишней и удалена.
       - db-data:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
 
   web:
     build: .
-    command: bash -c "sleep 5 && bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0"
+    # Используем наш новый скрипт для безопасного запуска.
+    entrypoint: /myapp/entrypoint.sh
+    # Команда по умолчанию - запуск Rails-сервера.
+    command: bundle exec rails server -b 0.0.0.0
     volumes:
       - .:/myapp
       - ~/.ssh:/root/.ssh:ro
     ports:
-      - '3000:3000'
+      - "3000:3000"
     depends_on:
       - db
+    # Больше НЕТ жестко закрепленного RAILS_ENV.
+    # Переменные берутся из .env и настраиваются динамически.
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://postgres:password@db:5432/baukis2_development
-      RAILS_ENV: development
-      GIT_SSH_COMMAND: 'ssh -o StrictHostKeyChecking=no'
+      GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=no"
 
 volumes:
   db-data:

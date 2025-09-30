@@ -11,14 +11,16 @@
     <h1><%= @title %></h1>
 
     <div>
-      <%= f.label :email, "メールアドレス" %>
-      <%= f.text_field :email, "admin_login_form_email" %>
-    </div>
+    <%= f.label :email, "メールアドレス" %>
+    <%# Передаем хэш опций { id: "..." } %>
+    <%= f.text_field :email, id: "admin_login_form_email" %>
+  </div>
 
-    <div>
-      <%= f.label :password, "パスワード" %>
-      <%= f.password_field :password, "admin_login_form_password" %>
-    </div>
+  <div>
+    <%= f.label :password, "パスワード" %>
+    <%# Делаем то же самое для поля пароля %>
+    <%= f.password_field :password, id: "admin_login_form_password" %>
+  </div>
 
     <div class="buttons">
       <%= f.submit "ログイン" %>

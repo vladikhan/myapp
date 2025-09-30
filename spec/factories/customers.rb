@@ -6,6 +6,8 @@ FactoryBot.define do
     family_name_kana { "ヤマダ" }
     given_name_kana { "タロウ" }
     password { "pw" }
+    password_confirmation { "pw" }
+
     birthday { Date.new(1970, 1, 1) }
     gender { "male" }
 

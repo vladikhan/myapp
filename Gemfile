@@ -45,6 +45,8 @@ end
 group :test do
   gem 'capybara', '~> 3.40'
   gem 'cuprite', '~> 0.13'
+  gem 'database_cleaner-active_record'
+  gem 'database_cleaner-core'
 end
 
 
