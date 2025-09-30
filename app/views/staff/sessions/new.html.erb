@@ -2,11 +2,11 @@
   <div id="container">
     <div id="login-form">
 
+  <fieldset id="staff-edit-fields">
       <%= form_with model: @form, url: staff_login_path, method: :post do |f| %>
   <% @title = "ログイン" %>
   <h1><%= @title %></h1>
 
-  <fieldset id="staff-edit-fields">
     <div>
       <%= f.label :email, "メールアドレス" %>
       <%= f.text_field :email %>
