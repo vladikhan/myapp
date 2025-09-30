@@ -2,7 +2,7 @@
   <div id="container">
     <div id="login-form">
 
-      <%= form_with model: @form, url: staff_login_path, method: :post, id: "login-form" do |f| %>
+      <%= form_with model: @form, url: staff_login_path, method: :post do |f| %>
   <% @title = "ログイン" %>
   <h1><%= @title %></h1>
 
@@ -20,5 +20,6 @@
     </div>
   </fieldset>
 <% end %>
+    </div>
   </div>
 </div>

@@ -54,7 +54,16 @@ Rails.application.routes.draw do
 
     resource :account, except: [:new, :create, :destroy]
     resource :password, only: [:show, :edit, :update]
-    resources :customers
+    resources :customers do 
+      member do
+        get :edit
+        patch :update
+      end
+    end
+    namespace :customer do
+      resource :session, only: [:new, :create, :destroy]
+      resource :account, only: [:show, :edit, :update]
+    end
     resources :messages, only: [:index, :show, :destroy] do
       get :inbound, :outbound, :deleted, on: :collection
       delete :destroy_selected, on: :collection

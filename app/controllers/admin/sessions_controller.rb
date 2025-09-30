@@ -4,7 +4,6 @@ class Admin::SessionsController < Admin::Base
 
   def new
     @form = Admin::LoginForm.new
-    render :new
   end
 
   def create

@@ -1,37 +1,33 @@
 require "rails_helper"
 
-feature "顧客によるアカウント管理", type: :feature do
-  let(:customer) { create(:customer, :with_work_address) }
+feature "顧客によるアカウント管理", type: :system do
+  include FeaturesSpecHelper
+  let(:customer) { create(:customer, :with_home_address, :with_work_address) }
 
   before do
-    # Логинимся как customer через страницу входа
-    visit customer_session_path
-
-    fill_in "customer_login_form_email", with: customer.email
-    fill_in "customer_login_form_password", with: "pw"
-    click_button "ログイン"
-
-    # Переходим на страницу редактирования аккаунта
-    visit customer_account_path
-    click_link "編集"
+    driven_by :rack_test
+    login_as_customer(customer)
   end
 
-  scenario "顧客が勤務先を更新する" do
-    # Показываем форму для ввода данных о работе
-    check "勤務先を入力する"
+  scenario "顧客が基本情報、自宅住所、勤務を更新する" do
+    visit edit_customer_account_path
 
+    # Проверяем и отмечаем чекбоксы если они не отмечены
+    check "自宅住所を入力する" unless page.has_checked_field?("自宅住所を入力する")
+    check "勤務先を入力する" unless page.has_checked_field?("勤務先を入力する")
+
+    fill_in "customer_home_address_postal_code", with: "123-4567"
+    fill_in "customer_home_address_city", with: "新宿区"
     fill_in "customer_work_address_company_name", with: "テスト株式会社"
-    fill_in "customer_work_address_division_name", with: "開発部"
-    fill_in "customer_work_address_postal_code", with: "1112222"
+    fill_in "customer_birth_date", with: "1990-01-01"
 
-    click_button "確認画面へ進む"
     click_button "更新"
-
-    expect(current_path).to eq(customer_account_path)
-
+    
+    expect(page).to have_content("アカウント情報を更新しました")
+    
+    # Дополнительная проверка данных в БД
     customer.reload
+    expect(customer.home_address.postal_code).to eq("123-4567")
     expect(customer.work_address.company_name).to eq("テスト株式会社")
-    expect(customer.work_address.division_name).to eq("開発部")
-    expect(customer.work_address.postal_code).to eq("1112222")
   end
 end

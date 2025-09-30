@@ -7,7 +7,8 @@
       <% @title = "ログイン" %>
       <h1><%= @title %></h1>
 
-      <%= form_with model: @form, url: customer_login_create_path, method: :post do |f| %>
+      <%= form_with model: @form, url: customer_login_path, 
+              as: :customer_login_form, local: true do |f| %>
         <div>
           <%= f.label :email, "メールアドレス" %>
           <%= f.text_field :email %>
