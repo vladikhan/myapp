@@ -5,25 +5,26 @@
   <div id="container">
     <div id="login-form">
 
-      <%= form_with model: @form, url: admin_login_path, method: :post do |f| %>
-        <fieldset id="staff-edit-fields">
-      <h1><%= @title %></h1>
+      <%= form_with model: @form, url: admin_login_path, method: :post,
+              as: :admin_login_form, local: true do |f| %>
+  <fieldset id="staff-edit-fields">
+    <h1><%= @title %></h1>
 
+    <div>
+      <%= f.label :email, "メールアドレス" %>
+      <%= f.text_field :email %>
+    </div>
 
-          <div>
-            <%= f.label :email, "メールアドレス" %>
-            <%= f.text_field :email %>
-          </div>
-          <div>
-            <%= f.label :password, "パスワード" %>
-            <%= f.password_field :password %>
-          </div>
+    <div>
+      <%= f.label :password, "パスワード" %>
+      <%= f.password_field :password %>
+    </div>
 
-          <div class="buttons">
-            <%= f.submit "ログイン" %>
-          </div>
-        </fieldset>
-      <% end %>
+    <div class="buttons">
+      <%= f.submit "ログイン" %>
+    </div>
+  </fieldset>
+<% end %>
     </div>
   </div>
 </div>

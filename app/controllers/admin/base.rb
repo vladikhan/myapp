@@ -1,22 +1,21 @@
-# app/controllers/admin/base.rb
 class Admin::Base < ApplicationController
   layout "admin"
-  before_action :authorize
-  before_action :check_timeout
+  before_action :authorize, except: [:new, :create]  # ← Или используйте skip_before_action
+  before_action :check_timeout, except: [:new, :create]
 
   TIMEOUT = 1.hour
 
   def current_admin_member
-    @current_admin_member ||= AdminMember.find_by(id: session[:admin_member_id])
+    @current_admin_member ||= AdminMember.find_by(id: session[:admin_member_id]) if session[:admin_member_id]
   end
   helper_method :current_admin_member
 
   private
 
   def authorize
-    if current_admin_member.nil? || current_admin_member.suspended?
+    unless current_admin_member && !current_admin_member.suspended?
       reset_session
-      flash[:notice] = "管理者としてログインしてください"
+      flash.alert = "管理者としてログインしてください"  # ← Изменить на :alert
       redirect_to admin_login_path
     end
   end
@@ -24,9 +23,9 @@ class Admin::Base < ApplicationController
   def check_timeout
     if session[:last_seen_at] && session[:last_seen_at] < TIMEOUT.ago
       reset_session
-      redirect_to admin_login_path, alert: "セッションがタイムアウトしました"
+      flash.alert = "セッションがタイムアウトしました"
+      redirect_to admin_login_path
     end
-    # 更新 времени последнего доступа
     session[:last_seen_at] = Time.current
   end
 end
