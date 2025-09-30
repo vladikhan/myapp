@@ -56,6 +56,9 @@ RSpec.configure do |config|
   # --- ВОТ СТРОКА, КОТОРАЯ ИСПРАВИТ ОШИБКУ `NoMethodError` ---
   config.include FeaturesSpecHelper, type: :feature
 
+    config.include ActiveSupport::Testing::TimeHelpers, type: :request
+
+
   # Включаем синтаксис FactoryBot (например, create(:user))
   config.include FactoryBot::Syntax::Methods
 

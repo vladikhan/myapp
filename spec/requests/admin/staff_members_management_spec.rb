@@ -42,8 +42,10 @@ RSpec.describe "管理者による職員管理", type: :request do
     end
 
     it "職員登録がパラメータなしで失敗する" do
-      post admin_staff_members_path, params: {}
-      expect(response).to have_http_status(:bad_request) # 400
+      # Проверяем, что контроллер выбрасывает ParameterMissing
+      expect {
+        post admin_staff_members_path, params: {}
+      }.to raise_error(ActionController::ParameterMissing)
     end
   end
 
