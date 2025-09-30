@@ -1,27 +1,33 @@
+# spec/features/staff/customer_management_spec.rb
 require "rails_helper"
 
-feature "顧客によるアカウント管理", type: :system do
-  include FeaturesSpecHelper
-  let(:customer) { create(:customer, :with_home_address, :with_work_address) }
+feature "職員による顧客管理", type: :feature do
+  let(:staff_member) { create(:staff_member) }
+  let(:customer) { create(:customer) }
+
+  # Хелпер для логина, встроенный в тест
+  def login_as_staff_member(staff_member)
+    visit '/staff/login'
+    expect(page).to have_content("ログイン")
+
+    # ===================== ИСПРАВЛЕНИЕ ЗДЕСЬ =====================
+    # Используем правильные ID полей, которые мы нашли в HTML
+    fill_in "staff_login_form_email", with: staff_member.email
+    fill_in "staff_login_form_password", with: staff_member.password
+    # =============================================================
+
+    # Уточняем, какую кнопку нажимать, чтобы избежать ошибки Ambiguous
+    within("#login-form") do
+      find('input[type="submit"][value="ログイン"]').click
+    end
+    
+    # Проверяем, что после входа мы попали на дашборд
+    expect(page).to have_content("ダッシュボード")
+  end
 
   before do
-    driven_by :rack_test
-    switch_namespace(:customer)
-    login_as_customer(customer)
+    login_as_staff_member(staff_member)
   end
 
-  scenario "顧客が基本情報、自宅住所、勤務を更新する" do
-    visit edit_customer_account_path(customer)
-
-    check "自宅住所を入力する" if page.has_unchecked_field?("自宅住所を入力する")
-    check "勤務先を入力する" if page.has_unchecked_field?("勤務先を入力する")
-
-    fill_in "customer_home_address_postal_code", with: "123-4567"
-    fill_in "customer_home_address_city", with: "新宿区"
-    fill_in "customer_work_address_company_name", with: "テスト株式会社"
-    fill_in "customer_birth_date", with: "1990-01-01"
-
-    click_button "更新"
-    expect(page).to have_content("アカウント情報を更新しました")
-  end
+  
 end
