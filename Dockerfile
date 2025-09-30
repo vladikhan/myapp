@@ -31,13 +31,17 @@ WORKDIR /myapp
 # -------------------------
 # Ruby зависимости
 # -------------------------
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile* ./
 RUN bundle install
 
 # -------------------------
 # Копируем проект
 # -------------------------
 COPY . .
+
+RUN chmod +x /myapp/entrypoint.sh
+
+ENTRYPOINT ["/myapp/entrypoint.sh"]
 
 # -------------------------
 # Переменные окружения
