@@ -5,7 +5,7 @@ feature "職員による顧客電話番号管理" do
   let(:staff_member) { create(:staff_member) }
   let!(:customer) { create(:customer) }
 
-  before do 
+  before do
     switch_namespace(:staff)
     login_as_staff_member(staff_member)
   end

@@ -5,12 +5,11 @@ feature "職員による顧客管理" do
   let(:staff_member) { create(:staff_member) }
   let!(:customer) { create(:customer) }
 
-  before do 
+  before do
     switch_namespace(:staff)
     login_as_staff_member(staff_member)
   end
 
-  
   scenario "職員が顧客、自宅住所、勤務先を追加する" do
     click_link "顧客管理"
     first("div.links").click_link "新規登録"
@@ -23,7 +22,7 @@ feature "職員による顧客管理" do
     fill_in "form_customer_given_name_kana", with: "ハナコ"
     fill_in "生年月日", with: "1970-01-01"
     choose "女性"
-     within("fieldset#home-address-fields") do
+    within("fieldset#home-address-fields") do
       fill_in "郵便番号", with: "1000001"
       select "東京都", from: "都道府県"
       fill_in "市区町村", with: "千代田区"
@@ -50,49 +49,50 @@ feature "職員による顧客管理" do
   end
 
   scenario "職員が顧客情報を編集する" do
-  click_link "顧客管理"
-  first("table.listing tbody tr:first-child").click_link "編集"
-
-  fill_in "customer[email]", with: "test@example.jp"
-  within("fieldset#home-address-fields") do
-  fill_in "郵便番号", with: "9999999"
-  fill_in "customer_home_address_postal_code", with: "9999999"
-  fill_in "customer_work_address_company_name", with: "テスト"
-  end
-
-  scenario "職員が生年月日と自宅の郵便番号に無効な値を入力する" do
     click_link "顧客管理"
-    first("table.listing").click_link "編集"
+    first("table.listing tbody tr:first-child").click_link "編集"
 
-    fill_in "生年月日", with: "2100-01-01"
+    fill_in "customer[email]", with: "test@example.jp"
     within("fieldset#home-address-fields") do
-    fill_in "郵便番号", with: "XYZ"
+      fill_in "郵便番号", with: "9999999"
+      fill_in "customer_home_address_postal_code", with: "9999999"
+      fill_in "customer_work_address_company_name", with: "テスト"
+    end
+
+    scenario "職員が生年月日と自宅の郵便番号に無効な値を入力する" do
+      click_link "顧客管理"
+      first("table.listing").click_link "編集"
+
+      fill_in "生年月日", with: "2100-01-01"
+      within("fieldset#home-address-fields") do
+        fill_in "郵便番号", with: "XYZ"
+      end
+      click_button "変更"
+
+      expect(page).to have_css("header span.alert")
+      expect(page).to have_css(
+        "div.field_with_errors input#form_customer_birthday"
+      )
+      expect(page).to have_css(
+        "div.field_with_errors input#form_home_address_postal_code"
+      )
+    end
+
+    within("table.listing body tr:first-child") do
+      click_link "編集"
+    end
+    within("fieldset#work-address-fields") do
+      fill_in "会社名", with: "テスト"
     end
     click_button "変更"
 
-    expect(page).to have_css("header span.alert")
-    expect(page).to have_css(
-      "div.field_with_errors input#form_customer_birthday")
-    expect(page).to have_css(
-        "div.field_with_errors input#form_home_address_postal_code")
-    end
-      
-
-  within("table.listing body tr:first-child") do
-    click_link "編集"
+    customer.reload
+    expect(customer.email).to eq("test@example.jp")
+    expect(customer.home_address.postal_code).to eq("9999999")
+    expect(page).to have_content(/999-?9999/)
+    expect(customer.work_address.company_name).to eq("テスト")
+    expect(page).to have_content("顧客情報を変更しました")
+    expect(page).to have_content("test@example.jp")
+    expect(page).to have_content("テスト")
   end
-  within("fieldset#work-address-fields") do
-    fill_in "会社名", with: "テスト"
-  end
-  click_button "変更"
-
-  customer.reload
-  expect(customer.email).to eq("test@example.jp")
-  expect(customer.home_address.postal_code).to eq("9999999")
-  expect(page).to have_content(/999-?9999/)
-  expect(customer.work_address.company_name).to eq("テスト")
-  expect(page).to have_content("顧客情報を変更しました")
-  expect(page).to have_content("test@example.jp")
-  expect(page).to have_content("テスト")
-end
 end

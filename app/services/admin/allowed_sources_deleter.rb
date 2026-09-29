@@ -1,17 +1,13 @@
 class Admin::AllowedSourcesDeleter
   def delete(params)
-    if params && params[:allowed_sources].kind_of?(ActionController::Parameters)
-      ids = []
+    return unless params && params[:allowed_sources].is_a?(ActionController::Parameters)
 
-      params[:allowed_sources].values.each do |hash|
-        if hash[:destroy] == "1"
-          ids << hash[:id]
-        end
-      end
+    ids = []
 
-      if ads.present?
-        AllowedSource.where(namespace: "staff", id: ids).delete_all
-      end
+    params[:allowed_sources].values.each do |hash|
+      ids << hash[:id] if hash[:destroy] == "1"
     end
+
+    AllowedSource.where(namespace: "staff", id: ids).delete_all if ads.present?
   end
 end

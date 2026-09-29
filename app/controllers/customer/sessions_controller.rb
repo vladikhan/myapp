@@ -18,7 +18,7 @@ class Customer::SessionsController < Customer::Base
         cookies.permanent.signed[:customer_id] = customer.id
       else
         cookies.delete(:customer_id)
-        session[:customer_id] = customer.id 
+        session[:customer_id] = customer.id
       end
       flash[:notice] = "ログインしました。"
       redirect_to customer_root_path
@@ -26,7 +26,7 @@ class Customer::SessionsController < Customer::Base
       flash.now[:alert] = "メールアドレスまたはパスワードが正しくありません。"
       render :new
     end
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error "Customer login error: #{e.message}\n#{e.backtrace.join("\n")}"
     flash.now[:alert] = "システムエラーが発生しました。"
     render :new

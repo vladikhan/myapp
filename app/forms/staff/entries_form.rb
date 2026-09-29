@@ -13,9 +13,9 @@ class Staff::EntriesForm
   end
 
   private def assign_attributes(params)
-    fp = params.require(:form).permit([
-      :approved, :not_approved, :canceled, :not_canceled
-    ])
+    fp = params.require(:form).permit(%i[
+                                        approved not_approved canceled not_canceled
+                                      ])
 
     @approved = fp[:approved]
     @not_approved = fp[:not_approved]
@@ -30,16 +30,22 @@ class Staff::EntriesForm
     not_canceled_entry_ids = @not_canceled.split(":").map(&:to_i)
 
     ActiveRecord::Base.transaction do
-      @program.entries.where(id: approved_entry_ids)
-        .update_all(approved: true) if approved_entry_ids.present?
-      @program.entries.where(id: not_approved_entry_ids)
-        .update_all(approved: false) if not_approved_entry_ids.present?
-      @program.entries.where(id: canceled_entry_ids)
-        .update_all(canceled: true) if canceled_entry_ids.present?
-      @program.entries.where(id: not_canceled_entry_ids)
-        .update_all(canceled: false) if not_canceled_entry_ids.present?
+      if approved_entry_ids.present?
+        @program.entries.where(id: approved_entry_ids)
+                .update_all(approved: true)
+      end
+      if not_approved_entry_ids.present?
+        @program.entries.where(id: not_approved_entry_ids)
+                .update_all(approved: false)
+      end
+      if canceled_entry_ids.present?
+        @program.entries.where(id: canceled_entry_ids)
+                .update_all(canceled: true)
+      end
+      if not_canceled_entry_ids.present?
+        @program.entries.where(id: not_canceled_entry_ids)
+                .update_all(canceled: false)
+      end
     end
   end
 end
-
-    

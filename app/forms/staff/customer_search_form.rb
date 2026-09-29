@@ -3,8 +3,8 @@ class Staff::CustomerSearchForm
   include ActiveModel::Naming
   include StringNormalizer
 
-  attr_accessor :family_name_kana, :given_name_kana, 
-                :birth_year, :birth_month, :birth_mday, 
+  attr_accessor :family_name_kana, :given_name_kana,
+                :birth_year, :birth_month, :birth_mday,
                 :address_type, :prefecture, :city, :phone_number
 
   def search
@@ -33,16 +33,14 @@ class Staff::CustomerSearchForm
         rel = rel.where(work_addresses: { prefecture: prefecture }) if prefecture.present?
         rel = rel.where(work_addresses: { city: city }) if city.present?
       when ""
-  # пустой - объединяем оба адреса через left_outer_joins
-  rel = rel.left_outer_joins(:home_address, :work_address)
-  if prefecture.present?
-    rel = rel.where("home_addresses.prefecture = :pref OR work_addresses.prefecture = :pref", pref: prefecture)
-  end
-  if city.present?
-    rel = rel.where("home_addresses.city = :city OR work_addresses.city = :city", city: city)
-  end
-else
-  raise ArgumentError, "Unknown address_type: #{address_type}"
+        # пустой - объединяем оба адреса через left_outer_joins
+        rel = rel.left_outer_joins(:home_address, :work_address)
+        if prefecture.present?
+          rel = rel.where("home_addresses.prefecture = :pref OR work_addresses.prefecture = :pref", pref: prefecture)
+        end
+        rel = rel.where("home_addresses.city = :city OR work_addresses.city = :city", city: city) if city.present?
+      else
+        raise ArgumentError, "Unknown address_type: #{address_type}"
       end
 
       rel = rel.where("addresses.prefecture = ?", prefecture) if prefecture.present?

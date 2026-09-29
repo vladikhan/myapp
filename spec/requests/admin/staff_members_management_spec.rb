@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "管理者による職員管理", "ログイン前" do
-  before { host! 'baukis2.example.com' } # <- добавляем сюда
+  before { host! "baukis2.example.com" } # <- добавляем сюда
 
   include_examples "a protected admin controller", "admin/staff_members"
 end
@@ -10,7 +10,7 @@ describe "管理者による職員管理" do
   let(:administrator) { create(:administrator) }
 
   before do
-    host! 'baukis2.example.com'   # <- host для admin
+    host! "baukis2.example.com" # <- host для admin
 
     post admin_session_url, params: {
       admin_login_form: { email: administrator.email, password: "password" }
@@ -44,9 +44,9 @@ describe "管理者による職員管理" do
 
     example "password_digest の値は変更されない" do
       params_hash.delete(:password)
-      expect {
+      expect do
         patch admin_staff_member_url(staff_member), params: { staff_member: params_hash }
-      }.not_to change { staff_member.reload.password_digest }
+      end.not_to(change { staff_member.reload.password_digest })
     end
   end
 

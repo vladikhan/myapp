@@ -1,0 +1,47 @@
+# TODO: Add gems to Gemfile and uncomment when ready
+# require: rubocop-rails
+# require: rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 3.1
+  NewCops: disable
+  Exclude:
+    - 'bin/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/*'
+    - 'tmp/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'public/assets/**/*'
+    - 'public/packs/**/*'
+    - 'public/packs-test/**/*'
+    - 'storage/**/*'
+    - '!app/assets/stylesheets/application.scss'  # We'll keep this for now, but note it's empty
+    - '!app/assets/javascripts/application.js'
+
+Layout/LineLength:
+  Max: 120
+
+# Documentation:
+#   Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: true
+
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/IndentationConsistency:
+  EnforcedStyle: normal
+
+Layout/IndentationStyle:
+  EnforcedStyle: spaces
+
+# Note: we are going to run rubocop -a to fix safe offenses, so we enable autocorrect for those.

@@ -1,12 +1,12 @@
 class Admin::TopController < Admin::Base
-  layout "admin" 
-  
+  layout "admin"
+
   skip_before_action :authorize
-  
+
   def index
     if current_admin_member
       render action: "dashboard"
-    else 
+    else
       render action: "index"
     end
   end

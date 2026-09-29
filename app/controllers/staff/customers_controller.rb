@@ -1,11 +1,11 @@
 class Staff::CustomersController < Staff::Base
-  before_action :set_customer_form, only: [:show, :edit, :update]
+  before_action :set_customer_form, only: %i[show edit update]
 
   def index
     @search_form = Staff::CustomerSearchForm.new(search_params)
     @customers = @search_form.search
     @customers = @customers.page(params[:page]) if defined?(Kaminari)
-  rescue => e
+  rescue StandardError => e
     logger.error "Index error: #{e.message}"
     @customers = Customer.normalize_as_name
     flash.now[:alert] = "エラーが発生しました。"
@@ -15,18 +15,18 @@ class Staff::CustomersController < Staff::Base
     @customer = @customer_form.customer
   end
 
-def new
-  @customer_form = Staff::CustomerForm.new
-end
+  def new
+    @customer_form = Staff::CustomerForm.new
+  end
 
   def create
-  @customer_form = Staff::CustomerForm.new
-  @customer_form.assign_attributes(customer_form_params)
-  if @customer_form.save
-    redirect_to staff_customers_path, notice: "顧客を登録しました。"
-  else
-    render :new
-  end
+    @customer_form = Staff::CustomerForm.new
+    @customer_form.assign_attributes(customer_form_params)
+    if @customer_form.save
+      redirect_to staff_customers_path, notice: "顧客を登録しました。"
+    else
+      render :new
+    end
   end
 
   def edit
@@ -57,21 +57,21 @@ end
   private
 
   def search_params
-  params[:search]&.permit(
-    :family_name_kana, :given_name_kana, :birth_year, 
-    :birth_month, :birth_mday, :address_type, 
-    :prefecture, :city, :phone_number
-  )
+    params[:search]&.permit(
+      :family_name_kana, :given_name_kana, :birth_year,
+      :birth_month, :birth_mday, :address_type,
+      :prefecture, :city, :phone_number
+    )
   end
 
   def customer_form_params
-  params.require(:customer_form).permit(
-    :email, :password, :family_name, :given_name,
-    :family_name_kana, :given_name_kana, :birthday, :gender,
-    home_address_attributes: [:postal_code, :prefecture, :city, :address1, :address2],
-    work_address_attributes: [:company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
-    personal_phones_attributes: [:number]
-  )
+    params.require(:customer_form).permit(
+      :email, :password, :family_name, :given_name,
+      :family_name_kana, :given_name_kana, :birthday, :gender,
+      home_address_attributes: %i[postal_code prefecture city address1 address2],
+      work_address_attributes: %i[company_name division_name postal_code prefecture city address1 address2],
+      personal_phones_attributes: [:number]
+    )
   end
 
   def set_customer_form
@@ -87,8 +87,8 @@ end
     params.require(:customer).permit(
       :email, :password, :family_name, :given_name,
       :family_name_kana, :given_name_kana, :birthday, :gender,
-      home_address_attributes: [:postal_code, :prefecture, :city, :address1, :address2],
-      work_address_attributes: [:company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
+      home_address_attributes: %i[postal_code prefecture city address1 address2],
+      work_address_attributes: %i[company_name division_name postal_code prefecture city address1 address2],
       personal_phones_attributes: [:number]
     )
   end

@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe "ロウテイング" do
   example "職員トップページ" do
-    config = Rails .application.config.baukis2
+    config = Rails.application.config.baukis2
     url = "http://#{config[:staff][:host]}/#{config[:staff][:path]}"
     expect(get: url).to route_to(
       host: config[:staff][:host],
