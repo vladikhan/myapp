@@ -8,14 +8,14 @@ module ErrorHandlers
   end
 
   private def rescue400(_e)
-    render "errors/bad_request", status: 400
+    render "errors/bad_request", status: :bad_request
   end
 
   private def rescue404(_e)
-    render "errors/not_found", status: 404
+    render "errors/not_found", status: :not_found
   end
 
   private def rescue500(_e)
-    render "errors/internal_server_error", status: 500
+    render "errors/internal_server_error", status: :internal_server_error
   end
 end
