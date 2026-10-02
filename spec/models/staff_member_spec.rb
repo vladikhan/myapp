@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe StaffMember do
-  describe "#password=" do
+RSpec.describe StaffMember do 
+  describe "#password=" do 
     it "文字列をセットするとpassword_digestは長さ60の文字列になる" do
       member = StaffMember.new
       member.password = "baukis"

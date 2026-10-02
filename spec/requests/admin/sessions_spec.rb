@@ -18,9 +18,7 @@ RSpec.describe "Admin::Sessions", type: :request do
   end
 
   describe "ログアウト" do
-    before do
-      post admin_session_path, params: { admin_login_form: { email: admin_member.email, password: "password" } }
-    end
+    before { post admin_session_path, params: { admin_login_form: { email: admin_member.email, password: "password" } } }
 
     example "ログアウトできる" do
       delete admin_logout_path

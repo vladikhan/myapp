@@ -1,6 +1,6 @@
 describe "Admin::StaffEvents", type: :request do
   before do
-    host! "baukis2.example.com"
+    host! 'baukis2.example.com'   
   end
 
   describe "GET /index" do

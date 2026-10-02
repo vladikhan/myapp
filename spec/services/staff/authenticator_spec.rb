@@ -1,14 +1,14 @@
 require "rails_helper"
 
-describe Staff::Authenticator do
-  describe "#authenticate" do
+describe Staff::Authenticator do 
+  describe "#authenticate" do 
     example "正しいパスワードなら true を返す" do
       m = build(:staff_member)
       expect(Staff::Authenticator.new(m).authenticate("pw")).to be_truthy
     end
 
     example " ったパスワードなら false を返す" do
-      m = build(:staff_member)
+      m = build (:staff_member)
       expect(Staff::Authenticator.new(m).authenticate("xy")).to be_falsey
     end
 
@@ -17,7 +17,7 @@ describe Staff::Authenticator do
       expect(Staff::Authenticator.new(m).authenticate(nil)).to be_falsey
     end
 
-    example "... フラグが立っていれば true を返す" do
+    example "... フラグが立っていれば true を返す" do 
       m = build(:staff_member, suspended: true)
       expect(Staff::Authenticator.new(m).authenticate("pw")).to be_truthy
     end
@@ -31,5 +31,5 @@ describe Staff::Authenticator do
       m = build(:staff_member, end_date: Date.today)
       expect(Staff::Authenticator.new(m).authenticate("pw")).to be_falsey
     end
-  end
+end
 end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "職員による自分のアカウントの管理", "ログイン前" do
-  before { host! "staff.baukis2.example.com" } # <- host для staff
+  before { host! 'staff.baukis2.example.com' } # <- host для staff
 
   include_examples "a protected singular staff controller", "staff/accounts"
 end
@@ -10,7 +10,7 @@ describe "職員による自分のアカウントの管理" do
   let(:staff_member) { create(:staff_member) }
 
   before do
-    host! "staff.baukis2.example.com" # <- host для staff
+    host! 'staff.baukis2.example.com'   # <- host для staff
 
     post staff_session_url, params: {
       staff_login_form: { email: staff_member.email, password: "pw" }
@@ -52,9 +52,9 @@ describe "職員による自分のアカウントの管理" do
 
     example "end_dateの値は書き換え不可" do
       params_hash.merge!(end_date: Date.tomorrow)
-      expect do
+      expect {
         patch staff_account_url, params: { staff_member: params_hash }
-      end.not_to(change { staff_member.end_date })
+      }.not_to change { staff_member.end_date }
     end
   end
 end
