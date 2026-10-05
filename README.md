@@ -1,6 +1,7 @@
 # README
 
-Based on the book <TITLE>; below is what I changed and why.
+Based on the book «Ruby on Rails 6 実践ガイド» (Baukis2).
+This repository shows what I built below is what I changed and why.
 
 ## Overview
 

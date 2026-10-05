@@ -5,9 +5,8 @@ gem "logger"
 ruby "~> 3.1.4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem "rails", "~> 6.1.7", ">= 6.1.7.6"
-# Use sqlite3 as the database for Active Record
 gem "pg"
+gem "rails", "~> 6.1.7", ">= 6.1.7.6"
 # Use Puma as the app server
 gem "puma", "~> 5.0"
 # Use SCSS for stylesheet
@@ -31,12 +30,6 @@ gem "valid_email2"
 
 group :development, :test do
   gem "factory_bot_rails"
-end
-
-# Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", ">= 1.4.4", require: false
-
-group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "listen", "~> 3.3"
@@ -45,15 +38,15 @@ group :development, :test do
   gem "rubocop", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
-  gem "web-console", ">= 4.1.0"
 end
 
+group :development do
+  gem "web-console", ">= 4.1.0"
+end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", ">= 3.26"
   gem "selenium-webdriver", ">= 4.0.0.rc1"
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem "webdrivers"
 end
 
 gem "kaminari", "~> 1.2.2"
