@@ -6,7 +6,7 @@ rm -f /myapp/tmp/pids/server.pid
 
 # Выполняем миграции базы данных.
 echo "Running database migrations..."
-bundle exec rails db:migrate
+bundle exec rails db:prepare
 
 # Затем выполняем основную команду контейнера (CMD).
 echo "Starting main process..."
