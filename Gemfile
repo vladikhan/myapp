@@ -66,3 +66,6 @@ gem "dartsass-rails", "~> 0.5.1"
 # gem 'sassc-rails', '~> 2.1.0'
 
 gem "sprockets-rails"
+
+gem "trailblazer-rails", "~> 2.4"
+gem "reform-rails", "~> 0.3.1"
