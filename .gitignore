@@ -46,3 +46,4 @@ yarn-debug.log*
 .netrc
 .DS_Store
 .env
+.DS_Store
