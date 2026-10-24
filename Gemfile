@@ -22,6 +22,8 @@ gem "jbuilder", "~> 2.7"
 # Use Active Model has_secure_password
 gem "bcrypt", "~> 3.1.7"
 
+gem "json", "~> 2.6.1"
+
 gem "validates_timeliness", "~> 6.0"
 
 gem "valid_email2"
@@ -67,5 +69,5 @@ gem "dartsass-rails", "~> 0.5.1"
 
 gem "sprockets-rails"
 
-gem "trailblazer-rails", "~> 2.4"
 gem "reform-rails", "~> 0.3.1"
+gem "trailblazer-rails", "~> 2.4"
