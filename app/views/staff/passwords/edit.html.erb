@@ -2,7 +2,7 @@
 <h1><%= @title %></h1>
 
 <div id="login-form">
-  <%= form_with model: @change_password_form, url: :staff_password, method: :patch do |f| %>
+  <%= form_with model: @change_password_form, scope: :staff_change_password_form, url: :staff_password, method: :patch do |f| %>
   
     <fieldset id="staff-edit-fields">
 
