@@ -3,7 +3,7 @@ class StaffMember::Contract::ChangePassword < Reform::Form
   property :new_password, virtual: true
   property :new_password_confirmation, virtual: true
 
-  validates :current_password, presence: { message: "パスワードは必須です" }
+  validates :current_password, presence: { message: "は必須です" }
   validates :new_password, presence: { message: "は必須です" }
   validates :new_password_confirmation, presence: { message: "は必須です" }
   validate :passwords_match
