@@ -1,7 +1,9 @@
 class Customer::EntriesController < Customer::Base
   def create
     program = Program.published.find(params[:program_id])
-    case Customer::EntryAcceptor.new(current_customer).accept(program)
+    acceptor = Customer::EntryAcceptor.new(current_customer)
+
+    case acceptor.accept(program)
     when :accepted
       flash.notice = "プログラムに申し込みました。"
     when :full
@@ -10,18 +12,17 @@ class Customer::EntriesController < Customer::Base
       flash.alert = "プログラムの申し込み期間終了しました。"
     end
 
-    program.entries.create!(customer: current_customer)
-    flash.notice = "プログラムに申し込みました。"
     redirect_to [:customer, program]
   end
 
   def cancel
     program = Program.published.find(params[:program_id])
-    if program.application_end_time.try(:<, Time.current)
+    entry = program.entries.find_by!(customer_id: current_customer.id)
+
+    if program.application_end_time && Time.current > program.application_end_time
       flash.alert = "プログラムへの申し込みをキャンセルできません（受付期間終了）。"
     else
-      entry = program.entries.find_by!(customer_id: current_customer.id)
-      entry.update_column(:canceled, true)
+      entry.update!(canceled: true)
       flash.notice = "プログラムへの申し込みをキャンセルしました。"
     end
     redirect_to [:customer, program]

@@ -1,45 +1,38 @@
 class Admin::SessionsController < Admin::Base
-  layout "admin"
-
-  skip_before_action :authorize
+  skip_before_action :authorize, only: [:new, :create]
+  skip_before_action :check_timeout, only: [:new, :create]
 
   def new
-    if current_admin_member
-      redirect_to :admin_root
-    else
-      @form = Admin::LoginForm.new
-      render action: "new"
-    end
+    @form = Admin::LoginForm.new
   end
 
   def create
-    @form = Admin::LoginForm.new(login_form_params)
-    if @form.email.present?
-      admin_member =
-        AdminMember.find_by("LOWER(email) = ?", @form.email.downcase)
-    end
-    if Admin::Authenticator.new(admin_member).authenticate(@form.password)
-      if admin_member.suspended?
-        flash.now.alert = "アカウントが止されています．"
-        render action :new
-      else
-        session[:admin_member_id] = admin_member.id
-        flash.notice = "ログインしました."
-        redirect_to :admin_root
-      end
+    @form = Admin::LoginForm.new(login_params)
+    if @form.authenticate
+      session[:admin_member_id] = @form.admin_member.id
+      session[:last_seen_at] = Time.current
+      flash.notice = "ログインしました。"
+      redirect_to admin_root_path
     else
-      flash.now.alert = "メールアドレスまたパスワードが正しくありません．"
-      render action: "new"
+      flash.now.alert = "メールアドレスまたはパスワードが正しくありません。"
+      render :new, status: :unprocessable_entity
     end
-  end
-
-  private def login_form_params
-    params.require(:admin_login_form).permit(:email, :password)
+  rescue ActionController::ParameterMissing
+    @form = Admin::LoginForm.new
+    flash.now.alert = "メールアドレスとパスワードを入力してください。"
+    render :new, status: :unprocessable_entity
   end
 
   def destroy
     session.delete(:admin_member_id)
-    flash.notice = "ログアウトしました．"
+    session.delete(:last_seen_at)
+    flash.notice = "ログアウトしました。"
     redirect_to admin_login_path
+  end
+
+  private
+
+  def login_params
+    params.require(:admin_login_form).permit(:email, :password)
   end
 end

@@ -6,7 +6,7 @@
 
     <!-- 基本情報 -->
     <fieldset>
-      <h3>基本情報</h3>
+      <legend>基本情報</legend>
 
       <div class="field">
         <%= f.label :email, "メールアドレス" %>
@@ -57,7 +57,7 @@
 
     <!-- 自宅住所 -->
     <fieldset>
-      <h3>自宅住所</h3>
+      <legend>自宅住所</legend>
       <%= f.fields_for :home_address do |home| %>
         <div class="field">
           <%= home.label :postal_code, "郵便番号" %>
@@ -89,7 +89,7 @@
 
     <!-- 勤務先住所 -->
     <fieldset>
-      <h3>勤務先住所</h3>
+      <legend>勤務先住所</legend>
       <%= f.fields_for :work_address do |work| %>
         <div class="field">
           <%= work.label :company_name, "会社名" %>

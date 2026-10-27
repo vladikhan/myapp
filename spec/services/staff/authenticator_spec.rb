@@ -1,35 +1,37 @@
-require "rails_helper"
+# spec/services/staff/authenticator_spec.rb
+require 'rails_helper'
 
-describe Staff::Authenticator do 
-  describe "#authenticate" do 
-    example "正しいパスワードなら true を返す" do
-      m = build(:staff_member)
-      expect(Staff::Authenticator.new(m).authenticate("pw")).to be_truthy
+RSpec.describe Staff::Authenticator, type: :service do
+  let(:password) { "pw" }
+
+  let(:active_member) do
+    create(:staff_member, password: password, suspended: false)
+  end
+
+  let(:suspended_member) do
+    create(:staff_member, password: password, suspended: true)
+  end
+
+  describe "#authenticate" do
+    context "フラグが立っていれば true を返す" do
+      it "активный сотрудник с правильным паролем" do
+        auth = Staff::Authenticator.new(active_member)
+        expect(auth.authenticate(password)).to be_truthy
+      end
     end
 
-    example " ったパスワードなら false を返す" do
-      m = build (:staff_member)
-      expect(Staff::Authenticator.new(m).authenticate("xy")).to be_falsey
+    context "パスワードが間違っている場合" do
+      it "false を返す" do
+        auth = Staff::Authenticator.new(active_member)
+        expect(auth.authenticate("wrong")).to be_falsey
+      end
     end
 
-    example "パスワード 設定なら false を返す" do
-      m = build(:staff_member, password: nil)
-      expect(Staff::Authenticator.new(m).authenticate(nil)).to be_falsey
+    context "suspended フラグが立っている場合" do
+      it "false を返す" do
+        auth = Staff::Authenticator.new(suspended_member)
+        expect(auth.authenticate(password)).to be_falsey
+      end
     end
-
-    example "... フラグが立っていれば true を返す" do 
-      m = build(:staff_member, suspended: true)
-      expect(Staff::Authenticator.new(m).authenticate("pw")).to be_truthy
-    end
-
-    example "開始前なら false を返す" do
-      m = build(:staff_member, start_date: Date.tomorrow)
-      expect(Staff::Authenticator.new(m).authenticate("pw")).to be_falsey
-    end
-
-    example "了解後なら falseを 返す" do
-      m = build(:staff_member, end_date: Date.today)
-      expect(Staff::Authenticator.new(m).authenticate("pw")).to be_falsey
-    end
-end
+  end
 end

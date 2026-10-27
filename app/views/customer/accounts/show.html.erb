@@ -1,12 +1,13 @@
 <% @title = "アカウント情報" %>
 <h1><%= @title %></h1>
 
-<% customer = @customer_form.customer %>
+<% customer = @customer %>
 
 <div class="table-wrapper">
   <div class="links">
     <%= link_to "編集", :edit_customer_account %>
   </div>
+  
   <table class="attributes">
     <tr>
       <th>氏名</th>

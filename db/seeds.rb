@@ -1,3 +1,11 @@
+common_table_names = %w(hash_locks)
+common_table_names.each do |table_name|
+  path = Rails.root.join("db", "seeds", "#{table_name}.rb")
+  if File.exist?(path)
+    puts "Creating #{table_name}..."
+    require(path)
+  end
+end
 puts "Seeding customers..."
 
 # --- Удаляем старые записи в правильном порядке ---
@@ -153,3 +161,84 @@ Program.all.each do |program|
 end
 
 puts "Entries created for programs"
+
+puts "Creating messages..."
+
+customers = Customer.all
+staff_members = StaffMember.where(suspended: false)
+
+s = 2.years.ago
+23.times do |n|
+  m = CustomerMessage.create!(
+    customer: customers.sample,
+    subject: "これは問い合わせ。" * 4,
+    body: "これは問い合わせです。\n" * 8,
+    created_at: s.advance(months: n),
+    status: "新"   # <--- обязательно
+  )
+  r = StaffMessage.create!(
+    customer: m.customer,
+    staff_member: staff_members.sample,
+    root: m,
+    parent: m,
+    subject: "これは返信です。" * 4,
+    body: "これは返信です。\n" * 8,
+    created_at: s.advance(months: n, hours: 1),
+    status: "処理済み"   # <--- тоже укажем
+  )
+  if n % 6 == 0
+    m2 = CustomerMessage.create!(
+      customer: r.customer,
+      root: m,
+      parent: r,
+      subject: "これは返信への回答です。",
+      body: "これは返信への回答です。",
+      created_at: s.advance(months: n, hours: 2),
+      status: "新"
+    )
+    StaffMessage.create!(
+      customer: m2.customer,
+      staff_member: staff_members.sample,
+      root: m,
+      parent: m2,
+      subject: "これは回答への返信です。",
+      body: "これは回答への返信です。",
+      created_at: s.advance(months: n, hours: 3),
+      status: "処理済み"
+    )
+  end
+end
+
+s = 24.hours.ago
+8.times do |n|
+  CustomerMessage.create!(
+    customer: customers.sample,
+    subject: "これは問い合わせです。" * 4,
+    body: "これは問い合わせです。\n" * 8,
+    created_at: s.advance(hours: n * 3),
+    status: "新"
+  )
+end
+
+puts "Created #{Message.count} messages"
+
+puts "Created #{Message.count} messages"
+
+puts "Creating tags..."
+
+names = %w(緊急 苦情 請求書 法人)
+tags = names.map do |name|
+  Tag.create!(value: name)
+end
+
+tag_for_test = Tag.create!(value: "TEST")
+
+Message.all.each do |m|
+  tags.sample(rand(3)).each do |tag|
+    MessageTagLink.create!(message: m, tag: tag)
+  end
+
+  MessageTagLink.create!(message: m, tag: tag_for_test)
+end
+
+puts "Created #{Tag.count} tags and linked them to messages"

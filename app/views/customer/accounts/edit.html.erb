@@ -1,0 +1,108 @@
+<% @title = "アカウントの編集" %>
+<h1><%= @title %></h1>
+
+<div id="login-form">
+  <%= form_with model: @customer_form.customer, url: confirm_customer_account_path, local: true do |f| %>
+
+    <!-- 基本情報 -->
+    <fieldset>
+      <legend>基本情報</legend>
+
+      <div class="field">
+        <%= f.label :email, "メールアドレス" %>
+        <%= f.email_field :email, required: true %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password, "パスワード" %>
+        <%= f.password_field :password %>
+      </div>
+
+      <div class="field">
+        <%= f.label :family_name, "姓" %>
+        <%= f.text_field :family_name, required: true %>
+      </div>
+
+      <div class="field">
+        <%= f.label :given_name, "名" %>
+        <%= f.text_field :given_name, required: true %>
+      </div>
+
+      <div class="field">
+        <%= f.label :family_name_kana, "姓（カナ）" %>
+        <%= f.text_field :family_name_kana, required: true %>
+      </div>
+
+      <div class="field">
+        <%= f.label :given_name_kana, "名（カナ）" %>
+        <%= f.text_field :given_name_kana, required: true %>
+      </div>
+
+      <div class="field">
+        <%= f.label :birthday, "生年月日" %>
+        <%= f.date_field :birthday %>
+      </div>
+
+      <div class="field">
+        <%= f.label :gender, "性別" %><br>
+        <%= f.radio_button :gender, "male" %> 男性
+        <%= f.radio_button :gender, "female" %> 女性
+      </div>
+    </fieldset>
+
+    <%# 自宅住所フィールド %>
+    <div class="check-boxes">
+      <%= f.check_box :inputs_home_address %>
+      <%= f.label :inputs_home_address, "自宅住所を入力する" %>
+    </div>
+
+    <fieldset id="home-address-fields">
+      <legend>自宅住所</legend>
+      <%= f.fields_for :home_address, @customer_form.customer.home_address do |ha| %>
+        <%= ha.hidden_field :id %>
+        <div class="field">
+          <%= ha.label :postal_code, "郵便番号" %>
+          <%= ha.text_field :postal_code, id: "form_home_address_postal_code" %>
+        </div>
+        <%# 他の自宅住所フィールドも必要なら追加 %>
+      <% end %>
+    </fieldset>
+
+    <%# 勤務先フィールド %>
+    <div class="check-boxes">
+      <%= f.check_box :inputs_work_address %>
+      <%= f.label :inputs_work_address, "勤務先を入力する" %>
+    </div>
+
+    <fieldset id="work-address-fields">
+      <legend>勤務先</legend>
+      <%= f.fields_for :work_address, @customer_form.customer.work_address do |wa| %>
+        <%= wa.hidden_field :id %>
+        <div class="field">
+          <%= wa.label :company_name, "会社名" %>
+          <%= wa.text_field :company_name, id: "form_work_address_company_name" %>
+        </div>
+        <%# 他の勤務先フィールドも必要なら追加 %>
+      <% end %>
+    </fieldset>
+
+    <%# 携帯電話フィールド %>
+    <fieldset id="personal-phones">
+      <legend>電話番号</legend>
+      <%= f.fields_for :personal_phones, @customer_form.customer.personal_phones do |pp| %>
+        <%= pp.hidden_field :id %>
+        <div class="field">
+          <%= pp.label :number, "電話番号" %>
+          <%= pp.text_field :number %>
+        </div>
+      <% end %>
+    </fieldset>
+
+    <!-- ボタン -->
+    <div class="buttons">
+      <%= f.submit "確認画面へ進む", class: "unified-button" %>
+      <%= link_to "キャンセル", customer_account_path, class: "link-button" %>
+    </div>
+
+  <% end %>
+</div>

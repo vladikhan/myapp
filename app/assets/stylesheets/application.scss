@@ -20,12 +20,14 @@
 @use './staff/divs_and_spans';
 @use './staff/entries';
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
 $dark_gray: #666666;
 /* ========================================== */
 /* Typography */
 h1,
 h2,
-h3 {
+legend {
 	color: #7b82e2;
 	font-weight: 600;
 }
@@ -42,11 +44,16 @@ body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
-	font-family: 'Segoe UI', Roboto, sans-serif;
+	font-family: 'Noto Sans JP', 'Segoe UI', Roboto, sans-serif;
 	background-color: #f7f8fa;
 	color: #333;
 }
-
+ul {
+	padding: 0 100px;
+}
+span.instruction {
+	font-size: small;
+}
 div#wrapper {
 	position: relative;
 	box-sizing: border-box;
@@ -125,8 +132,68 @@ a {
 }
 
 a:hover {
-	color: #055d73;
+	color: #4daec7;
+	text-decoration: none;
+}
+
+/* Buttons */
+.logout-btn,
+.login-btn {
+	background: none;
+	border: none;
+	color: #f8f9fa;
+	text-decoration: none;
+	cursor: pointer;
+	transition: color 0.3s ease;
+	font: inherit;
+	padding: 0;
+	margin-left: 10px;
+}
+
+.logout-btn:hover,
+.login-btn:hover {
+	color: #4daec7;
+}
+
+/*. */
+
+.delete-btn {
+	background: none;
+	border: none;
+	color: #08a;
 	text-decoration: underline;
+	cursor: pointer;
+	font: inherit;
+	padding: 0;
+}
+
+.delete-btn:hover {
+	color: #4daec7;
+}
+
+.auth-form {
+	display: inline;
+	margin-left: auto;
+}
+
+/* Header layout */
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.header-left {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	margin-left: auto;
 }
 
 /* Forms */
@@ -138,7 +205,7 @@ a:hover {
 	color: $very_dark_magenta;
 }
 
-#login-form fieldset h3 {
+#login-form fieldset legend {
 	margin-top: 0;
 	font-size: 1.1em;
 }
@@ -172,9 +239,25 @@ a:hover {
 	transition: all 0.3s ease;
 }
 
+#login-form textarea {
+	width: 375px;
+	width: 100%;
+	padding: 10px 14px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 16px;
+	box-sizing: border-box;
+	color: $dark_gray;
+	background-color: #fff;
+	transition: all 0.3s ease;
+}
+#login-form textarea:focus {
+	box-shadow: 0 0 8px rgba(0, 136, 170, 0.3);
+	outline: none;
+}
+
 #login-form input:focus,
 #login-form select:focus {
-	border-color: #08a;
 	box-shadow: 0 0 8px rgba(0, 136, 170, 0.3);
 	outline: none;
 }

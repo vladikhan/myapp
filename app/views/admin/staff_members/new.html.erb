@@ -19,7 +19,7 @@
   <%= form_with model: @staff_member, url: admin_staff_members_path do |f| %>
     
     <fieldset id="staff-fields">
-      <h3>基本情報</h3>
+      <legend>基本情報</legend>
       <%= render "form", f: f %>
     <div class="buttons">
       <%= f.submit "更新" %>

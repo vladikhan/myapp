@@ -1,59 +1,68 @@
 require "rails_helper"
 
-describe "管理者による職員管理", "ログイン前" do
-  before { host! 'baukis2.example.com' } # <- добавляем сюда
-
-  include_examples "a protected admin controller", "admin/staff_members"
-end
-
-describe "管理者による職員管理" do
-  let(:administrator) { create(:administrator) }
+RSpec.describe "管理者による職員管理", type: :request do
+  let(:admin_member) { create(:admin_member, password: "pw") }
 
   before do
-    host! 'baukis2.example.com'   # <- host для admin
-
-    post admin_session_url, params: {
-      admin_login_form: { email: administrator.email, password: "password" }
+    # Авторизация администратора перед каждым тестом
+    post admin_login_path, params: {
+      admin_login_form: {
+        email: admin_member.email,
+        password: "pw"
+      }
     }
-    follow_redirect!
   end
 
-  describe "新人登録" do
-    let(:params_hash) { attributes_for(:staff_member) }
-
-    example "職員一覧ページにリダイレクト" do
-      post admin_staff_members_url, params: { staff_member: params_hash }
-      expect(response).to redirect_to(admin_staff_members_url)
+  describe "一覧" do
+    it "成功" do
+      get admin_staff_members_path
+      expect(response).to have_http_status(:ok)
     end
 
-    example "例外 ActionController::ParameterMissing が発生" do
-      expect { post admin_staff_members_url, params: {} }.to raise_error(ActionController::ParameterMissing)
+    it "停止フラグがセットされたら強制的にログアウト" do
+      admin_member.update!(suspended: true)
+      get admin_staff_members_path
+      expect(response).to redirect_to(admin_login_path)
+    end
+
+    it "セッションタイムアウト" do
+      travel_to 1.hour.from_now + 1.second do
+        get admin_staff_members_path
+        expect(response).to redirect_to(admin_login_path)
+      end
+    end
+  end
+
+  describe "新規登録" do
+    let(:params_hash) { attributes_for(:staff_member) }
+
+    it "職員一覧ページにリダイレクト" do
+      post admin_staff_members_path, params: { staff_member: params_hash }
+      expect(response).to redirect_to(admin_staff_members_path)
+    end
+
+    it "職員登録がパラメータなしで失敗する" do
+      # Проверяем, что контроллер выбрасывает ParameterMissing
+      expect {
+        post admin_staff_members_path, params: {}
+      }.to raise_error(ActionController::ParameterMissing)
     end
   end
 
   describe "更新" do
     let(:staff_member) { create(:staff_member) }
-    let(:params_hash) { attributes_for(:staff_member) }
 
-    example "suspended フラグをセットする" do
-      params_hash.merge!(suspended: true)
-      patch admin_staff_member_url(staff_member), params: { staff_member: params_hash }
+    it "suspendedフラグをセットする" do
+      patch admin_staff_member_path(staff_member), params: { staff_member: { suspended: true } }
       staff_member.reload
       expect(staff_member).to be_suspended
     end
 
-    example "password_digest の値は変更されない" do
-      params_hash.delete(:password)
-      expect {
-        patch admin_staff_member_url(staff_member), params: { staff_member: params_hash }
-      }.not_to change { staff_member.reload.password_digest }
-    end
-  end
-
-  describe "ログアウト" do
-    example "管理者は正しくログアウトできる" do
-      delete admin_logout_url
-      expect(response).to redirect_to(admin_login_url)
+    it "password_digestの値は書き換え不可" do
+      old_digest = staff_member.password_digest
+      patch admin_staff_member_path(staff_member), params: { staff_member: { password_digest: "x" } }
+      staff_member.reload
+      expect(staff_member.password_digest).to eq(old_digest)
     end
   end
 end

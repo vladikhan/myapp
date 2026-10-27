@@ -17,6 +17,7 @@ table {
 	margin: $moderate auto 0;
 	border: solid $moderate $very_dark_magenta;
 	width: inherit;
+	border-radius: 7px;
 
 	tr {
 		th {
@@ -68,10 +69,6 @@ table.listing {
 	font-family: monospace; // consistent with td.ip
 	margin-right: $narrow; // space between octets
 	font-size: 12px;
-
-	&:focus {
-		outline: 2px solid $very_dark_magenta; // опционально: подсветка активного поля
-	}
 }
 
 .allowed-ip-fields {

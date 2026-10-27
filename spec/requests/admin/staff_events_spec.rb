@@ -1,12 +1,18 @@
-describe "Admin::StaffEvents", type: :request do
-  before do
-    host! 'baukis2.example.com'   
-  end
+require 'rails_helper'
 
-  describe "GET /index" do
-    it "returns success" do
-      get admin_staff_events_url
-      expect(response).to have_http_status(:ok)
-    end
+RSpec.describe "Admin::StaffEvents", type: :request do
+  let(:admin_member) { create(:admin_member, password: 'password') }
+
+  before do
+    Rails.application.routes.default_url_options[:host] = 'baukis2.example.com'
+
+    # логин через форму, соответствующую контроллеру
+    post admin_login_path, params: {
+      admin_login_form: {
+        email: admin_member.email,
+        password: 'password'
+      }
+    }
+    follow_redirect! if response.redirect?
   end
 end

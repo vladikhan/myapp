@@ -3,20 +3,26 @@ class Customer::EntryAcceptor
     @customer = customer
   end
 
-  def accept(_program_id)
-    raise if Time.current < program.application_start_time
-    return :closed if Time.current >= program.application_end_time
+  def accept(program)
+    # проверка сроков
+    return :closed if Time.current < program.application_start_time ||
+                      Time.current >= program.application_end_time
 
     ActiveRecord::Base.transaction do
-      program.lock!
-      if program.entries.where(cutomer_id: @customer.id).exists?
-        return :accepted
-      elsif max = program.max_number_of_participants
-        return :full unless program.entries.where(canceled: false).count < max
+      # Загружаем объект из базы заново, чтобы он был без незасейвленных изменений
+      program = Program.lock.find(program.id)
 
-        program.entries.create!(customer: @customer)
-        return :accepted
+      # Проверяем, есть ли уже запись
+      return :accepted if program.entries.where(customer_id: @customer.id).exists?
 
+      # Проверка лимита участников
+      if max = program.max_number_of_participants
+        if program.entries.where(canceled: false).count < max
+          program.entries.create!(customer: @customer)
+          return :accepted
+        else
+          return :full
+        end
       else
         program.entries.create!(customer: @customer)
         return :accepted
