@@ -5,11 +5,11 @@ class CustomerPresenter
   end
 
   def full_name
-    [@customer.family_name, @customer.given_name].compact.join(' ').presence || "不明"
+    [@customer.family_name, @customer.given_name].compact.join(" ").presence || "不明"
   end
 
   def full_name_kana
-    [@customer.family_name_kana, @customer.given_name_kana].compact.join(' ').presence || "不明"
+    [@customer.family_name_kana, @customer.given_name_kana].compact.join(" ").presence || "不明"
   end
 
   def email

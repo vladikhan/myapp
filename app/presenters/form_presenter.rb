@@ -2,7 +2,9 @@ class FormPresenter
   include HtmlBuilder
 
   attr_reader :form_builder, :view_context
-  delegate :label, :text_field, :date_field, :password_field, :check_box, :radio_button, :text_area, :object, to: :form_builder
+
+  delegate :label, :text_field, :date_field, :password_field, :check_box, :radio_button, :text_area, :object,
+           to: :form_builder
 
   def initialize(form_builder, view_context)
     @form_builder = form_builder
@@ -13,7 +15,7 @@ class FormPresenter
   def decorated_label(name, text = nil, options = {})
     form_builder.label(name, text, options.merge(class: "decorated_label"))
   end
-  
+
   # with_options для required и других опций
   def with_options(options = {})
     @current_options = options
@@ -27,16 +29,14 @@ class FormPresenter
   end
 
   def text_field_block(name, label_text = nil, options = {})
-  label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
-  merged_options = options.merge(@current_options || {})
-  merged_options[:class] = [merged_options[:class], ("error-field" if object.errors[name].any?)].compact.join(" ")
+    label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
+    merged_options = options.merge(@current_options || {})
+    merged_options[:class] = [merged_options[:class], ("error-field" if object.errors[name].any?)].compact.join(" ")
 
     markup(:div, class: "input-block") do |m|
       m << decorated_label(name, label_text, merged_options)
       m << text_field(name, merged_options)
-      if options[ :maxlength ]
-        m.span " (#{options[:maxlength]}文字列以内) ", class: "instruction"
-      end
+      m.span " (#{options[:maxlength]}文字列以内) ", class: "instruction" if options[:maxlength]
       m << error_messages_for(name)
     end
   end
@@ -54,7 +54,11 @@ class FormPresenter
   end
 
   def date_field_block(name, label_text = nil, options = {})
-    label_text ||= I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}") rescue name.to_s
+    label_text ||= begin
+      I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name}")
+    rescue StandardError
+      name.to_s
+    end
     merged_options = options.merge(@current_options || {})
     markup(:div, class: "input-block") do |m|
       m << decorated_label(name, label_text, merged_options)
@@ -101,10 +105,10 @@ class FormPresenter
           m.text message
         end
       end
-      
+
       def decorated_label(name, label_text, options = {})
         label(name, label_text, class: options[:required] ? "required" : nil)
       end
-  end
+    end
   end
 end

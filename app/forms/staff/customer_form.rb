@@ -2,6 +2,7 @@ class Staff::CustomerForm
   include ActiveModel::Model
 
   attr_accessor :customer, :inputs_home_address, :inputs_work_address
+
   delegate :persisted?, :save, to: :customer
 
   def initialize(customer = nil)
@@ -20,10 +21,10 @@ class Staff::CustomerForm
     customer.home_address.assign_attributes(home_address_params) if inputs_home_address
     customer.work_address.assign_attributes(work_address_params) if inputs_work_address
 
-    if params[:personal_phones_attributes]
-      customer.personal_phones.each_with_index do |phone, i|
-        phone.assign_attributes(number: params[:personal_phones_attributes][i][:number])
-      end
+    return unless params[:personal_phones_attributes]
+
+    customer.personal_phones.each_with_index do |phone, i|
+      phone.assign_attributes(number: params[:personal_phones_attributes][i][:number])
     end
   end
 
@@ -52,6 +53,7 @@ class Staff::CustomerForm
   end
 
   def work_address_params
-    @params.require(:work_address).permit(:postal_code, :prefecture, :city, :address1, :address2, :company_name, :division_name)
+    @params.require(:work_address).permit(:postal_code, :prefecture, :city, :address1, :address2, :company_name,
+                                          :division_name)
   end
 end

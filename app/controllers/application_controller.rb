@@ -14,16 +14,16 @@ class ApplicationController < ActionController::Base
 
   # ---- ADMIN: возвращает текущего администратора, если он вошёл ----
   def current_admin_member
-    if session[:admin_member_id]
-      @current_admin_member ||= AdminMember.find_by(id: session[:admin_member_id])
-    end
+    return unless session[:admin_member_id]
+
+    @current_admin_member ||= AdminMember.find_by(id: session[:admin_member_id])
   end
 
   # ---- STAFF: возвращает текущего сотрудника, если он вошёл ----
   def current_staff_member
-    if session[:staff_member_id]
-      @current_staff_member ||= StaffMember.find_by(id: session[:staff_member_id])
-    end
+    return unless session[:staff_member_id]
+
+    @current_staff_member ||= StaffMember.find_by(id: session[:staff_member_id])
   end
 
   # ---- Логика выбора layout ----
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
 
   private def rescue403(e)
     @exception = e
-    render "errors/forbidden", status: 403
+    render "errors/forbidden", status: :forbidden
   end
 
   private def reject_non_xhr

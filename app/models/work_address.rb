@@ -10,8 +10,7 @@ class WorkAddress < ApplicationRecord
 
   validates :company_name, presence: true
 
-
-def normalize_as_name(value)
-  value.to_s.strip.presence
-end
+  def normalize_as_name(value)
+    value.to_s.strip.presence
+  end
 end

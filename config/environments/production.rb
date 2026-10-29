@@ -124,7 +124,12 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
-  config.hosts << "127.0.0.1"
-  config.hosts << "localhost"
+  allowed_hosts = ENV['ALLOWED_HOSTS']
+  if allowed_hosts.present?
+    allowed_hosts.split(',').map(&:strip).each { |host| config.hosts << host }
+  else
+    config.hosts << "127.0.0.1"
+    config.hosts << "localhost"
+  end
 
 end

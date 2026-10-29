@@ -10,13 +10,13 @@ class Admin::LoginForm
   def authenticate
     @admin_member = AdminMember.find_by(email: email)
     return false unless @admin_member
-    
+
     # Проверяем suspended
     if @admin_member.suspended?
       errors.add(:base, "アカウントが停止されています")
       return false
     end
-    
+
     # Проверяем пароль
     if @admin_member.authenticate(password)
       true
@@ -25,4 +25,3 @@ class Admin::LoginForm
       false
     end
   end
-end

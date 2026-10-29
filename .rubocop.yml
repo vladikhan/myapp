@@ -1,0 +1,53 @@
+inherit_from: .rubocop_todo.yml
+
+# Плагины RuboCop
+plugins:
+  - rubocop-rails
+
+AllCops:
+  SuggestExtensions: false
+  TargetRubyVersion: 2.7
+  NewCops: disable
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'node_modules/**/*'
+    - 'public/assets/**/*'
+    - 'public/packs/**/*'
+    - 'public/packs-test/**/*'
+    - 'storage/**/*'
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/**/*'
+    
+
+# Длина строки
+Layout/LineLength:
+  Max: 120
+
+# Кавычки (двойные кавычки по умолчанию)
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# Отключение замороженных строковых литералов (стандарт для Rails 6.1)
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Разрешаем комментарии на японском/кириллице без алертов
+Style/AsciiComments:
+  Enabled: false
+
+# Настройка отступов (2 пробела)
+Layout/IndentationWidth:
+  Width: 2
+
+Layout/IndentationConsistency:
+  EnforcedStyle: normal
+
+Layout/IndentationStyle:
+  EnforcedStyle: spaces
