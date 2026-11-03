@@ -43,25 +43,21 @@ class Staff::CustomersController < Staff::Base
     end
   end
 
-
-def destroy
-  customer = Customer.find_by(id: params[:id])
-  if customer
-    begin
-      customer.messages.destroy_all
-      customer.destroy
-      flash[:notice] = "顧客アカウントを削除しました。"
-    rescue ActiveRecord::InvalidForeignKey => e
-      flash[:alert] = "削除できませんでした。関連付けられたデータが存在します。"
+  def destroy
+    customer = Customer.find_by(id: params[:id])
+    if customer
+      begin
+        customer.messages.destroy_all
+        customer.destroy
+        flash[:notice] = "顧客アカウントを削除しました。"
+      rescue ActiveRecord::InvalidForeignKey
+        flash[:alert] = "削除できませんでした。関連付けられたデータが存在します。"
+      end
+    else
+      flash[:alert] = "顧客が見つかりませんでした。"
     end
-  else
-    flash[:alert] = "顧客が見つかりませんでした。"
+    redirect_to staff_customers_path
   end
-  redirect_to staff_customers_path
-end
- 
-
-
 
   private
 
@@ -95,7 +91,7 @@ end
   def account_params
     params.require(:customer).permit(
       :name, :email,
-      work_address_attributes: [:id, :company_name, :department, :postal_code]
+      work_address_attributes: %i[id company_name department postal_code]
     )
   end
 

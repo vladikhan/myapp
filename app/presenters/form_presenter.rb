@@ -77,11 +77,11 @@ class FormPresenter
 
   def text_area_block(name, label_text, options = {})
     markup(:div, class: "input-block") do |m|
-      m << decorated_label(name,label_text, options)
+      m << decorated_label(name, label_text, options)
       m << text_area(name, options)
       if options[:maxlength]
         m.span "(#{options[:maxlength]}文字以内)", class: "instruction",
-        style: "float: right"
+                                               style: "float: right"
       end
       m << error_messages_for(name)
     end

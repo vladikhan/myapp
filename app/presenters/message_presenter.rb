@@ -14,17 +14,17 @@ class MessagePresenter < ModelPresenter
 
   def sender
     case object
-    when CustomerMessage 
+    when CustomerMessage
       object.customer.family_name + " " + object.customer.given_name
     when StaffMessage
-      object.staff_member.family_name + " " + object.staff_member.given_name 
-    else 
+      object.staff_member.family_name + " " + object.staff_member.given_name
+    else
       raise
     end
   end
 
   def receiver
-    case object 
+    case object
     when CustomerMessage
       ""
     when StaffMessage
@@ -45,7 +45,7 @@ class MessagePresenter < ModelPresenter
   def created_at
     if object.created_at > Time.current.midnight
       object.created_at.strftime("%Y/%m/%d %H:%M:%S")
-    elsif object.created_at > 5.month.ago.beginning_of_month
+    elsif object.created_at > 5.months.ago.beginning_of_month
       object.created_at.strftime("%Y/%m/%d %H:%M")
 
     else
@@ -60,15 +60,15 @@ class MessagePresenter < ModelPresenter
   private def expand(node)
     markup(:ul) do |m|
       m.li do
-      if node.id == object.id
-        m.strong(node.subject)
-      else
-        m << link_to(node.subject, view_context.staff_message_path(node)) 
+        if node.id == object.id
+          m.strong(node.subject)
+        else
+          m << link_to(node.subject, view_context.staff_message_path(node))
+        end
+        node.child_nodes.each do |c|
+          m << expand(c)
+        end
       end
-      node.child_nodes.each do |c|
-        m << expand(c)
-      end
-     end
     end
   end
 end

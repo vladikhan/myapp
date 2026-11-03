@@ -4,10 +4,9 @@ class StaffMember < ApplicationRecord
   include PersonalNameHolder
   include PasswordHolder
 
-  has_many :events, class_name: "StaffEvent", foreign_key: "staff_member_id", dependent: :nullify  
+  has_many :events, class_name: "StaffEvent", dependent: :nullify
   has_many :programs, foreign_key: "registrant_id", dependent: :restrict_with_exception
   has_many :messages, dependent: :nullify
-
 
   # 正規化 (Normalization)
 

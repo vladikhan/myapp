@@ -1,6 +1,6 @@
 class Admin::SessionsController < Admin::Base
-  skip_before_action :authorize, only: [:new, :create]
-  skip_before_action :check_timeout, only: [:new, :create]
+  skip_before_action :authorize, only: %i[new create]
+  skip_before_action :check_timeout, only: %i[new create]
 
   def new
     @form = Admin::LoginForm.new

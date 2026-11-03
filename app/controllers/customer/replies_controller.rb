@@ -5,7 +5,7 @@ class Customer::RepliesController < Customer::Base
     @reply = CustomerMessage.new
   end
 
-  #POST
+  # POST
   def confirm
     @reply = CustomerMessage.new(customer_message_params)
     @reply.parent = @message
@@ -17,7 +17,7 @@ class Customer::RepliesController < Customer::Base
     end
   end
 
-  def create 
+  def create
     @reply = CustomerMessage.new(customer_message_params)
     if params[:commit]
       @reply.parent = @message
@@ -41,4 +41,3 @@ class Customer::RepliesController < Customer::Base
     params.require(:customer_message).permit(:subject, :body)
   end
 end
-

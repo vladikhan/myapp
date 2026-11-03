@@ -1,8 +1,7 @@
 class Customer::MessagesController < Customer::Base
-  
   def index
     @messages = current_customer.messages.includes(:staff_member)
-      .order(created_at: :desc)
+                                .order(created_at: :desc)
     @messages = @messages.page(params[:page]) if defined?(Kaminari)
   end
 
@@ -19,7 +18,7 @@ class Customer::MessagesController < Customer::Base
 
   def create
     @message = current_customer.outbound_messages.build(message_params)
-    
+
     if @message.save
       flash[:notice] = "メッセージを送信しました。"
       redirect_to customer_messages_path
@@ -38,24 +37,18 @@ class Customer::MessagesController < Customer::Base
     end
   end
 
-  
-  
-
   def destroy
-  @message = Message.find(params[:id])
-  if @message.deletable?
-    @message.destroy
-    redirect_to customer_messages_path, notice: 'メッセージを削除しました。'
-  else
-    redirect_to customer_messages_path, alert: 'このメッセージは削除できません。返信が存在します'
-  end
-  rescue => e
+    @message = Message.find(params[:id])
+    if @message.deletable?
+      @message.destroy
+      redirect_to customer_messages_path, notice: "メッセージを削除しました。"
+    else
+      redirect_to customer_messages_path, alert: "このメッセージは削除できません。返信が存在します"
+    end
+  rescue StandardError => e
     logger.error "メッセージ削除時のエラー: #{e.message}"
-    redirect_to customer_messages_path, alert: 'メッセージが見つかりません。'
+    redirect_to customer_messages_path, alert: "メッセージが見つかりません。"
   end
-
-
-
 
   private
 

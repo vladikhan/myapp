@@ -28,8 +28,8 @@ class Admin::AllowedSourcesController < ApplicationController
   def delete
     if params[:form] && params[:form][:allowed_sources]
       ids = params[:form][:allowed_sources].values
-              .select { |h| h[:_destroy] == "1" }
-              .map { |h| h[:id] }
+                                           .select { |h| h[:_destroy] == "1" }
+                                           .map { |h| h[:id] }
 
       AllowedSource.where(id: ids).destroy_all if ids.any?
     end

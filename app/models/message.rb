@@ -1,8 +1,8 @@
 class Message < ApplicationRecord
   belongs_to :customer
   belongs_to :staff_member, optional: true
-  belongs_to :root, class_name: "Message", foreign_key: "root_id", optional: true
-  belongs_to :parent, class_name: "Message", foreign_key: "parent_id", optional: true
+  belongs_to :root, class_name: "Message", optional: true
+  belongs_to :parent, class_name: "Message", optional: true
   has_many :message_tag_links, dependent: :destroy
   has_many :tags, -> { order(:value) }, through: :message_tag_links
   has_many :replies, class_name: "Message", foreign_key: "parent_id"
@@ -25,18 +25,19 @@ class Message < ApplicationRecord
   scope :deleted, -> { where(deleted: true) }
   scope :sorted, -> { order(created_at: :desc) }
 
-  scope :tagged_as, ->(tag_id) do
+  scope :tagged_as, lambda { |tag_id|
     if tag_id
       joins(:message_tag_links).where("message_tag_links.tag_id" => tag_id)
     else
       self
     end
-  end
+  }
 
   attr_accessor :child_nodes
 
   def tree
     return @tree if @tree
+
     r = root || self
     messages = Message.where(root_id: r.id).select(:id, :parent_id, :subject)
     @tree = SimpleTree.new(r, messages)
@@ -47,9 +48,7 @@ class Message < ApplicationRecord
       HashLock.acquire("tags", "value", label)
       tag = Tag.find_by(value: label)
       tag ||= Tag.create!(value: label)
-      unless message_tag_links.where(tag_id: tag.id).exists?
-        message_tag_links.create!(tag_id: tag.id)
-      end
+      message_tag_links.create!(tag_id: tag.id) unless message_tag_links.where(tag_id: tag.id).exists?
     end
   end
 
