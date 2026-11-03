@@ -25,3 +25,4 @@ class Admin::LoginForm
       false
     end
   end
+end
