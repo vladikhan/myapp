@@ -5,12 +5,8 @@ module StaffHelper
     markup do |m|
       m.a(href: inbound_staff_messages_path) do
         m << "新規問い合わせ"
-        anchor_text =
-          if (c = CustomerMessage.unprocessed.count) > 0
-            "(#{c})"
-          else
-            ""
-          end
+        count = CustomerMessage.unprocessed.count
+        anchor_text = count.positive? ? "(#{count})" : ""
         m.span(
           anchor_text,
           id: "number-of-unprocessed-messages",
