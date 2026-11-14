@@ -33,11 +33,13 @@ class Customer::RepliesController < Customer::Base
     end
   end
 
-  private def prepate_message
+  private
+
+  def prepate_message
     @message = StaffMessage.find(params)
   end
 
-  private def customer_message_params
+  def customer_message_params
     params.require(:customer_message).permit(:subject, :body)
   end
 end

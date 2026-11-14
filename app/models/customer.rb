@@ -7,8 +7,8 @@ class Customer < ApplicationRecord
   has_many :entries, dependent: :destroy
   has_many :programs, through: :entries
   has_many :messages, dependent: :destroy
-  has_many :outbound_messages, class_name: "CustomerMessage"
-  has_many :inbound_messages, class_name: "StaffMessage"
+  has_many :outbound_messages, class_name: "CustomerMessage" # rubocop:disable Rails/HasManyOrHasOneDependent
+  has_many :inbound_messages, class_name: "StaffMessage" # rubocop:disable Rails/HasManyOrHasOneDependent
 
   # Адреса
   has_many :addresses, dependent: :destroy

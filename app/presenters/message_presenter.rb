@@ -15,9 +15,9 @@ class MessagePresenter < ModelPresenter
   def sender
     case object
     when CustomerMessage
-      object.customer.family_name + " " + object.customer.given_name
+      "#{object.customer.family_name} #{object.customer.given_name}"
     when StaffMessage
-      object.staff_member.family_name + " " + object.staff_member.given_name
+      "#{object.staff_member.family_name} #{object.staff_member.given_name}"
     else
       raise
     end
@@ -28,7 +28,7 @@ class MessagePresenter < ModelPresenter
     when CustomerMessage
       ""
     when StaffMessage
-      object.customer.family_name + " " + object.customer.given_name
+      "#{object.customer.family_name} #{object.customer.given_name}"
     else
       raise
     end
@@ -39,7 +39,7 @@ class MessagePresenter < ModelPresenter
   end
 
   def formatted_body
-    ERB::Util.html_escape(body).gsub(/\n/, "<br>").html_safe
+    view_context.safe_join(body.to_s.split("\n", -1), view_context.tag.br)
   end
 
   def created_at
@@ -57,7 +57,9 @@ class MessagePresenter < ModelPresenter
     expand(object.tree.root)
   end
 
-  private def expand(node)
+  private
+
+  def expand(node)
     markup(:ul) do |m|
       m.li do
         if node.id == object.id

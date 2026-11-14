@@ -48,7 +48,7 @@ class Customer::AccountForm
     # Телефоны
     return unless params[:personal_phones_attributes]
 
-    params[:personal_phones_attributes].each do |_i, phone_params|
+    params[:personal_phones_attributes].each_value do |phone_params|
       phone = customer.personal_phones.find do |p|
         p.id.to_s == phone_params[:id].to_s
       end || customer.personal_phones.build

@@ -3,7 +3,7 @@ class ProgramPresenter < ModelPresenter
   delegate :number_with_delimiter, :button_to, :current_customer, to: :view_context
 
   def apply_or_cancel_button
-    if entry = object.entries.find_by(customer_id: current_customer.id)
+    if (entry = object.entries.find_by(customer_id: current_customer.id))
       status = cancellation_status(entry)
       button_to cancel_button_label_text(status),
                 [:cancel, :customer, object, :entry],
@@ -49,7 +49,8 @@ class ProgramPresenter < ModelPresenter
   def program_status
     if Time.current > object.application_end_time
       :closed
-    elsif object.max_number_of_participants && object.entries.where(canceled: false).count >= object.max_number_of_participants
+    elsif object.max_number_of_participants &&
+          object.entries.where(canceled: false).count >= object.max_number_of_participants
       :full
     else
       :available

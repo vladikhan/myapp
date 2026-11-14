@@ -1,5 +1,5 @@
 class Message < ApplicationRecord
-  STATUS_UNREAD = "unread.freeze"
+  STATUS_UNREAD = "unread".freeze
 
   belongs_to :customer
   belongs_to :staff_member, optional: true
@@ -57,7 +57,7 @@ class Message < ApplicationRecord
   def remove_tag(label)
     self.class.transaction do
       HashLock.acquire("tags", "value", label)
-      if tag = Tag.find_by(value: label)
+      if (tag = Tag.find_by(value: label))
         message_tag_links.find_by(tag_id: tag.id)&.destroy
         tag.destroy if tag.message_tag_links.empty?
       end
@@ -66,6 +66,10 @@ class Message < ApplicationRecord
 
   def deletable?
     replies.empty?
+  end
+
+  def self.soft_delete_all(ids)
+    where(id: ids).update_all(deleted: true) # rubocop:disable Rails/SkipsModelValidations
   end
 
   private
