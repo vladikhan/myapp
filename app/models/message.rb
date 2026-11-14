@@ -1,11 +1,13 @@
 class Message < ApplicationRecord
+  STATUS_UNREAD = "unread.freeze"
+
   belongs_to :customer
   belongs_to :staff_member, optional: true
   belongs_to :root, class_name: "Message", optional: true
-  belongs_to :parent, class_name: "Message", optional: true
+  belongs_to :parent, class_name: "Message", optional: true, inverse_of: :replies
   has_many :message_tag_links, dependent: :destroy
   has_many :tags, -> { order(:value) }, through: :message_tag_links
-  has_many :replies, class_name: "Message", foreign_key: "parent_id"
+  has_many :replies, class_name: "Message", foreign_key: "parent_id", inverse_of: :parent, dependent: :destroy
 
   # Устанавливаем статус по умолчанию при создании нового объекта
   after_initialize :set_default_status, if: :new_record?
@@ -69,6 +71,6 @@ class Message < ApplicationRecord
   private
 
   def set_default_status
-    self.status ||= "unread"
+    self.status ||= STATUS_UNREAD
   end
 end
