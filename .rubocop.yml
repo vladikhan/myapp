@@ -1,12 +1,11 @@
 inherit_from: .rubocop_todo.yml
 
-# Плагины RuboCop
 plugins:
   - rubocop-rails
 
 AllCops:
   SuggestExtensions: false
-  TargetRubyVersion: 2.7
+  TargetRubyVersion: 3.1
   NewCops: disable
   Exclude:
     - 'bin/**/*'
@@ -24,6 +23,7 @@ AllCops:
     - 'test/**/*'
     - 'db/schema.rb'
     - 'db/migrate/**/*'
+    - 'Gemfile'
     
 
 # Длина строки
