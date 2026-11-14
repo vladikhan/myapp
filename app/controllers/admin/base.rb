@@ -1,7 +1,7 @@
 class Admin::Base < ApplicationController
   layout "admin"
-  before_action :authorize, except: %i[new create] # ← Или используйте skip_before_action
-  before_action :check_timeout, except: %i[new create]
+  before_action :authorize
+  before_action :check_timeout
 
   TIMEOUT = 1.hour
 
