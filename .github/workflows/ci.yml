@@ -54,4 +54,4 @@ jobs:
         run: bundle exec rails db:create db:schema:load
 
       - name: Run RSpec
-        run: bundle exec rspec
+        run: bundle exec rspec spec/ --format progress
