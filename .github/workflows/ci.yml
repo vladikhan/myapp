@@ -50,6 +50,10 @@ jobs:
           ruby-version: '3.1.4'
           bundler-cache: true
 
+      - name: Disable Bootsnap for CI
+        run: |
+          sed -i 's/^require "bootsnap\/setup"/# require "bootsnap\/setup"/' config/boot.rb
+
       - run: bundle install --jobs 4 --retry 3
 
       - name: Set up database
