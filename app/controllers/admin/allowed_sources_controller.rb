@@ -1,7 +1,7 @@
 class Admin::AllowedSourcesController < ApplicationController
   def index
     @allowed_sources = AllowedSource.where(namespace: "staff")
-    .order(:octet1, :octet2, :octet3, :octet4 )
+                                    .order(:octet1, :octet2, :octet3, :octet4)
     @new_allowed_source = AllowedSource.new
   end
 
@@ -14,7 +14,7 @@ class Admin::AllowedSourcesController < ApplicationController
       redirect_to action: "index"
     else
       @allowed_sources =
-      AllowedSource.order(:octet1, :octet2, :octet3, :octet4 )
+        AllowedSource.order(:octet1, :octet2, :octet3, :octet4)
       flash.now.alert = "IPアドレスの値がただしくありません．"
       render action: "index"
     end
@@ -22,14 +22,14 @@ class Admin::AllowedSourcesController < ApplicationController
 
   private def allowed_source_params
     params.require(:allowed_source)
-    .permit( :octet1, :octet2, :octet3, :last_octet )
+          .permit(:octet1, :octet2, :octet3, :last_octet)
   end
 
   def delete
     if params[:form] && params[:form][:allowed_sources]
       ids = params[:form][:allowed_sources].values
-              .select { |h| h[:_destroy] == "1" }
-              .map { |h| h[:id] }
+                                           .select { |h| h[:_destroy] == "1" }
+                                           .map { |h| h[:id] }
 
       AllowedSource.where(id: ids).destroy_all if ids.any?
     end

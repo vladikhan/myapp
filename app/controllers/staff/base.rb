@@ -13,20 +13,19 @@ class Staff::Base < ApplicationController
   end
 
   def current_staff_member
-    if session[:staff_member_id]
-      @current_staff_member ||= StaffMember.find_by(id: session[:staff_member_id])
-    end
+    return unless session[:staff_member_id]
+
+    @current_staff_member ||= StaffMember.find_by(id: session[:staff_member_id])
   end
 
   helper_method :current_staff_member, :staff_member
 
-
   def check_account
-    if current_staff_member && !current_staff_member.active?
-      session.delete(:staff_member_id)
-      flash[:notice] = "アカウントが無効になりました"
-      redirect_to staff_root_path
-    end
+    return unless current_staff_member && !current_staff_member.active?
+
+    session.delete(:staff_member_id)
+    flash[:notice] = "アカウントが無効になりました"
+    redirect_to staff_root_path
   end
 
   TIMEOUT = 60.minutes
@@ -45,13 +44,13 @@ class Staff::Base < ApplicationController
   end
 
   private def check_source_ip_address
-    return IpAddressRejected unless AllowedSource.include?("staff", request.ip)
+    IpAddressRejected unless AllowedSource.include?("staff", request.ip)
   end
-  
+
   def authorize
-    unless current_staff_member
-      flash[:notice] = "職員としてログインしてください"
-      redirect_to staff_login_path
-    end
+    return if current_staff_member
+
+    flash[:notice] = "職員としてログインしてください"
+    redirect_to staff_login_path
   end
 end

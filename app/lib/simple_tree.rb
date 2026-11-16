@@ -6,8 +6,8 @@ class SimpleTree
     @descendeants = descendants
 
     @nodes = {}
-    ([ @root ] + @descendeants).each do |d|
-      d.child_nodes =[]
+    ([@root] + @descendeants).each do |d|
+      d.child_nodes = []
       @nodes[d.id] = d
     end
     @descendeants.each do |d|

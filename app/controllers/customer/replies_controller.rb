@@ -1,11 +1,11 @@
 class Customer::RepliesController < Customer::Base
-  before action :prepare_message
+  before_action :prepare_message
 
   def new
     @reply = CustomerMessage.new
   end
 
-  #POST
+  # POST
   def confirm
     @reply = CustomerMessage.new(customer_message_params)
     @reply.parent = @message
@@ -17,7 +17,7 @@ class Customer::RepliesController < Customer::Base
     end
   end
 
-  def create 
+  def create
     @reply = CustomerMessage.new(customer_message_params)
     if params[:commit]
       @reply.parent = @message
@@ -33,12 +33,13 @@ class Customer::RepliesController < Customer::Base
     end
   end
 
-  private def prepate_message
+  private
+
+  def prepate_message
     @message = StaffMessage.find(params)
   end
 
-  private def customer_message_params
+  def customer_message_params
     params.require(:customer_message).permit(:subject, :body)
   end
 end
-

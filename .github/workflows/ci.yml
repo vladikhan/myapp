@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.4'
+          bundler-cache: true
+
+      - run: bundle install --jobs 4 --retry 3
+
+      - name: Run RuboCop
+        run: rubocop --format offenses
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: baukis2_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      DB_HOST: localhost
+      RAILS_ENV: test
+      DISABLE_BOOTSNAP: '1'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.4'
+          bundler-cache: true
+
+      - name: Disable Bootsnap for CI
+        run: |
+          sed -i 's/^require "bootsnap\/setup"/# require "bootsnap\/setup"/' config/boot.rb
+
+      - run: bundle install --jobs 4 --retry 3
+
+      - name: Set up database
+        run: bundle exec rails db:create db:schema:load
+
+      - name: Debug Rails boot
+        run: bundle exec rails runner "puts Rails.version"
+
+      - name: Run RSpec
+        run: bundle exec rspec spec/ --format progress

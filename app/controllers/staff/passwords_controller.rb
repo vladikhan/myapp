@@ -3,9 +3,9 @@ class Staff::PasswordsController < ApplicationController
     redirect_to :edit_staff_password
   end
 
-  def edit 
-    @change_password_form = 
-    Staff::ChangePasswordForm.new(object: current_staff_member)
+  def edit
+    @change_password_form =
+      Staff::ChangePasswordForm.new(object: current_staff_member)
   end
 
   def update
@@ -14,7 +14,7 @@ class Staff::PasswordsController < ApplicationController
     if @change_password_form.save
       flash.notice = "パスワードを変更しました．"
       redirect_to :staff_account
-    else 
+    else
       flash.now.alert = "入力に誤りがあります．"
       render action: "edit"
     end

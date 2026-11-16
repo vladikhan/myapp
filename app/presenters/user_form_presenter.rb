@@ -17,7 +17,7 @@ class UserFormPresenter < FormPresenter
     merged_options = options.merge(@current_options || {})
     markup(:div, class: "input-block") do |m|
       label_text1 = I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name1}")
-      label_text2 = I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name2}")
+      I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name2}")
       m << decorated_label(name1, label_text1, merged_options)
       m << text_field(name1, merged_options)
       m << text_field(name2, merged_options)
@@ -31,7 +31,7 @@ class UserFormPresenter < FormPresenter
     merged_options = options.merge(@current_options || {})
     markup(:div, class: "input-block") do |m|
       label_text1 = I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name1}")
-      label_text2 = I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name2}")
+      I18n.t("activerecord.attributes.#{object.model_name.i18n_key}.#{name2}")
       m << decorated_label(name1, label_text1, merged_options)
       m << text_field(name1, merged_options)
       m << text_field(name2, merged_options)

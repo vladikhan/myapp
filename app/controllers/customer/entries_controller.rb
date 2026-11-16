@@ -25,7 +25,6 @@ class Customer::EntriesController < Customer::Base
       entry.update!(canceled: true)
       flash.notice = "プログラムへの申し込みをキャンセルしました。"
     end
-
     redirect_to [:customer, program]
   end
 end

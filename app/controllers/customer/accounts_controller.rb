@@ -15,9 +15,9 @@ class Customer::AccountsController < Customer::Base
       permitted_params = params.require(:customer).permit(
         :email, :password, :family_name, :given_name,
         :family_name_kana, :given_name_kana, :birthday, :gender,
-        home_address_attributes: [:id, :postal_code, :prefecture, :city, :address1, :address2],
-        work_address_attributes: [:id, :company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
-        personal_phones_attributes: [:id, :number]
+        home_address_attributes: %i[id postal_code prefecture city address1 address2],
+        work_address_attributes: %i[id company_name division_name postal_code prefecture city address1 address2],
+        personal_phones_attributes: %i[id number]
       )
 
       @customer_form.assign_attributes(permitted_params)
@@ -34,9 +34,9 @@ class Customer::AccountsController < Customer::Base
       permitted_params = params.require(:customer).permit(
         :email, :password, :family_name, :given_name,
         :family_name_kana, :given_name_kana, :birthday, :gender,
-        home_address_attributes: [:id, :postal_code, :prefecture, :city, :address1, :address2],
-        work_address_attributes: [:id, :company_name, :division_name, :postal_code, :prefecture, :city, :address1, :address2],
-        personal_phones_attributes: [:id, :number]
+        home_address_attributes: %i[id postal_code prefecture city address1 address2],
+        work_address_attributes: %i[id company_name division_name postal_code prefecture city address1 address2],
+        personal_phones_attributes: %i[id number]
       )
 
       @customer_form.assign_attributes(permitted_params)
@@ -46,7 +46,7 @@ class Customer::AccountsController < Customer::Base
         redirect_to :customer_account
       else
         flash.now.alert = "入力に誤りがあります。"
-        render :confirm  # Важно рендерить confirm, чтобы данные не потерялись
+        render :confirm # Важно рендерить confirm, чтобы данные не потерялись
       end
     else
       redirect_to edit_customer_account_path

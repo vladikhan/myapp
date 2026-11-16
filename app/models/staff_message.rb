@@ -1,3 +1,2 @@
 class StaffMessage < Message
-  
 end

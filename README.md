@@ -1,24 +1,35 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Based on the book <TITLE>; below is what I changed and why.
 
-Things you may want to cover:
+## Overview
 
-* Ruby version
+This is a Rails 6.1 application that serves as a portfolio piece for Middle-level Rails roles.
 
-* System dependencies
+## Changes Made
 
-* Configuration
+### Step 1: Foundation
+- Fixed production host configuration to allow external hosts via environment variable `ALLOWED_HOSTS`.
+- Added `.rubocop.yml` with basic Rails and performance cop configuration.
+- Applied RuboCop auto-correctable offenses (string literals, etc.) to improve code consistency.
+- Added GitHub Actions workflow to run RuboCop on push and pull request.
 
-* Database creation
+## Setup Instructions
 
-* Database initialization
+1. Install Ruby 3.1.4
+2. Install bundler: `gem install bundler`
+3. Install dependencies: `bundle install`
+4. Set up database: `rails db:create db:migrate`
+5. Start the server: `rails s`
 
-* How to run the test suite
+## Testing
 
-* Services (job queues, cache servers, search engines, etc.)
+Run the test suite with: `bundle exec rspec`
 
-* Deployment instructions
+## Deployment
 
-* ...
+Set environment variable `ALLOWED_HOSTS` to a comma-separated list of allowed hostnames for production.
+
+## License
+
+MIT

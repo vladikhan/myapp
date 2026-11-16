@@ -31,7 +31,7 @@ class AllowedSource < ApplicationRecord
       octets = ip_address.to_s.split(".").map(&:to_i)
       return false if octets.size != 4
 
-      condition = <<-SQL.squish
+      condition = <<~SQL.squish
         octet1 = ? AND octet2 = ? AND octet3 = ?
         AND ((octet4 = ? AND wildcard = ?) OR wildcard = ?)
       SQL

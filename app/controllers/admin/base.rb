@@ -1,7 +1,7 @@
 class Admin::Base < ApplicationController
   layout "admin"
-  before_action :authorize, except: [:new, :create]  # ← Или используйте skip_before_action
-  before_action :check_timeout, except: [:new, :create]
+  before_action :authorize
+  before_action :check_timeout
 
   TIMEOUT = 1.hour
 
@@ -13,11 +13,11 @@ class Admin::Base < ApplicationController
   private
 
   def authorize
-    unless current_admin_member && !current_admin_member.suspended?
-      reset_session
-      flash.alert = "管理者としてログインしてください"  # ← Изменить на :alert
-      redirect_to admin_login_path
-    end
+    return if current_admin_member && !current_admin_member.suspended?
+
+    reset_session
+    flash.alert = "管理者としてログインしてください" # ← Изменить на :alert
+    redirect_to admin_login_path
   end
 
   def check_timeout

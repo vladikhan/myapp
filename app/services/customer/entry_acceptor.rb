@@ -17,12 +17,11 @@ class Customer::EntryAcceptor
 
       # Проверка лимита участников
       if max = program.max_number_of_participants
-        if program.entries.where(canceled: false).count < max
-          program.entries.create!(customer: @customer)
-          return :accepted
-        else
-          return :full
-        end
+        return :full unless program.entries.where(canceled: false).count < max
+
+        program.entries.create!(customer: @customer)
+        return :accepted
+
       else
         program.entries.create!(customer: @customer)
         return :accepted

@@ -4,17 +4,17 @@ class Program < ApplicationRecord
   has_many :entries, dependent: :destroy
   has_many :applicants, through: :entries, source: :customer
 
-  scope :listing, -> {
-  left_joins(:entries)
-    .select("programs.*, COUNT(entries.id) AS number_of_applicants")
-    .group("programs.id")
-    .order(application_start_time: :desc)
-    .includes(:registrant)
-}
+  scope :listing, lambda {
+    left_joins(:entries)
+      .select("programs.*, COUNT(entries.id) AS number_of_applicants")
+      .group("programs.id")
+      .order(application_start_time: :desc)
+      .includes(:registrant)
+  }
 
-  scope :published, -> {
+  scope :published, lambda {
     where("application_start_time <= ?", Time.current)
-    .order(application_start_time: :desc)
+      .order(application_start_time: :desc)
   }
   # Virtual attributes for forms
   attribute :application_start_date, :date, default: Date.today
@@ -22,7 +22,7 @@ class Program < ApplicationRecord
   attribute :application_start_minute, :integer, default: 0
   attribute :application_end_date, :date, default: Date.today
   attribute :application_end_hour, :integer, default: 17
-  attribute :application_end_minute, :integer, default: 0  
+  attribute :application_end_minute, :integer, default: 0
 
   # Initialize virtual attributes after loading
   after_initialize :init_virtual_attributes
@@ -34,50 +34,50 @@ class Program < ApplicationRecord
       self.application_start_minute = application_start_time.min
     end
 
-    if application_end_time
-      self.application_end_date     = application_end_time.to_date
-      self.application_end_hour     = application_end_time.hour
-      self.application_end_minute   = application_end_time.min
-    end
+    return unless application_end_time
+
+    self.application_end_date     = application_end_time.to_date
+    self.application_end_hour     = application_end_time.hour
+    self.application_end_minute   = application_end_time.min
   end
 
   before_validation :set_application_start_time
   before_validation :set_application_end_time
 
   private def set_application_start_time
-    if t = application_start_date&.in_time_zone
-      self.application_start_time = t.advance(
-        hours: application_start_hour,
-        minutes: application_start_minute
-      )
-    end
+    return unless t = application_start_date&.in_time_zone
+
+    self.application_start_time = t.advance(
+      hours: application_start_hour,
+      minutes: application_start_minute
+    )
   end
 
   private def set_application_end_time
-    if t = application_end_date&.in_time_zone
-      self.application_end_time = t.advance(
-        hours: application_end_hour,
-        minutes: application_end_minute
-      )
-    end
+    return unless t = application_end_date&.in_time_zone
+
+    self.application_end_time = t.advance(
+      hours: application_end_hour,
+      minutes: application_end_minute
+    )
   end
 
-  validates :title, presence: true, length: { maximum:32 }
+  validates :title, presence: true, length: { maximum: 32 }
   validates :description, presence: true, length: { maximum: 800 }
   validates :application_start_time, timeliness: {
     after_or_equal_to: Time.zone.local(2000, 1, 1),
-    before: -> (obj) { 1.year.from_now },
+    before: ->(_obj) { 1.year.from_now },
     allow_blank: true
   }
   validates :application_end_time, timeliness: {
     after: :application_start_time,
-    before: -> (obj) { obj.application_start_time.advance(days: 90) },
+    before: ->(obj) { obj.application_start_time.advance(days: 90) },
     allow_blank: true,
-    if: -> (obj) { obj.application_start_time }
+    if: ->(obj) { obj.application_start_time }
   }
   validate do
-    if min_number_of_participants && max_number_of_participants && 
-        min_number_of_participants > max_number_of_participants
+    if min_number_of_participants && max_number_of_participants &&
+       min_number_of_participants > max_number_of_participants
       errors.add(:max_number_of_participants, :less_than_min_number)
     end
   end

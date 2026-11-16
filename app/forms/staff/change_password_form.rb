@@ -19,6 +19,7 @@ class Staff::ChangePasswordForm
 
   def correct_current_password
     return if object && Staff::Authenticator.new(object).authenticate(current_password)
+
     errors.add(:current_password, :wrong)
   end
 end
