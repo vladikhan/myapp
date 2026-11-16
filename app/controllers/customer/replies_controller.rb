@@ -1,5 +1,5 @@
 class Customer::RepliesController < Customer::Base
-  before action :prepare_message
+  before_action :prepare_message
 
   def new
     @reply = CustomerMessage.new
